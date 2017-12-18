@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\Shell\Vim]
+@="Edit with V&1m"
+"Icon"="\"C:\\Program Files\\Vim\\vim80\\gvim.exe\""
+
+[HKEY_CLASSES_ROOT\*\Shell\Vim\command]
+@="\"C:\\Program Files\\Vim\\vim80\\gvim.exe\" --remote-tab-silent \"%1\""

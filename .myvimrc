@@ -1,0 +1,862 @@
+"    ____      ____  ____      ______  _______        _____         _____
+"   |    |    |    ||    |    |      \/       \   ___|\    \    ___|\    \
+"   |    |    |    ||    |   /          /\     \ |    |\    \  /    /\    \
+"   |    |    |    ||    |  /     /\   / /\     ||    | |    ||    |  |    |
+"   |    |    |    ||    | /     /\ \_/ / /    /||    |/____/ |    |  |____|
+"   |    |    |    ||    ||     |  \|_|/ /    / ||    |\    \ |    |   ____
+"   |\    \  /    /||    ||     |       |    |  ||    | |    ||    |  |    |
+"   | \ ___\/___ / ||____||\____\       |____|  /|____| |____||\ ___\/    /|
+"    \ |   ||   | / |    || |    |      |    | / |    | |    || |   /____/ |
+"     \|___||___|/  |____| \|____|      |____|/  |____| |____| \|___|    | /
+"       \(    )/      \(      \(          )/       \(     )/     \( |____|/
+"        '    '        '       '          '         '     '       '   )/
+"                                                                     '
+" TODOs {{{1
+" TODO-MB [171213] - Fix FindFunc wrapping error when there's 3 records or less in loc window
+" TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
+" TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
+" TODO-MB [171101] - Fix QuickFix list regex that formats |
+" TODO-MB [170921] - Vim as a Python IDE:
+" https://www.youtube.com/watch?v=YhqsjUUHj6g&feature=youtu.be
+" TODO-MB [170814] - Create skeleton file for markdown/others
+" TODO-MB [170712] - Powershell is loading slowly
+" TODO-MB [170712] - Fix ssh conection on start-up
+
+" Constants {{{1
+
+" Max Number of Records to show in QF/Location Lists
+let g:maxQFlistRecords = 8
+let g:qfListHeight = 5
+
+" Data entry prompts
+let g:setTodoHeader = 'TODO: '
+let g:prompt_wrapFold = 'Fold Text: '
+
+" Functions {{{1
+function! CloseQuickFixWindow() " {{{2
+    " If the window is quickfix, proceed
+    if &buftype=="quickfix"
+        " If this window is last on screen quit without warning
+        if winbufnr(2) == -1
+            quit!
+        endif
+    endif
+endfunction
+
+function! EditCommonFile(filename) " {{{2
+" Open file in new teb
+    let current_filename = expand('%:t')
+    let openfilestring = 'tabedit ' . a:filename
+    silent exec openfilestring
+    " Close the blank buffer
+    if (current_filename == '')
+        tabprev
+        bd
+    endif
+endfunction
+
+function! FindFunc(...) " {{{2
+    " Move cursor to next pattern match and open fold
+    call search(a:1)
+    FoldOpen
+
+    " Save search string into window local var
+    let w:searchStr=a:1
+
+    " Record initial line number into "z
+    let @z='| '.line('.').' |'
+
+    " Clear quickfix list
+    lexpr []
+
+    " Put Results into QuickFix Window
+    " Remove ':' from each line because it messes up the caddexpr filename/line num
+    silent execute 'g/'.a:1.'/laddexpr expand("%")  . ":" . line(".") . ":" . GetLastFoldString() . substitute(getline("."), ":", "", "g")'
+
+    " Prepare location list height - minimum or record count and max allowable limit
+    let w:locListHeight = min([ g:maxQFlistRecords, len(getloclist(0)) ])
+
+    " If there are no matched records, return
+    if !w:locListHeight
+        lclose
+        return
+    endif
+
+    " Open Loc List and limit the record number
+    execute 'bot ' . w:locListHeight . 'lopen'
+
+    " Update search register
+    let @/=a:1
+
+    " Find initial line in QuickFix list
+    call search(@z)
+
+    " Jump to that record
+    exe "normal \<CR>"
+
+    " Go to proper column number (rather than the beginning of the line)
+    GoToMatchedColumn
+endfunction
+
+" FontSize() {{{2
+if has("unix")
+    function! FontSizePlus ()
+        let l:gf_size_whole = matchstr(&guifont, '\( \)\@<=\d\+$')
+        let l:gf_size_whole = l:gf_size_whole + 1
+        let l:new_font_size = ' '.l:gf_size_whole
+        let &guifont = substitute(&guifont, ' \d\+$', l:new_font_size, '')
+    endfunction
+
+    function! FontSizeMinus ()
+        let l:gf_size_whole = matchstr(&guifont, '\( \)\@<=\d\+$')
+        let l:gf_size_whole = l:gf_size_whole - 1
+        let l:new_font_size = ' '.l:gf_size_whole
+        let &guifont = substitute(&guifont, ' \d\+$', l:new_font_size, '')
+    endfunction
+else
+    function! FontSizePlus ()
+        let l:gf_size_whole = matchstr(&guifont, '\(:h\)\@<=\d\+$')
+        let l:gf_size_whole = l:gf_size_whole + 1
+        let l:new_font_size = ':h'.l:gf_size_whole
+        let &guifont = substitute(&guifont, ':h\d\+$', l:new_font_size, '')
+    endfunction
+
+    function! FontSizeMinus ()
+        let l:gf_size_whole = matchstr(&guifont, '\(:h\)\@<=\d\+$')
+        let l:gf_size_whole = l:gf_size_whole - 1
+        let l:new_font_size = ':h'.l:gf_size_whole
+        let &guifont = substitute(&guifont, ':h\d\+$', l:new_font_size, '')
+    endfunction
+endif
+function! GetBufferList() " {{{2
+" load all current buffers into a list
+    redir =>buflist
+    silent! ls!
+    redir END
+    return buflist
+endfunction
+
+function! GetTODOs() " {{{2
+" TODO [171103] - Add current file ONLY option
+    " Binary files that can be ignored
+    set wildignore+=*.jpg,*.docx,*.xlsm,*.mp4
+    " Seacrch the CWD to find all of your current TODOs
+    vimgrep /TODO-MB \[\d\{6}]/ **/* **/.* | cw 5
+    " Un-ignore the binary files
+    set wildignore-=*.jpg,*.docx,*.xlsm,*.mp4
+endfunction
+
+function! ToggleList(bufname, pfx) " {{{2
+" Toggle QuickFix/Location List, don't change focus
+    let buflist = GetBufferList()
+    for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
+        if bufwinnr(bufnum) != -1
+            exec(a:pfx.'close')
+            return
+        endif
+    endfor
+
+    " Set orignal window
+    let winnr = winnr()
+
+    " Location List
+    if a:pfx == 'l'
+        " Nicer error message than original
+        if len(getloclist(0)) == 0
+            echohl ErrorMsg
+            echo "Location List is Empty."
+            return
+        endif
+        " Open window with minimum height
+        exec 'bot '. w:locListHeight .a:pfx.'open'
+    " QuickFix List
+    elseif a:pfx == 'c'
+        " Open window with minimum height
+        exec 'top '. g:qfListHeight .a:pfx.'open'
+    endif
+
+    " Change focus back to the orignal window
+    if winnr() != winnr
+        wincmd p
+    endif
+
+endfunction
+
+function! RepoGrep(...) " {{{2
+" TODO-MB [171106] - Make this function work with multi-word arguments
+" Fugitive Ggrep Wrapper
+    " Load QuickFix window with grep results
+    exe 'silent Ggrep! -i ' . a:1
+    let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ])
+    exe 'top ' . g:qfListHeight . ' copen'
+endfunction
+
+function! SetTODO() " {{{2
+" Insert a new TODOs
+    " Return the TODOs string
+    return 'TODO-MB [' . strftime('%y%m%d') . '] - ' . UserInput(g:setTodoHeader)
+endfunction
+
+function! ShowSpaces(...) " {{{2
+" Show trailing white spaces
+    let @/='\v(\s+$)|( +\ze\t)'
+    let oldhlsearch=&hlsearch
+    if !a:0
+        let &hlsearch=!&hlsearch
+    else
+        let &hlsearch=a:1
+    end
+    return oldhlsearch
+endfunction
+
+function! TrimSpaces() range " {{{2
+" Trim trailing white spaces
+    let oldhlsearch=ShowSpaces(1)
+    execute a:firstline.",".a:lastline."substitute ///gec"
+    let &hlsearch=oldhlsearch
+    execute "normal! `m"
+endfunction
+
+function! UserInput(prompt) " {{{2
+" TODO [171104] - Need escape sequence
+" Get a string input from the user
+    " Get input from user
+    call inputsave()
+    let reply=input(a:prompt)
+    call inputrestore()
+    " Return the user's reply
+    return l:reply
+endfunction
+
+" Snippets{{{2
+function! SnipClass() " {{{3
+    if &filetype == "php"
+        execute "normal! oclass  {\<CR>public function __construct() {\<CR>}\<CR>}\<ESC>kkk^t{" | startinsert
+    endif
+endfunction
+
+function! SnipComment() " {{{3
+    execute "read $CODE/Windows/Vim/Snippets/SectionComment.txt"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! jj"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! k"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! $l" | startinsert!
+endfunction
+
+function! SnipFunction() " {{{3
+    if &filetype == "vim"
+        execute "normal! ofunction \<CR>endfunction\<ESC>k" | startinsert!
+
+    elseif &filetype == "sh"
+        execute "normal! ofunction \<CR>{\<CR>}\<ESC>kk" | startinsert!
+    endif
+endfunction
+
+function! SnipHeader() " {{{3
+    execute "read $CODE/Windows/Vim/Snippets/Header.txt"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! kddjjjpk"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! k"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! k"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! $l" | startinsert!
+endfunction
+
+function! SnipIf() " {{{3
+    if &filetype == "php"
+        execute "normal! o// IF\<CR>\<ESC>^Diif () {\<CR>}\<ESC>kf)" | startinsert
+    elseif &filetype == "vim"
+        execute "normal! o\" IF\<CR>\<ESC>^Diif \<CR>endif\<ESC>k" | startinsert!
+    endif
+endfunction
+
+" Commands {{{1
+" Find {{{2
+" Search for string in current file and put results in Location window
+command! -nargs=+ -complete=command Find
+            \| try | call FindFunc(<q-args>) | catch | endtry | set hls
+
+" FoldOpen {{{2
+" Suppress errors when no fold exists
+command! FoldOpen try | silent foldopen! | catch | | endtry
+
+" QuickFix/Location List Next {{{2
+" Wrap around after hitting first/last record
+command! Cnext try | cnext | catch | cfirst | catch | endtry
+command! Cprev try | cprev | catch | clast | catch | endtry
+command! Lnext try | lnext | catch | lfirst | catch | endtry
+command! Lprev try | lprev | catch | llast | catch | endtry
+
+" GoToMatchedColumn {{{2
+" Since the QF list isn't populated with col numbers, this function
+" allows you to jump to the proper column. It works by recording the
+" current line number, searching for w:searchStr,
+" if the line changed, it goes back
+command! GoToMatchedColumn let @/=w:searchStr | let @z=line('.') | call search(@/) | if (line(".") > @z) | call search(@/, 'b') | endif | set hls
+
+" RepoFind {{{2
+" Search for string in current repo and put results in QuickFix window
+command! -nargs=+ -complete=command RepoFind
+            \| try | call RepoGrep(<q-args>) | catch | endtry
+
+" Show and Trim Spaces {{{2
+command! -bar -nargs=? ShowSpaces call ShowSpaces(<args>)
+command! -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
+
+" SpellToggle {{{2
+command! SpellToggle if (&spell == 0) | setlocal spell | else | setlocal nospell | endif
+
+" Editor Settings{{{1
+" Display{{{2
+" 256 color
+set t_Co=256
+" Preferred background
+set background=dark
+" Preferred color scheme
+colorscheme desert
+" Set GVIM Font
+set guifont=Consolas:h12
+
+" Display line number for current line
+set number
+" Display relative line number along the left hand side
+set relativenumber
+
+" Start scrolling <x> lines before window border
+set scrolloff=5
+
+" Visual auto complete for command menu
+set wildmenu
+" Show command in bottom bar
+set showcmd
+" Do not redraw during operations such as macro
+set lazyredraw
+" Don't wrap/line break in the middle of a word
+set linebreak
+" Always display the status line even if only one window is displayed
+set laststatus=2
+" Display hidden char
+let g:display_hidden = "hidden"
+
+" Functionality{{{2
+" Different VIM Versions{{{3
+if has('GUI')
+    " Disable annoying error bell sounds
+    autocmd GUIEnter * set vb t_vb=
+    let path_corrector = ''
+    " Open GVim in Maximized mode
+    autocmd GUIEnter * simalt ~x
+    " Remove Menubar and Toolbar from GVIM
+    set guioptions -=m
+    set guioptions -=T
+else
+    let path_corrector = '\'
+endif
+
+" General{{{3
+"
+" General settings required for highlighting
+syntax on
+" Enable plug-ins for indentation
+filetype plugin indent on
+
+" Backspace over auto indent, line breaks, start of insert
+set backspace=indent,eol,start
+" Remove vi compatibility
+set nocompatible
+" Update when idle for 1000 msec (default is 4000 msec)
+set updatetime=1000
+" Virtual editing, position cursor where there is are no characters (all modes)
+set virtualedit=all
+" Ignore file patterns globally
+set wildignore+=*.swp
+" Standard Encoding
+set encoding=utf8
+" Buffer should be modifable (GV-Vim needs this)
+set modifiable
+" No .swp backup files
+set noswapfile
+" Use windows clipboard in VIM
+set clipboard=unnamed
+
+" Automatically change current directory when new file is opened
+set autochdir
+
+" Enable Vim to check for modelines throughout your files
+" best practice to keep them at the top or the bottom of the file
+set modeline
+" Number of modelines to be checked, if set to zero then modeline checking
+" will be disabled
+set modelines=5
+
+" Don't add comment automatically on new line
+au FileType * setlocal formatoptions-=cro
+
+" Spelling
+set spellfile=$HOME/OneDrive/Software/Settings/en.utf-8.add
+
+" Have Vim jump to the last position when reopening a file
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+                \| exe "normal! g'\"" | endif
+endif
+
+" Folding{{{3
+set foldenable
+set foldlevelstart=0
+set foldnestmax=10
+set foldmethod=marker
+set foldignore=
+set foldlevel=2
+
+" Indenting/Tabs{{{3
+" Do smart auto indenting when starting a new line
+set autoindent
+set smartindent
+
+" Case Auto-Indent enable (not sure what this is)
+" let g:sh_indent_case_labels=1
+
+" Set tab width
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+
+" Use spaces instead of tabs
+set expandtab
+" Delete spaces like tabs
+set smarttab
+
+" Searching{{{3
+" Search as characters are entered
+set incsearch
+" Highlight search
+set hlsearch
+" Ignore case of given search term
+set ignorecase
+" Only search for matching capitals when they are used
+set smartcase
+
+" QuickFix/Location {{{3
+
+" TODO-MB [171030] - The second regex expression will match every second |
+" Align QuickFix List (only first 3 '|')
+au BufReadPost QuickFix,Location setlocal modifiable
+    \| silent exe 'Tab /^.\{-}\zs|'
+    \| silent exe 'Tab /\(.\{-}\zs|\)\{2}'
+    \| silent exe 'Tab /\(.\{-}\zs|\)\{3}'
+    \| setlocal nowrap
+    \| setlocal norelativenumber
+    \| setlocal cursorline
+    \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>
+    \| setlocal nomodifiable
+    " \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>:GoToMatchedColumn<CR>
+
+" Close QuickFix/Location lists automatically when it's the last window in current tab
+au BufEnter * call CloseQuickFixWindow()
+
+" Undo Files {{{3
+" Let's save undo info!
+if !isdirectory($HOME."/vimfiles")
+    call mkdir($HOME."/vimfiles", "", 0770)
+endif
+if !isdirectory($HOME."/vimfiles/undo-dir")
+    call mkdir($HOME."/vimfiles/undo-dir", "", 0700)
+endif
+set undodir=~/vimfiles/undo-dir
+set undofile
+
+" Plugins{{{2
+" Custom Languages {{{3
+
+" SEBOL:
+au BufRead,BufNewFile *.sebol setfiletype sebol
+let g:NERDCustomDelimiters = {
+    \ 'sebol': { 'left': '!', 'right': '' }
+\ }
+
+" Pathogen{{{3
+" Pathogen source all Vim bundles found in ~/.vim/bundle
+execute pathogen#infect()
+
+" AirLine{{{3
+let g:airline_section_a = '%f'
+let g:airline_section_c = '%{GetFoldStrings()}'
+
+" CtrlP {{{3
+" Fuzzy file/buffer/tag open
+
+" Most recent files is default
+let g:ctrlp_cmd = 'CtrlPMRU'
+
+" Use filename instead of full path for searching
+let g:ctrlp_by_filename = 1
+
+" Remap hotkeys
+let g:ctrlp_prompt_mappings = {
+    \ 'PrtSelectMove("j")':   ['<m-j>', '<down>'],
+    \ 'PrtSelectMove("k")':   ['<m-k>', '<up>'],
+    \ 'ToggleType(1)':        ['<m-l>'],
+    \ 'ToggleType(-1)':       ['<m-h>'],
+    \ }
+
+" NerdCommenter{{{3
+" NerdCommenter add a space after comment
+let g:NERDSpaceDelims=1
+" Remove extra spaces when uncommenting
+let g:NERDRemoveExtraSpaces=1
+
+" NERDTree{{{3
+" Close NERDTree when opening file
+let NERDTreeQuitOnOpen = 1
+" Show hidden files by default
+let NERDTreeShowHidden = 1
+" Enable Bookmarks by default
+let NERDTreeShowBookmarks = 1
+" Line Numbers
+let NERDTreeShowLineNumbers=1
+
+" Syntastic{{{3
+" TODO-MB [170506] - Add Python Virtual Environments and make pylint work for
+" Python 2 and 3
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+" TODO-MB [170524] - Find a cleaner way to use syntastic
+nnoremap <leader>cp :SyntasticCheck<CR>
+" Vim-Indent-Guides{{{3
+" Indent Guides default is on
+let g:indent_guides_enable_on_vim_startup = 1
+
+" Vim-QF {{{3
+" let g:qf_mapping_ack_style = 1
+
+" YouCompleteMe{{{3
+" Close preview window after completion
+" let g:ycm_autoclose_preview_window_after_completion=1
+
+nnoremap <space>fi :YcmCompleter FixIt<CR>
+
+" Language/Project Specific{{{1
+" Comma/Pipe/Tab Seperated Values{{{2
+" autocmd BufReadPost *.tsv,*.csv,*.psv execute 'Tabularize /,'
+autocmd BufReadPost *.csv setlocal nowrap
+autocmd BufReadPost *.psv setlocal nowrap
+autocmd BufReadPost *.tsv setlocal nowrap
+" autocmd BufReadPost *.csv 1sp
+" autocmd BufReadPost *.psv 1sp
+" autocmd BufReadPost *.tsv 1sp
+" HTML/JS/SQL{{{2
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+" Mappings{{{1
+" Leader key {{{2
+let mapleader="\<space>"
+" Auto-Indent {{{2
+" Indent entire file and return to current line
+nnoremap <leader>ai mpgg=G'p
+
+" Command Line Navigation {{{2
+
+" Cycle through history
+cmap <m-j> <down>
+cmap <m-k> <up>
+cmap <m-h> <left>
+cmap <m-l> <right>
+
+" Paste
+cmap <c-v> <c-r>+
+
+" Comment {{{2
+
+" Inline Comment
+nnoremap <leader>cii :silent execute "cal NERDComment('n',\"append\")"<CR>
+
+" Comment, Yank and Paste
+nnoremap <leader>cy "zyy:silent execute "cal NERDComment('n',\"comment\")"<CR>"zp
+vnoremap <leader>cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
+
+" Comment/Uncomment Paragraph
+map <leader>cp vip<plug>NERDCommenterYank
+map <leader>cu vip<plug>NERDCommenterUncomment
+
+" Convert Line Endings {{{2
+
+" Convert to Dos
+nnoremap <leader>ctd mz:e ++ff=dos<CR>`z
+
+" Convert to Mac
+nnoremap <leader>ctm mz:e ++ff=mac<CR>`z
+
+" Convert to Unix
+nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
+
+" Cycle through Auto-Suggestions {{{2
+inoremap <m-j> <c-n>
+inoremap <m-k> <c-p>
+
+" Dump Register
+nnoremap <leader><space> "z
+nnoremap <leader>p "adiwP
+
+" Edit Common Files {{{2
+nnoremap <leader>ev :call EditCommonFile($MYVIMRC)<CR>
+nnoremap <leader>ei :call EditCommonFile('$CODE/Windows/VIM/VIM' . path_corrector . ' Instructions.md')<CR>
+nnoremap <leader>egc :call EditCommonFile('$HOME/.gitconfig')<CR>
+nnoremap <leader>eac :call EditCommonFile('$CODE/Windows/AHK/Common.ahk')<CR>
+
+" End/Beginning of Line {{{2
+nnoremap <silent> H ^
+nnoremap <silent> L $
+omap H ^
+omap L $
+
+" Escape Key {{{2
+
+" Disable Highlighting
+nnoremap <esc> :noh<esc>
+
+" NERDTree{{{2
+nnoremap <leader>on :NERDTreeToggle<CR>
+" Find - Local {{{2
+
+" Find string in current file
+nnoremap <C-f> :Find<space>
+
+" Find word under cursor
+map <leader>fw "xyiw:exe "Find \\<".@x."\\>"<CR><m-,>
+
+" TODO-MB [171019] - Finish up the find tag function
+" map <leader>ft :exe "Find \\<".tagbar#currenttag("[%s]","")."\\>"
+
+" Find - Global {{{2
+
+" Find in current Git Repo and put reslts in QuickFix window
+nnoremap <c-g> :RepoFind<space>
+
+" Ggrep word under cursor
+map <leader>gw "xyiw:exe "RepoFind ".@x<CR>
+
+" Yank highlighted text into "z and Ggrep
+vnoremap <c-g> "xy:RepoFind <c-r>x<CR>
+
+" Fix ^M line ending {{{2
+
+" Find and replace ^M with ''
+nnoremap <M-m> :%s/\r$//<CR>
+
+" Find and replace ^M with New Line
+nnoremap <M-n> :%s/\r/\r/<CR>
+
+" Folding {{{2
+
+" Fold Everything except for the current section
+nnoremap <leader>zf zMzvzz
+
+" Create Folds
+noremap <silent> <leader>zz :call WrapFold(v:count)<CR>
+noremap <silent> <leader>zj :call WrapFold(foldlevel(line(".")) + 1)<CR>
+noremap <silent> <leader>zk :call WrapFold(foldlevel(line(".")) - 1)<CR>
+
+" Fugitive - Git {{{2
+nnoremap <leader>gca :Git! c -am<Space>
+nnoremap <leader>gcu :silent Git cu<CR>
+nnoremap <leader>gd :Gdiff<Space>
+nnoremap <leader>gh :Git! hist<CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gp :Gpush<CR>
+
+" Font Size Bigger/Smaller {{{2
+
+" Font Hotkeys
+if has("gui_running")
+    nmap <S-F6> :call FontSizeMinus()<CR>
+    nmap <F6> :call FontSizePlus()<CR>
+endif
+
+" Insert Mode Escape {{{2
+inoremap <silent> <esc> <nop>
+inoremap <silent> <enter> <esc>
+
+" Marks {{{2
+" Jump to proper column when using marks
+nnoremap ' `
+nnoremap ` '
+
+" New blank line {{{2
+" Add blank line before/after current line
+nmap <S-CR> mzO<CR>'z
+nmap <CR> mzo<CR>'z
+
+" Restore Enter key functionality for command history window
+autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
+
+" Navigation {{{2
+" Do not automatically adjust for line wrapping
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+
+" Scrolling{{{2
+
+" Scroll Up
+nnoremap <c-k> 5<c-u>
+" Scroll Down
+nnoremap <c-j> 5<c-d>
+
+" Open File/Folder {{{2
+
+" Explorer
+nnoremap <leader>oe :silent !explorer .<CR>
+
+" Chrome
+nnoremap <leader>oc :silent !"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" ".\<c-r>%"<CR>
+
+" Double Commander
+nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\doublecmd.exe" %:p:h<CR>
+
+" Rename Tag {{{2
+
+" Copy word under cursor into "a and paste into new buffer
+nnoremap <leader>rt mz"ayiw:1sp wordRenamingBuffer<CR>"aP
+
+" After edits, press enter, the original word is renamed globally
+" Press escape to cancel
+au BufWinEnter,BufEnter wordRenamingBuffer nnoremap <buffer> <Esc> :q!<CR>
+au BufWinEnter,BufEnter wordRenamingBuffer nnoremap <buffer> <Enter>
+            \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/g<CR>`z
+
+" QuickFix/Location Lists {{{2
+
+" Go to next/previous search result
+" TODO-MB [171107] - These functions don't work when there's 2/3 results
+nnoremap <m-.> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <m-,> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <m->> :Cnext<CR>:FoldOpen<CR>
+nnoremap <m-<> :Cprev<CR>:FoldOpen<CR>
+
+nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
+nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
+
+" Quit {{{2
+
+" Close location list then quit
+nnoremap <c-w> :lclose<CR>:q<CR>
+
+" A hack to close the Fugitive Plugin window with <c-w>
+nmap gf gf
+
+" Exit command line window q: or q/ with <c-w>
+au CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR>
+
+" Save Buffer {{{2
+
+nnoremap <c-s> :w<CR>
+
+" Snippets {{{2
+" nnoremap <leader>snc :call SnipClass()<CR>
+nnoremap <leader>snc :call SnipComment()<CR>
+nnoremap <leader>snf :call SnipFunction()<CR>
+nnoremap <leader>snh :call SnipHeader()<CR>
+nnoremap <leader>sni :call SnipIf()<CR>
+
+" Show and Trim Spaces {{{2
+
+nnoremap <leader>ts mm:TrimSpaces<CR>
+
+" Sorting {{{2
+nnoremap <leader>so vip:sort<CR>
+
+" Source {{{2
+nnoremap <leader>sv :so $HOME/.vimrc<CR>
+
+" Spell Toggle {{{2
+" Toggle the spelling on/off
+nnoremap <leader>st :SpellToggle<CR>
+
+" TagBar {{{2
+nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
+
+" Run Scripts {{{2
+
+" Initialize Start argument. Can't be null
+au BufEnter * call StartArgInitialize()
+function! StartArgInitialize()
+    if !exists('b:start')
+        let b:start = ''
+    endif
+endfunction
+
+" Run Script Asynchronously
+nnoremap <leader>rr :wa<CR>:silent exe "Start ".@%." "b:start<CR>
+
+" Run Python
+nnoremap <leader>rsp :wa<CR>:silent exe "Start py -2 ".@%." "b:start<CR>
+nnoremap <leader>rp :wa<CR>:exe "Start py -2 ".@%." "b:start<CR>
+
+" Tabs {{{2
+" Open current file in new tab
+noremap <c-t> mm:tabe <c-r>%<CR>`m
+
+" TODOs {{{2
+
+" Add new TODO above current line
+nnoremap <silent> <leader>ti mmO<C-c>:call setline('.',SetTODO())<CR>:call NERDComment(0,'toggle')<CR>==`m
+
+" Find all TODOs
+nnoremap <silent> <leader>tf :call GetTODOs()<CR>
+
+" Window {{{2
+
+" Use Alt+h/j/k/l to move between windows
+nnoremap <M-j> <C-W>j
+nnoremap <M-k> <C-W>k
+nnoremap <M-h> <C-W>h
+nnoremap <M-l> <C-W>l
+
+" Resize
+nnoremap <leader>wgv :<C-U>exec "vertical resize +".v:count1<CR>
+nnoremap <leader>wgh :<C-U>exec "resize +".v:count1<CR>
+
+" Windows Style Commands {{{2
+"
+" Undo and redo
+nnoremap <c-z> :u<CR>
+inoremap <c-z> <Esc>:u<CR>
+nnoremap <c-y> <c-r>
+inoremap <c-y> <Esc><C-r>
+
+" Paste into windows clipboard
+nnoremap <c-v> i<c-r>+<esc>
+inoremap <c-v> <c-r>+
+
+" Yank {{{2
+" Yank till the end of the line
+nnoremap Y y$
+
+" Yank all
+nnoremap <leader>ya mzggyG`z
+
+" Templates {{{1
+" Load template based on current file extension (:help template)
+augroup templates
+    " Remove ALL auto commands for the current group
+    autocmd!
+    " Expand file extension and search templates placing content at top of file
+    autocmd BufNewFile *.* silent! execute '0r $CODE/Windows/VIM/templates/skeleton.'.expand("<afile>:e")
+    " Substitute equations between the VIM_EVAL and END_EVAL equations
+    autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
+augroup END
+
+" Temporary{{{1
+" SQL Assist Mapping {{{2
+autocmd BufReadPost *.sql let @z = expand('%:r')
+"autocmd BufReadPost *.sql nnoremap <leader>rms :silent !python Clone.py & cd C:/Users/Mike/.bin & python sqlShowResults.py <c-r>z<CR>
+autocmd BufReadPost *.sql nnoremap <leader>rms :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
+autocmd BufReadPost *.sql nnoremap <F5> :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
+
