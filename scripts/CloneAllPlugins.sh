@@ -31,6 +31,7 @@ do
     git clone https://github.com/kien/ctrlp.vim "$i/ctrlp"
     git clone https://github.com/majutsushi/tagbar "$i/tagbar"
     git clone https://github.com/nathanaelkane/vim-indent-guides.git "$i/vim-indent-guides"
+    git clone https://github.com/posva/vim-vue "$i/vim-vue"
     git clone https://github.com/scrooloose/nerdcommenter "$i/nerdcommenter"
     git clone https://github.com/scrooloose/nerdtree "$i/nerdtree"
     git clone https://github.com/tpope/vim-dispatch "$i/vim-dispatch"
