@@ -12,6 +12,7 @@
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
 " TODOs {{{1
+" TODO-MB [171219] - In vue files, Lnext doesn't jump to highlighted word
 " TODO-MB [171213] - Fix FindFunc wrapping error when there's 3 records or less in loc window
 " TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
@@ -278,7 +279,7 @@ endfunction
 " Find {{{2
 " Search for string in current file and put results in Location window
 command! -nargs=+ -complete=command Find
-            \| try | call FindFunc(<q-args>) | catch | endtry | set hls
+            \| try | silent call FindFunc(<q-args>) | catch | endtry | set hls
 
 " FoldOpen {{{2
 " Suppress errors when no fold exists
@@ -306,6 +307,10 @@ command! -nargs=+ -complete=command RepoFind
 " Show and Trim Spaces {{{2
 command! -bar -nargs=? ShowSpaces call ShowSpaces(<args>)
 command! -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
+
+" ReplaceMwithBlank {{{2
+" Useful when converting from DOS to Unix line endings
+command! ReplaceMwithBlank try | %s/\r$// | catch | endtry
 
 " SpellToggle {{{2
 command! SpellToggle if (&spell == 0) | setlocal spell | else | setlocal nospell | endif
@@ -487,6 +492,9 @@ execute pathogen#infect()
 let g:airline_section_a = '%f'
 let g:airline_section_c = '%{GetFoldStrings()}'
 
+" Emmet HTML/JS {{{3
+" let g:user_emmet_leader_key = '<C-y>'
+
 " CtrlP {{{3
 " Fuzzy file/buffer/tag open
 
@@ -539,7 +547,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 " YouCompleteMe{{{3
 " Close preview window after completion
-" let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_autoclose_preview_window_after_completion=1
 
 nnoremap <space>fi :YcmCompleter FixIt<CR>
 
@@ -552,9 +560,36 @@ autocmd BufReadPost *.tsv setlocal nowrap
 " autocmd BufReadPost *.csv 1sp
 " autocmd BufReadPost *.psv 1sp
 " autocmd BufReadPost *.tsv 1sp
-" HTML/JS/SQL{{{2
-autocmd FileType html setlocal shiftwidth=2 tabstop=2
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+" HTML/JS {{{2
+autocmd FileType html,javascript,vue setlocal shiftwidth=2 tabstop=2
+
+" Vue {{{2
+
+" NERDCommenter fix
+
+" En error occured when putting this code into a seperate vim.vue file
+let g:vue_disable_pre_processors=1
+let g:ft = ''
+
+function! NERDCommenter_before()
+  if &ft == 'vue'
+    let g:ft = 'vue'
+    let stack = synstack(line('.'), col('.'))
+    if len(stack) > 0
+      let syn = synIDattr((stack)[0], 'name')
+      if len(syn) > 0
+        exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+      endif
+    endif
+  endif
+endfunction
+
+function! NERDCommenter_after()
+  if g:ft == 'vue'
+    setf vue
+    let g:ft = ''
+  endif
+endfunction
 " Mappings{{{1
 " Leader key {{{2
 let mapleader="\<space>"
@@ -647,7 +682,7 @@ vnoremap <c-g> "xy:RepoFind <c-r>x<CR>
 " Fix ^M line ending {{{2
 
 " Find and replace ^M with ''
-nnoremap <M-m> :%s/\r$//<CR>
+nnoremap <M-m> :ReplaceMwithBlank<CR>
 
 " Find and replace ^M with New Line
 nnoremap <M-n> :%s/\r/\r/<CR>
@@ -829,8 +864,8 @@ inoremap <c-z> <Esc>:u<CR>
 nnoremap <c-y> <c-r>
 inoremap <c-y> <Esc><C-r>
 
-" Paste into windows clipboard
-nnoremap <c-v> i<c-r>+<esc>
+" Paste from clipboard
+nnoremap <c-v> o<esc>P
 inoremap <c-v> <c-r>+
 
 " Yank {{{2

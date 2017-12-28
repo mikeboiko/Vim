@@ -22,24 +22,24 @@ do
 
     # git clone --depth=1 https://github.com/vim-syntastic/syntastic "$i/syntastic"
     echo item: $i
-    git clone https://github.com/PProvost/vim-ps1.git "$i/vim-ps1"
-    git clone https://github.com/PyCQA/pylint.git "$i/pylint"
-    git clone https://github.com/Valloric/YouCompleteMe "$i/youcompleteme"
-    git clone https://github.com/Vimjas/vim-python-pep8-indent.git "$i/python-indent"
-    git clone https://github.com/godlygeek/tabular "$i/tabular"
-    git clone https://github.com/junegunn/gv.vim.git "$i/gv-vim"
-    git clone https://github.com/kien/ctrlp.vim "$i/ctrlp"
-    git clone https://github.com/majutsushi/tagbar "$i/tagbar"
-    git clone https://github.com/nathanaelkane/vim-indent-guides.git "$i/vim-indent-guides"
-    git clone https://github.com/posva/vim-vue "$i/vim-vue"
-    git clone https://github.com/scrooloose/nerdcommenter "$i/nerdcommenter"
-    git clone https://github.com/scrooloose/nerdtree "$i/nerdtree"
-    git clone https://github.com/tpope/vim-dispatch "$i/vim-dispatch"
-    git clone https://github.com/tpope/vim-fugitive "$i/vim-fugitive"
-    git clone https://github.com/tpope/vim-repeat "$i/vim-repeat"
-    git clone https://github.com/tpope/vim-surround "$i/vim-surround"
-    git clone https://github.com/vim-airline/vim-airline "$i/vim-airline"
-
+    git clone https://github.com/PProvost/vim-ps1.git "$i/vim-ps1"                          # Powershell file types
+    git clone https://github.com/PyCQA/pylint.git "$i/pylint"                               # Anaylize python code
+    git clone https://github.com/Valloric/YouCompleteMe "$i/youcompleteme"                  # Auto-completion
+    git clone https://github.com/Vimjas/vim-python-pep8-indent.git "$i/python-indent"       # PEP8 standard
+    git clone https://github.com/godlygeek/tabular "$i/tabular"                             # Align things
+    git clone https://github.com/junegunn/gv.vim.git "$i/gv-vim"                            # Access git files easier
+    git clone https://github.com/kien/ctrlp.vim "$i/ctrlp"                                  # Browse recent/project files
+    git clone https://github.com/majutsushi/tagbar "$i/tagbar"                              # Use c-tags in real time and display tag bar
+    git clone https://github.com/mattn/emmet-vim "$i/emmet-vim"                             # Edit HTML/CSS quickly
+    git clone https://github.com/nathanaelkane/vim-indent-guides.git "$i/vim-indent-guides" # Visual indent levels
+    git clone https://github.com/posva/vim-vue "$i/vim-vue"                                 # Vue filetype recognition
+    git clone https://github.com/scrooloose/nerdcommenter "$i/nerdcommenter"                # Commenting
+    git clone https://github.com/scrooloose/nerdtree "$i/nerdtree"                          # Tree file browser
+    git clone https://github.com/tpope/vim-dispatch "$i/vim-dispatch"                       # Asynchronous compilation/commands
+    git clone https://github.com/tpope/vim-fugitive "$i/vim-fugitive"                       # Git wrapper
+    git clone https://github.com/tpope/vim-repeat "$i/vim-repeat"                           # Repeat surround and commenting with .
+    git clone https://github.com/tpope/vim-surround "$i/vim-surround"                       # Surround all the stuff
+    git clone https://github.com/vim-airline/vim-airline "$i/vim-airline"                   # Nice status bar
 done
 
 # Configure YouCompleteMe
