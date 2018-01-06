@@ -493,7 +493,7 @@ let g:airline_section_a = '%f'
 let g:airline_section_c = '%{GetFoldStrings()}'
 
 " Emmet HTML/JS {{{3
-" let g:user_emmet_leader_key = '<C-y>'
+" let g:user_emmet_leader_key = '<c-r>'
 
 " CtrlP {{{3
 " Fuzzy file/buffer/tag open
@@ -511,6 +511,7 @@ let g:ctrlp_prompt_mappings = {
     \ 'ToggleType(1)':        ['<m-l>'],
     \ 'ToggleType(-1)':       ['<m-h>'],
     \ }
+
 
 " NerdCommenter{{{3
 " NerdCommenter add a space after comment
@@ -759,10 +760,11 @@ nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\double
 nnoremap <leader>rt mz"ayiw:1sp wordRenamingBuffer<CR>"aP
 
 " After edits, press enter, the original word is renamed globally
+" The search is case sensitive because of I in .../gI
 " Press escape to cancel
 au BufWinEnter,BufEnter wordRenamingBuffer nnoremap <buffer> <Esc> :q!<CR>
 au BufWinEnter,BufEnter wordRenamingBuffer nnoremap <buffer> <Enter>
-            \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/g<CR>`z
+            \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/gI<CR>`z
 
 " QuickFix/Location Lists {{{2
 
