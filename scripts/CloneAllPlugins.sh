@@ -1,6 +1,7 @@
 #!/bin/bash
 # Enter bash terminal: chmod +x <script name>
 # Run Script: ./<script name>
+# TODO-MB [180106] - Check if in Linux/Windows and don't create vimfiles folder in Linux
 MyFilePath[0]=~/.vim/bundle
 MyFilePath[1]=~/vimfiles/bundle
 
@@ -42,6 +43,7 @@ do
     git clone https://github.com/vim-airline/vim-airline "$i/vim-airline"                   # Nice status bar
 done
 
+# TODO-MB [180106] - Only perform on Windows
 # Configure YouCompleteMe
 if [ ! -d "$HOME/ycm_build" ]; then
     cd ~/vimfiles/bundle/youcompleteme
@@ -52,7 +54,7 @@ if [ ! -d "$HOME/ycm_build" ]; then
     # Visual Studio 2017 packages need to be installed first (not sure which ones)
     cmake -G "Visual Studio 15 Win64" . ~/vimfiles/bundle/YouCompleteMe/third_party/ycmd/cpp
     cmake --build . --target ycm_core --config Release
-	cd ~/vimfiles/bundle/youcompleteme
+    cd ~/vimfiles/bundle/youcompleteme
     python install.py --omnisharp-completer
 fi
 
