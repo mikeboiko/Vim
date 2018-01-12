@@ -58,11 +58,16 @@ if [ ! -d "$HOME/ycm_build" ]; then
     python install.py --omnisharp-completer
 fi
 
-# Configure Pylint
-if [ ! -d "$HOME/vimfiles/bundle/pylint" ]; then
-    cd ~/vimfiles/bundle/pylint
-    python ./setup.py install
-fi
+# YouCompleteMe
+cd ~/.vim/bundle/youcompleteme
+git submodule update --init --recursive
+./install.py --js-completer
+
+# # Configure Pylint
+# if [ ! -d "$HOME/vimfiles/bundle/pylint" ]; then
+    # cd ~/vimfiles/bundle/pylint
+    # python ./setup.py install
+# fi
 
 # echo ${MyFilePath[0]}
 # echo ${MyFilePath[1]}

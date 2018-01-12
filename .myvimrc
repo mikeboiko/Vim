@@ -360,18 +360,21 @@ let g:display_hidden = "hidden"
 " Functionality{{{2
 " General{{{3
 
-" Open GVim in fullscreen mode
+" Optimizer GVim
 if has('GUI')
     " Disable annoying error bell sounds
     autocmd GUIEnter * set vb t_vb=
-    let path_corrector = ''
+
     " Open GVim in Maximized mode
-    autocmd GUIEnter * simalt ~x
+    if has("unix")
+        autocmd GUIEnter * call system('wmctrl -i -b add,maximized_vert,maximized_horz -r '.v:windowid)
+    else
+        autocmd GUIEnter * simalt ~x
+    endif
+
     " Remove Menubar and Toolbar from GVIM
     set guioptions -=m
     set guioptions -=T
-else
-    let path_corrector = '\'
 endif
 
 " General settings required for highlighting
