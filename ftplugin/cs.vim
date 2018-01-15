@@ -6,7 +6,7 @@
 " Notes {{{1
 " Dispatch
 " Compile Asynchronously :Make
-" Run Program Asynchronously :Start C:\Users\Mike\Documents\GitHub\AccuTune\AccuTuneMain\AccuTune\bin\Release\AccuTune.exe -wait=never --unlockApp -t python --log
+" Run Program Asynchronously :Start C:\Users\Mike\Documents\GitRepos\AccuTune\AccuTuneMain\AccuTune\bin\Release\AccuTune.exe -wait=never --unlockApp -t python --log
 
 " Mappings {{{1
 
@@ -43,9 +43,9 @@ nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
 " Project Specific {{{1
 " AccuTuneMain " {{{2
 " Save all files, compile and open AccuTune.exe
-au BufWinEnter,BufEnter */AccuTuneMain/* let b:start='C:\Users\Mike\Documents\GitHub\AccuTune\AccuTuneMain\AccuTune\bin\Release\AccuTune.com --unlockApp -t Simulink.Device1.Python -s Kepware.KEPServerEX.V5 --log'
+au BufWinEnter,BufEnter */AccuTuneMain/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\AccuTuneMain\AccuTune\bin\Release\AccuTune.com --unlockApp -t Simulink.Device1.Python -s Kepware.KEPServerEX.V5 --log'
 
 " AccuTuneLogs " {{{2
 " Save all files, compile and open AccuTune.exe
-au BufWinEnter,BufEnter */AccuTuneLogs/* let b:start='C:\Users\Mike\Documents\GitHub\AccuTune\AccuTuneLogs\LogDecrypt\LogDecrypt\bin\Release\LogDecrypt.exe'
+au BufWinEnter,BufEnter */AccuTuneLogs/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\AccuTuneLogs\LogDecrypt\LogDecrypt\bin\Release\LogDecrypt.exe'
 

@@ -12,6 +12,7 @@
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
 " TODOs {{{1
+" TODO-MB [180113] - AutoOpen/Close brackets and quotes
 " TODO-MB [171219] - In vue files, Lnext doesn't jump to highlighted word
 " TODO-MB [171213] - Fix FindFunc wrapping error when there's 3 records or less in loc window
 " TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
