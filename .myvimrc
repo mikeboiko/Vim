@@ -130,7 +130,6 @@ else
         let &guifont = substitute(&guifont, ':h\d\+$', l:new_font_size, '')
     endfunction
 endif
-
 function! GetBufferList() " {{{2
 " load all current buffers into a list
     redir =>buflist
@@ -319,23 +318,14 @@ command! SpellToggle if (&spell == 0) | setlocal spell | else | setlocal nospell
 
 " Editor Settings{{{1
 " Display{{{2
-
 " 256 color
 set t_Co=256
-
 " Preferred background
 set background=dark
-
 " Preferred color scheme
 colorscheme desert
-
 " Set GVIM Font
-" To select form availbale fonts :set guifont=*
-if has("unix")
-    set guifont=Ubuntu\ Mono\ 13
-else
-    set guifont=Consolas:h12
-endif
+set guifont=Consolas:h12
 
 " Display line number for current line
 set number
@@ -359,25 +349,22 @@ set laststatus=2
 let g:display_hidden = "hidden"
 
 " Functionality{{{2
-" General{{{3
-
-" Optimizer GVim
+" Different VIM Versions{{{3
 if has('GUI')
     " Disable annoying error bell sounds
     autocmd GUIEnter * set vb t_vb=
-
+    let path_corrector = ''
     " Open GVim in Maximized mode
-    if has("unix")
-        autocmd GUIEnter * call system('wmctrl -i -b add,maximized_vert,maximized_horz -r '.v:windowid)
-    else
-        autocmd GUIEnter * simalt ~x
-    endif
-
+    autocmd GUIEnter * simalt ~x
     " Remove Menubar and Toolbar from GVIM
     set guioptions -=m
     set guioptions -=T
+else
+    let path_corrector = '\'
 endif
 
+" General{{{3
+"
 " General settings required for highlighting
 syntax on
 " Enable plug-ins for indentation
@@ -399,14 +386,8 @@ set encoding=utf8
 set modifiable
 " No .swp backup files
 set noswapfile
-
-" Use linux shard clipboard in VIM
-if has("unix")
-    set clipboard=unnamedplus
-" Use windows shard clipboard in VIM
-else
-    set clipboard=unnamed
-endif
+" Use windows clipboard in VIM
+set clipboard=unnamed
 
 " Automatically change current directory when new file is opened
 set autochdir
