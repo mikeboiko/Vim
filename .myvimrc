@@ -12,10 +12,10 @@
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
 " TODOs {{{1
+" TODO-MB [180117] - When there are 2 Location lists open and one of the closes, the second one grows by the number of items of the first one
 " TODO-MB [180113] - AutoOpen/Close brackets and quotes
-" TODO-MB [171219] - In vue files, Lnext doesn't jump to highlighted word
-" TODO-MB [171213] - Fix FindFunc wrapping error when there's 3 records or less in loc window
 " TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
+" TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 " TODO-MB [171101] - Fix QuickFix list regex that formats |
 " TODO-MB [170921] - Vim as a Python IDE:
@@ -58,7 +58,7 @@ function! EditCommonFile(filename) " {{{2
 endfunction
 
 function! FindFunc(...) " {{{2
-    " Move cursor to next pattern match and open fold
+    " Move cursor to next pattern match
     call search(a:1)
     FoldOpen
 
@@ -66,7 +66,7 @@ function! FindFunc(...) " {{{2
     let w:searchStr=a:1
 
     " Record initial line number into "z
-    let @z='| '.line('.').' |'
+    let @z='| '.line('.')
 
     " Clear quickfix list
     lexpr []
@@ -284,8 +284,10 @@ command! -nargs=+ -complete=command Find
             \| try | silent call FindFunc(<q-args>) | catch | endtry | set hls
 
 " FoldOpen {{{2
+
 " Suppress errors when no fold exists
-command! FoldOpen try | silent foldopen! | catch | | endtry
+" The catch part of the command prevents an error that would move the cursor when there are no folds in the file
+command! FoldOpen let save_cursor = getcurpos() | try | silent foldopen! | catch | call setpos('.', save_cursor) | endtry
 
 " QuickFix/Location List Next {{{2
 " Wrap around after hitting first/last record
@@ -295,11 +297,8 @@ command! Lnext try | lnext | catch | lfirst | catch | endtry
 command! Lprev try | lprev | catch | llast | catch | endtry
 
 " GoToMatchedColumn {{{2
-" Since the QF list isn't populated with col numbers, this function
-" allows you to jump to the proper column. It works by recording the
-" current line number, searching for w:searchStr,
-" if the line changed, it goes back
-command! GoToMatchedColumn let @/=w:searchStr | let @z=line('.') | call search(@/) | if (line(".") > @z) | call search(@/, 'b') | endif | set hls
+" Since the QF list isn't populated with col numbers, this function allows you to jump to the proper column.
+command! GoToMatchedColumn exe "normal b" | let @/=w:searchStr | call search(@/) | set hls
 
 " RepoFind {{{2
 " Search for string in current repo and put results in QuickFix window
@@ -685,7 +684,7 @@ nnoremap <leader>on :NERDTreeToggle<CR>
 nnoremap <C-f> :Find<space>
 
 " Find word under cursor
-map <leader>fw "xyiw:exe "Find \\<".@x."\\>"<CR><m-,>
+map <leader>fw "xyiw:exe "Find \\<".@x."\\>"<CR>
 
 " TODO-MB [171019] - Finish up the find tag function
 " map <leader>ft :exe "Find \\<".tagbar#currenttag("[%s]","")."\\>"
@@ -791,6 +790,7 @@ au BufWinEnter,BufEnter wordRenamingBuffer nnoremap <buffer> <Enter>
 
 " Go to next/previous search result
 " TODO-MB [171107] - These functions don't work when there's 2/3 results
+" nnoremap <leader>zf zMzvzz
 nnoremap <m-.> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
 nnoremap <m-,> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
 nnoremap <m->> :Cnext<CR>:FoldOpen<CR>
@@ -916,3 +916,27 @@ autocmd BufReadPost *.sql let @z = expand('%:r')
 autocmd BufReadPost *.sql nnoremap <leader>rms :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
 autocmd BufReadPost *.sql nnoremap <F5> :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
 
+" Highlight all instances of word under cursor, when idle.
+" Useful when studying strange source code.
+" Type z/ to toggle highlighting on/off.
+nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+function! AutoHighlightToggle()
+    let @/ = ''
+    if exists('#auto_highlight')
+        au! auto_highlight
+        augroup! auto_highlight
+        setl updatetime=1000
+        echo 'Highlight current word: off'
+        return 0
+    else
+        augroup auto_highlight
+            au!
+            au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+        augroup end
+        setl updatetime=50
+        echo 'Highlight current word: ON'
+        return 1
+    endif
+endfunction
+" test and test
+" test and test
