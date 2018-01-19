@@ -12,10 +12,9 @@
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
 " TODOs {{{1
-" TODO-MB [180117] - When there are 2 Location lists open and one of the closes, the second one grows by the number of items of the first one
+" TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [180113] - AutoOpen/Close brackets and quotes
 " TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
-" TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 " TODO-MB [171101] - Fix QuickFix list regex that formats |
 " TODO-MB [170921] - Vim as a Python IDE:
@@ -66,7 +65,7 @@ function! FindFunc(...) " {{{2
     let w:searchStr=a:1
 
     " Record initial line number into "z
-    let @z='| '.line('.')
+    let @z=' | '.line('.')
 
     " Clear quickfix list
     lexpr []
@@ -618,7 +617,12 @@ let mapleader="\<space>"
 " Indent entire file and return to current line
 nnoremap <leader>ai mpgg=G'p
 
-" Command Line Navigation {{{2
+" Command Line {{{2
+
+" Get into command window with ; instead of :
+nnoremap : ;
+nnoremap q; q:
+nnoremap ; :
 
 " Cycle through history
 cmap <m-j> <down>
@@ -916,27 +920,3 @@ autocmd BufReadPost *.sql let @z = expand('%:r')
 autocmd BufReadPost *.sql nnoremap <leader>rms :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
 autocmd BufReadPost *.sql nnoremap <F5> :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
 
-" Highlight all instances of word under cursor, when idle.
-" Useful when studying strange source code.
-" Type z/ to toggle highlighting on/off.
-nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
-function! AutoHighlightToggle()
-    let @/ = ''
-    if exists('#auto_highlight')
-        au! auto_highlight
-        augroup! auto_highlight
-        setl updatetime=1000
-        echo 'Highlight current word: off'
-        return 0
-    else
-        augroup auto_highlight
-            au!
-            au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
-        augroup end
-        setl updatetime=50
-        echo 'Highlight current word: ON'
-        return 1
-    endif
-endfunction
-" test and test
-" test and test
