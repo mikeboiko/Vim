@@ -41,6 +41,8 @@ do
     git clone https://github.com/tpope/vim-repeat "$i/vim-repeat"                           # Repeat surround and commenting with .
     git clone https://github.com/tpope/vim-surround "$i/vim-surround"                       # Surround all the stuff
     git clone https://github.com/vim-airline/vim-airline "$i/vim-airline"                   # Nice status bar
+    git clone https://github.com/jiangmiao/auto-pairs "$i/auto-pairs"                       # Auto-close brackets
+
 done
 
 # TODO-MB [180106] - Only perform on Windows

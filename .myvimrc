@@ -12,16 +12,18 @@
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
 " TODOs {{{1
+" TODO-MB [180120] - Fork autopairs repo and copy code for <CR> to <s-CR>
+" TODO-MB [180120] - Get rid of folds.vimrc file and only leave the 1 line that assigns a string {{{
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [180113] - AutoOpen/Close brackets and quotes
 " TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
+" TODO-MB [180120] - Copy <m-p> autopairs toggle display style to my SpellToggle command
 " TODO-MB [171101] - Fix QuickFix list regex that formats |
-" TODO-MB [170921] - Vim as a Python IDE:
-" https://www.youtube.com/watch?v=YhqsjUUHj6g&feature=youtu.be
 " TODO-MB [170814] - Create skeleton file for markdown/others
 " TODO-MB [170712] - Powershell is loading slowly
 " TODO-MB [170712] - Fix ssh conection on start-up
+" TODO-MB [170921] - Vim as a Python IDE: https://www.youtube.com/watch?v=YhqsjUUHj6g&feature=youtu.be
 
 " Constants {{{1
 
@@ -512,7 +514,7 @@ let g:airline_section_a = '%f'
 let g:airline_section_c = '%{GetFoldStrings()}'
 
 " Emmet HTML/JS {{{3
-let g:user_emmet_leader_key = '<tab>'
+let g:user_emmet_leader_key = '<c-b>'
 
 " CtrlP {{{3
 " Fuzzy file/buffer/tag open
@@ -737,7 +739,7 @@ if has("gui_running")
 endif
 
 " Insert Mode Escape {{{2
-inoremap <silent> <esc> <nop>
+" inoremap <silent> <esc> <nop>
 inoremap <silent> <enter> <esc>
 
 " Marks {{{2
@@ -747,8 +749,8 @@ nnoremap ` '
 
 " New blank line {{{2
 " Add blank line before/after current line
-nmap <S-CR> mzO<CR>'z
-nmap <CR> mzo<CR>'z
+nnoremap <CR> :<CR>mzo<Esc>`z:<CR>
+nnoremap <s-CR> :<CR>mzO<Esc>`z:<CR>
 
 " Restore Enter key functionality for command history window
 autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
@@ -917,4 +919,3 @@ autocmd BufReadPost *.sql let @z = expand('%:r')
 "autocmd BufReadPost *.sql nnoremap <leader>rms :silent !python Clone.py & cd C:/Users/Mike/.bin & python sqlShowResults.py <c-r>z<CR>
 autocmd BufReadPost *.sql nnoremap <leader>rms :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
 autocmd BufReadPost *.sql nnoremap <F5> :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
-

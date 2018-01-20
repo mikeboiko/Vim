@@ -84,10 +84,12 @@ endfunction
 
 "Comment with fold levels - inline
 " TODO-MB [171114] - Use Tabular alignment with comment character
-map <leader>ci1 <plug>NERDCommenterAppend{{{1<CR>
-map <leader>ci2 <plug>NERDCommenterAppend{{{2<CR>
-map <leader>ci3 <plug>NERDCommenterAppend{{{3<CR>
-map <leader>ci4 <plug>NERDCommenterAppend{{{4<CR>
+" map <leader>ci1 <plug>NERDCommenterAppend{{{1<CR>
+let fold_marker_string = "{{{"
+map <leader>ci1 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>1<ESC>
+map <leader>ci2 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>2<ESC>
+map <leader>ci3 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>3<ESC>
+map <leader>ci4 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>4<ESC>
 
 " Travis's Fold Function
 
