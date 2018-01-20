@@ -512,7 +512,7 @@ let g:airline_section_a = '%f'
 let g:airline_section_c = '%{GetFoldStrings()}'
 
 " Emmet HTML/JS {{{3
-" let g:user_emmet_leader_key = '<c-r>'
+let g:user_emmet_leader_key = '<tab>'
 
 " CtrlP {{{3
 " Fuzzy file/buffer/tag open
@@ -619,10 +619,8 @@ nnoremap <leader>ai mpgg=G'p
 
 " Command Line {{{2
 
-" Get into command window with ; instead of :
-nnoremap : ;
+" Get into command history
 nnoremap q; q:
-nnoremap ; :
 
 " Cycle through history
 cmap <m-j> <down>
@@ -833,7 +831,7 @@ nnoremap <leader>ts mm:TrimSpaces<CR>
 nnoremap <leader>so vip:sort<CR>
 
 " Source {{{2
-nnoremap <leader>sv :so $HOME/.vimrc<CR>
+nnoremap <leader>sv :w<CR>:so $HOME/.vimrc<CR>
 
 " Spell Toggle {{{2
 " Toggle the spelling on/off
