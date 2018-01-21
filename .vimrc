@@ -8,6 +8,7 @@ endif
 
 " Source vimrc files
 let $MYVIMRC='$CODE/VIM/.myvimrc'
-let $FOLDSVIMRC='$CODE/VIM/folds.vimrc'
 :so $MYVIMRC
-:so $FOLDSVIMRC
+
+" Placing this string here prevents .myvimrc from getting messed up folding
+let fold_marker_string = "{{{"

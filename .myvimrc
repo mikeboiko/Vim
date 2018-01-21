@@ -12,8 +12,10 @@
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
 " TODOs {{{1
+" TODO-MB [180120] - Create mapping gp (g preview) so it acts like gd but in a small new window up top
 " TODO-MB [180120] - Fork autopairs repo and copy code for <CR> to <s-CR>
-" TODO-MB [180120] - Get rid of folds.vimrc file and only leave the 1 line that assigns a string {{{
+" TODO-MB [171114] - Use Tabular alignment when doing inline comments (ci1). The title comments, 1st line in paragraph shouldn't match
+" TODO-MB [180120] - Create macro to put a space after all comments that don't currently have it
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [180113] - AutoOpen/Close brackets and quotes
 " TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
@@ -278,7 +280,112 @@ function! SnipIf() " {{{3
     endif
 endfunction
 
-" Commands {{{1
+function! WrapFold(foldlevel) range " {{{2
+" Create a fold on the current line(s)
+    let foldlevel = a:foldlevel
+    if l:foldlevel == 0
+        let foldlevel = foldlevel(line('.'))
+        if l:foldlevel == 0
+            let foldlevel = 1
+        endif
+    endif
+
+    " User entered fold name
+    let prompt = UserInput(g:prompt_wrapFold)
+
+    " TODO [171105] - Do I need this anymore?
+
+    " Prevent folding on seperate levels
+    let foldLevelFirst = foldlevel(a:firstline)
+    let foldLevelLast = foldlevel(a:lastline)
+    if len(getline(a:firstline, a:lastline)) == 0 || l:foldLevelFirst != l:foldLevelLast
+        return '' " No lines selected
+    endif
+
+    " Wrap selection with fold
+    execute 'normal! mm'
+    execute 'normal! ' . a:firstline . 'GO' . prompt . fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
+    execute 'normal! `m'
+endfunction
+
+function! GetFoldStrings() " {{{2
+" Make the status string a list of all the folds
+    " Iterate through each fold level and add fold string to list
+    let foldStringList = []
+    let i = 1
+    while i <= foldlevel(".")
+        " Append string to list
+        call add(foldStringList, FormatFoldString(GetLastFoldLineNum(i)))
+        let i += 1
+    endwhile
+
+    " Add each fold line to status string
+    let statusString = ""
+    for i in foldStringList
+        let statusString = statusString."|".i
+    endfor
+
+    return statusString."|"
+endfunction
+
+function! GetLastFoldString() " {{{2
+" Get the text of the last fold
+    return FormatFoldString(GetLastFoldLineNum(foldlevel(".")))."|"
+endfunction
+
+function! FormatFoldString(lineNum) " {{{2
+" Format fold string so it looks neat
+    " Get the line string of the current fold and remove special chars
+    let line = getline(a:lineNum)
+    " Remove programming language specific words
+    let line = RemoveFiletypeSpecific(line)
+    " Remove special (comment related) characters and extra spaces
+    let line = RemoveSpecialCharacters(line)
+    return line
+endfunction
+
+function! GetLastFoldLineNum(foldLvl) " {{{2
+" Get the line number of last Fold
+    " Only search current line for fold marker
+    let line = search(fold_marker_string.a:foldLvl,"n",line("."))
+    " Search backwards for fold marker
+    if (line==0)
+        let line = search(fold_marker_string.a:foldLvl,"bn")
+    endif
+    return line
+endfunction
+
+function! RemoveSpecialCharacters(line) " {{{2
+" Remove special (comment related) characters and extra spaces
+" Characters: " # ; /* */ // \d <!-- --> fold_marker_string
+    " Remove special characters
+    let text = substitute(a:line, '<!--\|-->\|\"\|#\|;\|/\*\|\*/\|//\|'.fold_marker_string.'\d\=', '', 'g')
+    " Replace 2 or more spaces with a single space
+    let text = substitute(text, ' \{2,}', ' ', 'g')
+    " Remove leading and trailing spaces
+    let text = substitute(text, '^\s*\|\s*$', '', 'g')
+    " Remove text between () in functions
+    let text = substitute(text, '(\(.*\)', '()', 'g')
+    " Add nice padding
+    return " ".text." "
+endfunction
+
+function! RemoveFiletypeSpecific(line) " {{{2
+" Remove programming language specific words
+    let text = a:line
+    if (&ft=='python')
+        " Functions/Classes
+        let text = substitute(a:line, '\<def\>\|\<class\>', '', 'g')
+    elseif  (&ft=='cs')
+        " Functions/Events
+        let text = substitute(a:line, '\<static\>\|\<int\>\|\<float\>\|\<void\>\|\<string\>\|\<bool\>\|\<private\>\|\<public\>\s', '', 'g')
+    elseif  (&ft=='vim')
+        " Functions/Events
+        let text = substitute(a:line, '\<function\>!\s', '', 'g')
+    endif
+    return text
+endfunction
+ " Commands {{{1
 " Find {{{2
 " Search for string in current file and put results in Location window
 command! -nargs=+ -complete=command Find
@@ -339,6 +446,7 @@ endif
 
 " Display line number for current line
 set number
+
 " Display relative line number along the left hand side
 set relativenumber
 
@@ -347,16 +455,24 @@ set scrolloff=5
 
 " Visual auto complete for command menu
 set wildmenu
+
 " Show command in bottom bar
 set showcmd
+
 " Do not redraw during operations such as macro
 set lazyredraw
+
 " Don't wrap/line break in the middle of a word
 set linebreak
+
 " Always display the status line even if only one window is displayed
 set laststatus=2
+
 " Display hidden char
 let g:display_hidden = "hidden"
+
+" Change the text that is displayed while in a fold
+set foldtext=v:folddashes.FormatFoldString(v:foldstart)
 
 " Functionality{{{2
 " General{{{3
@@ -615,6 +731,11 @@ endfunction
 " Mappings{{{1
 " Leader key {{{2
 let mapleader="\<space>"
+
+" Add colon to EOL
+" This is useful for C#
+inoremap <m-;> <esc>A;<esc>
+
 " Auto-Indent {{{2
 " Indent entire file and return to current line
 nnoremap <leader>ai mpgg=G'p
@@ -637,6 +758,12 @@ cmap <c-v> <c-r>+
 
 " Inline Comment
 nnoremap <leader>cii :silent execute "cal NERDComment('n',\"append\")"<CR>
+
+" Inline comments with folds
+map <leader>ci1 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>1<ESC>
+map <leader>ci2 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>2<ESC>
+map <leader>ci3 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>3<ESC>
+map <leader>ci4 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>4<ESC>
 
 " Comment, Yank and Paste
 nnoremap <leader>cy "zyy:silent execute "cal NERDComment('n',\"comment\")"<CR>"zp
