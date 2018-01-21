@@ -304,7 +304,7 @@ function! WrapFold(foldlevel) range " {{{2
 
     " Wrap selection with fold
     execute 'normal! mm'
-    execute 'normal! ' . a:firstline . 'GO' . prompt . fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
+    execute 'normal! ' . a:firstline . 'GO' . prompt . g:fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
     execute 'normal! `m'
 endfunction
 
@@ -347,19 +347,19 @@ endfunction
 function! GetLastFoldLineNum(foldLvl) " {{{2
 " Get the line number of last Fold
     " Only search current line for fold marker
-    let line = search(fold_marker_string.a:foldLvl,"n",line("."))
+    let line = search(g:fold_marker_string.a:foldLvl,"n",line("."))
     " Search backwards for fold marker
     if (line==0)
-        let line = search(fold_marker_string.a:foldLvl,"bn")
+        let line = search(g:fold_marker_string.a:foldLvl,"bn")
     endif
     return line
 endfunction
 
 function! RemoveSpecialCharacters(line) " {{{2
 " Remove special (comment related) characters and extra spaces
-" Characters: " # ; /* */ // \d <!-- --> fold_marker_string
+" Characters: " # ; /* */ // <!-- --> g:fold_marker_string
     " Remove special characters
-    let text = substitute(a:line, '<!--\|-->\|\"\|#\|;\|/\*\|\*/\|//\|'.fold_marker_string.'\d\=', '', 'g')
+    let text = substitute(a:line, '<!--\|-->\|\"\|#\|;\|/\*\|\*/\|//\|'.g:fold_marker_string.'\d\=', '', 'g')
     " Replace 2 or more spaces with a single space
     let text = substitute(text, ' \{2,}', ' ', 'g')
     " Remove leading and trailing spaces
@@ -760,10 +760,10 @@ cmap <c-v> <c-r>+
 nnoremap <leader>cii :silent execute "cal NERDComment('n',\"append\")"<CR>
 
 " Inline comments with folds
-map <leader>ci1 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>1<ESC>
-map <leader>ci2 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>2<ESC>
-map <leader>ci3 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>3<ESC>
-map <leader>ci4 <plug>NERDCommenterAppend<c-r>=fold_marker_string<CR>4<ESC>
+map <leader>ci1 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>1<ESC>
+map <leader>ci2 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>2<ESC>
+map <leader>ci3 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>3<ESC>
+map <leader>ci4 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>4<ESC>
 
 " Comment, Yank and Paste
 nnoremap <leader>cy "zyy:silent execute "cal NERDComment('n',\"comment\")"<CR>"zp

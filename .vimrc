@@ -6,9 +6,11 @@ else
     let $CODE='$HOME/Documents/GitRepos'
 endif
 
-" Source vimrc files
+" Placing this string here prevents .myvimrc from getting messed up folding
+let g:fold_marker_string = "{{{"
+
+" Source main vimrc file
 let $MYVIMRC='$CODE/VIM/.myvimrc'
 :so $MYVIMRC
 
-" Placing this string here prevents .myvimrc from getting messed up folding
-let fold_marker_string = "{{{"
+" vim: foldmethod=manual:foldlevel=5
