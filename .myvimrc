@@ -37,6 +37,9 @@ let g:qfListHeight = 5
 let g:setTodoHeader = 'TODO: '
 let g:prompt_wrapFold = 'Fold Text: '
 
+" Fold marker string used through vimrc file without messing up folding
+let g:fold_marker_string = '{'. '{'. '{'
+
 " Functions {{{1
 function! CloseQuickFixWindow() " {{{2
     " If the window is quickfix, proceed
@@ -733,8 +736,9 @@ endfunction
 let mapleader="\<space>"
 
 " Add colon to EOL
-" This is useful for C#
+" This is useful for C# and other programming languages
 inoremap <m-;> <esc>A;<esc>
+nnoremap <m-;> mzA;<esc>`z
 
 " Auto-Indent {{{2
 " Indent entire file and return to current line
