@@ -52,7 +52,7 @@ function! CloseQuickFixWindow() " {{{2
 endfunction
 
 function! EditCommonFile(filename) " {{{2
-" Open file in new teb
+    " Open file in new teb
     let current_filename = expand('%:t')
     let openfilestring = 'tabedit ' . a:filename
     silent exec openfilestring
@@ -138,7 +138,7 @@ else
 endif
 
 function! GetBufferList() " {{{2
-" load all current buffers into a list
+    " load all current buffers into a list
     redir =>buflist
     silent! ls!
     redir END
@@ -146,7 +146,7 @@ function! GetBufferList() " {{{2
 endfunction
 
 function! GetTODOs() " {{{2
-" TODO [171103] - Add current file ONLY option
+    " TODO [171103] - Add current file ONLY option
     " Binary files that can be ignored
     set wildignore+=*.jpg,*.docx,*.xlsm,*.mp4
     " Seacrch the CWD to find all of your current TODOs
@@ -156,7 +156,7 @@ function! GetTODOs() " {{{2
 endfunction
 
 function! ToggleList(bufname, pfx) " {{{2
-" Toggle QuickFix/Location List, don't change focus
+    " Toggle QuickFix/Location List, don't change focus
     let buflist = GetBufferList()
     for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
         if bufwinnr(bufnum) != -1
@@ -178,7 +178,7 @@ function! ToggleList(bufname, pfx) " {{{2
         endif
         " Open window with minimum height
         exec 'bot '. w:locListHeight .a:pfx.'open'
-    " QuickFix List
+        " QuickFix List
     elseif a:pfx == 'c'
         " Open window with minimum height
         exec 'top '. g:qfListHeight .a:pfx.'open'
@@ -192,8 +192,8 @@ function! ToggleList(bufname, pfx) " {{{2
 endfunction
 
 function! RepoGrep(...) " {{{2
-" TODO-MB [171106] - Make this function work with multi-word arguments
-" Fugitive Ggrep Wrapper
+    " TODO-MB [171106] - Make this function work with multi-word arguments
+    " Fugitive Ggrep Wrapper
     " Load QuickFix window with grep results
     exe 'silent Ggrep! -i ' . a:1
     let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ])
@@ -201,13 +201,13 @@ function! RepoGrep(...) " {{{2
 endfunction
 
 function! SetTODO() " {{{2
-" Insert a new TODOs
+    " Insert a new TODOs
     " Return the TODOs string
     return 'TODO-MB [' . strftime('%y%m%d') . '] - ' . UserInput(g:setTodoHeader)
 endfunction
 
 function! ShowSpaces(...) " {{{2
-" Show trailing white spaces
+    " Show trailing white spaces
     let @/='\v(\s+$)|( +\ze\t)'
     let oldhlsearch=&hlsearch
     if !a:0
@@ -219,7 +219,7 @@ function! ShowSpaces(...) " {{{2
 endfunction
 
 function! TrimSpaces() range " {{{2
-" Trim trailing white spaces
+    " Trim trailing white spaces
     let oldhlsearch=ShowSpaces(1)
     execute a:firstline.",".a:lastline."substitute ///gec"
     let &hlsearch=oldhlsearch
@@ -227,8 +227,8 @@ function! TrimSpaces() range " {{{2
 endfunction
 
 function! UserInput(prompt) " {{{2
-" TODO [171104] - Need escape sequence
-" Get a string input from the user
+    " TODO [171104] - Need escape sequence
+    " Get a string input from the user
     " Get input from user
     call inputsave()
     let reply=input(a:prompt)
@@ -284,7 +284,7 @@ function! SnipIf() " {{{3
 endfunction
 
 function! WrapFold(foldlevel) range " {{{2
-" Create a fold on the current line(s)
+    " Create a fold on the current line(s)
     let foldlevel = a:foldlevel
     if l:foldlevel == 0
         let foldlevel = foldlevel(line('.'))
@@ -312,7 +312,7 @@ function! WrapFold(foldlevel) range " {{{2
 endfunction
 
 function! GetFoldStrings() " {{{2
-" Make the status string a list of all the folds
+    " Make the status string a list of all the folds
     " Iterate through each fold level and add fold string to list
     let foldStringList = []
     let i = 1
@@ -332,12 +332,12 @@ function! GetFoldStrings() " {{{2
 endfunction
 
 function! GetLastFoldString() " {{{2
-" Get the text of the last fold
+    " Get the text of the last fold
     return FormatFoldString(GetLastFoldLineNum(foldlevel(".")))."|"
 endfunction
 
 function! FormatFoldString(lineNum) " {{{2
-" Format fold string so it looks neat
+    " Format fold string so it looks neat
     " Get the line string of the current fold and remove special chars
     let line = getline(a:lineNum)
     " Remove programming language specific words
@@ -348,7 +348,7 @@ function! FormatFoldString(lineNum) " {{{2
 endfunction
 
 function! GetLastFoldLineNum(foldLvl) " {{{2
-" Get the line number of last Fold
+    " Get the line number of last Fold
     " Only search current line for fold marker
     let line = search(g:fold_marker_string.a:foldLvl,"n",line("."))
     " Search backwards for fold marker
@@ -359,8 +359,8 @@ function! GetLastFoldLineNum(foldLvl) " {{{2
 endfunction
 
 function! RemoveSpecialCharacters(line) " {{{2
-" Remove special (comment related) characters and extra spaces
-" Characters: " # ; /* */ // <!-- --> g:fold_marker_string
+    " Remove special (comment related) characters and extra spaces
+    " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
     " Remove special characters
     let text = substitute(a:line, '<!--\|-->\|\"\|#\|;\|/\*\|\*/\|//\|'.g:fold_marker_string.'\d\=', '', 'g')
     " Replace 2 or more spaces with a single space
@@ -374,7 +374,7 @@ function! RemoveSpecialCharacters(line) " {{{2
 endfunction
 
 function! RemoveFiletypeSpecific(line) " {{{2
-" Remove programming language specific words
+    " Remove programming language specific words
     let text = a:line
     if (&ft=='python')
         " Functions/Classes
@@ -388,7 +388,7 @@ function! RemoveFiletypeSpecific(line) " {{{2
     endif
     return text
 endfunction
- " Commands {{{1
+" Commands {{{1
 " Find {{{2
 " Search for string in current file and put results in Location window
 command! -nargs=+ -complete=command Find
@@ -523,7 +523,7 @@ set noswapfile
 " Use linux shard clipboard in VIM
 if has("unix")
     set clipboard=unnamedplus
-" Use windows shard clipboard in VIM
+    " Use windows shard clipboard in VIM
 else
     set clipboard=unnamed
 endif
@@ -591,15 +591,15 @@ set smartcase
 " TODO-MB [171030] - The second regex expression will match every second |
 " Align QuickFix List (only first 3 '|')
 au BufReadPost QuickFix,Location setlocal modifiable
-    \| silent exe 'Tab /^.\{-}\zs|'
-    \| silent exe 'Tab /\(.\{-}\zs|\)\{2}'
-    \| silent exe 'Tab /\(.\{-}\zs|\)\{3}'
-    \| setlocal nowrap
-    \| setlocal norelativenumber
-    \| setlocal cursorline
-    \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>
-    \| setlocal nomodifiable
-    " \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>:GoToMatchedColumn<CR>
+            \| silent exe 'Tab /^.\{-}\zs|'
+            \| silent exe 'Tab /\(.\{-}\zs|\)\{2}'
+            \| silent exe 'Tab /\(.\{-}\zs|\)\{3}'
+            \| setlocal nowrap
+            \| setlocal norelativenumber
+            \| setlocal cursorline
+            \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>
+            \| setlocal nomodifiable
+" \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>:GoToMatchedColumn<CR>
 
 " Close QuickFix/Location lists automatically when it's the last window in current tab
 au BufEnter * call CloseQuickFixWindow()
@@ -621,8 +621,8 @@ set undofile
 " SEBOL:
 au BufRead,BufNewFile *.sebol setfiletype sebol
 let g:NERDCustomDelimiters = {
-    \ 'sebol': { 'left': '!', 'right': '' }
-\ }
+            \ 'sebol': { 'left': '!', 'right': '' }
+            \ }
 
 " Pathogen{{{3
 " Pathogen source all Vim bundles found in ~/.vim/bundle
@@ -646,11 +646,11 @@ let g:ctrlp_by_filename = 1
 
 " Remap hotkeys
 let g:ctrlp_prompt_mappings = {
-    \ 'PrtSelectMove("j")':   ['<m-j>', '<down>'],
-    \ 'PrtSelectMove("k")':   ['<m-k>', '<up>'],
-    \ 'ToggleType(1)':        ['<m-l>'],
-    \ 'ToggleType(-1)':       ['<m-h>'],
-    \ }
+            \ 'PrtSelectMove("j")':   ['<m-j>', '<down>'],
+            \ 'PrtSelectMove("k")':   ['<m-k>', '<up>'],
+            \ 'ToggleType(1)':        ['<m-l>'],
+            \ 'ToggleType(-1)':       ['<m-h>'],
+            \ }
 
 
 " NerdCommenter{{{3
@@ -713,24 +713,25 @@ let g:vue_disable_pre_processors=1
 let g:ft = ''
 
 function! NERDCommenter_before()
-  if &ft == 'vue'
-    let g:ft = 'vue'
-    let stack = synstack(line('.'), col('.'))
-    if len(stack) > 0
-      let syn = synIDattr((stack)[0], 'name')
-      if len(syn) > 0
-        exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
-      endif
+    if &ft == 'vue'
+        let g:ft = 'vue'
+        let stack = synstack(line('.'), col('.'))
+        if len(stack) > 0
+            let syn = synIDattr((stack)[0], 'name')
+            if len(syn) > 0
+                exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+            endif
+        endif
     endif
-  endif
 endfunction
 
 function! NERDCommenter_after()
-  if g:ft == 'vue'
-    setf vue
-    let g:ft = ''
-  endif
+    if g:ft == 'vue'
+        setf vue
+        let g:ft = ''
+    endif
 endfunction
+
 " Mappings{{{1
 " Leader key {{{2
 let mapleader="\<space>"
