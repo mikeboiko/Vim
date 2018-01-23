@@ -41,7 +41,7 @@ do
     git clone https://github.com/tpope/vim-repeat "$i/vim-repeat"                           # Repeat surround and commenting with .
     git clone https://github.com/tpope/vim-surround "$i/vim-surround"                       # Surround all the stuff
     git clone https://github.com/vim-airline/vim-airline "$i/vim-airline"                   # Nice status bar
-    git clone https://github.com/jiangmiao/auto-pairs "$i/auto-pairs"                       # Auto-close brackets
+    git clone https://github.com/mikeboiko/auto-pairs "$i/auto-pairs"                       # Auto-close brackets
 
 done
 
@@ -60,10 +60,11 @@ if [ ! -d "$HOME/ycm_build" ]; then
     python install.py --omnisharp-completer
 fi
 
-# YouCompleteMe
-cd ~/.vim/bundle/youcompleteme
-git submodule update --init --recursive
-./install.py --js-completer
+# TODO-MB [180122] - Fix this for linux
+# # YouCompleteMe
+# cd ~/.vim/bundle/youcompleteme
+# git submodule update --init --recursive
+# ./install.py --js-completer
 
 # # Configure Pylint
 # if [ ! -d "$HOME/vimfiles/bundle/pylint" ]; then

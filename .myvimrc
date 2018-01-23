@@ -12,12 +12,10 @@
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
 " TODOs {{{1
-" TODO-MB [180120] - Create mapping gp (g preview) so it acts like gd but in a small new window up top
-" TODO-MB [180120] - Fork autopairs repo and copy code for <CR> to <s-CR>
+" TODO-MB [180122] - Get equalprgs for commonly used languages
 " TODO-MB [171114] - Use Tabular alignment when doing inline comments (ci1). The title comments, 1st line in paragraph shouldn't match
 " TODO-MB [180120] - Create macro to put a space after all comments that don't currently have it
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
-" TODO-MB [180113] - AutoOpen/Close brackets and quotes
 " TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 " TODO-MB [180120] - Copy <m-p> autopairs toggle display style to my SpellToggle command
@@ -563,9 +561,6 @@ set foldlevel=2
 set autoindent
 set smartindent
 
-" Case Auto-Indent enable (not sure what this is)
-" let g:sh_indent_case_labels=1
-
 " Set tab width
 set tabstop=4
 set softtabstop=4
@@ -909,6 +904,9 @@ nnoremap <leader>oc :silent !"C:\Program Files (x86)\Google\Chrome\Application\c
 
 " Double Commander
 nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\doublecmd.exe" %:p:h<CR>
+
+" Preview Definition{{{2
+map gp :15sp<CR>gdzv
 
 " Rename Tag {{{2
 
