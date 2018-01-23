@@ -18,7 +18,6 @@
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
-" TODO-MB [180120] - Copy <m-p> autopairs toggle display style to my SpellToggle command
 " TODO-MB [171101] - Fix QuickFix list regex that formats |
 " TODO-MB [170814] - Create skeleton file for markdown/others
 " TODO-MB [170712] - Powershell is loading slowly
@@ -423,7 +422,7 @@ command! -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
 command! ReplaceMwithBlank try | %s/\r$// | catch | endtry
 
 " SpellToggle {{{2
-command! SpellToggle if (&spell == 0) | setlocal spell | else | setlocal nospell | endif
+command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
 
 " Editor Settings{{{1
 " Display{{{2
@@ -905,8 +904,13 @@ nnoremap <leader>oc :silent !"C:\Program Files (x86)\Google\Chrome\Application\c
 " Double Commander
 nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\doublecmd.exe" %:p:h<CR>
 
-" Preview Definition{{{2
-map gp :15sp<CR>gdzv
+" Go to Definition{{{2
+
+" Preview definition in split window and focus on fold
+map gp :sp<CR>gdzMzvzz
+
+" Go to definition and focus on fold
+map gd gdzMzvzz
 
 " Rename Tag {{{2
 
