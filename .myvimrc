@@ -12,12 +12,13 @@
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
 " TODOs {{{1
-" TODO-MB [180122] - Get equalprgs for commonly used languages
-" TODO-MB [171114] - Use Tabular alignment when doing inline comments (ci1). The title comments, 1st line in paragraph shouldn't match
-" TODO-MB [180120] - Create macro to put a space after all comments that don't currently have it
+" TODO-MB [180123] - echo b:NERDCommenterDelims in python and get rid of space in Left delimiter (also .bat)
+" TODO-MB [180123] - Figure out best way to abort user prompts in functions
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
-" TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
+" TODO-MB [180122] - Get equalprgs for commonly used languages
+
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
+" TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
 " TODO-MB [171101] - Fix QuickFix list regex that formats |
 " TODO-MB [170814] - Create skeleton file for markdown/others
 " TODO-MB [170712] - Powershell is loading slowly
@@ -32,7 +33,8 @@ let g:qfListHeight = 5
 
 " Data entry prompts
 let g:setTodoHeader = 'TODO: '
-let g:prompt_wrapFold = 'Fold Text: '
+let g:promptWrapFold = 'Fold Text: '
+let g:promptCommentText = 'Comment Text: '
 
 " Fold marker string used through vimrc file without messing up folding
 let g:fold_marker_string = '{'. '{'. '{'
@@ -46,6 +48,39 @@ function! CloseQuickFixWindow() " {{{2
             quit!
         endif
     endif
+endfunction
+
+function! CommentInline() " {{{2
+    " Add inline comment and align with other inline comments
+
+    " Prompt user for comment text
+    let prompt = UserInput(g:promptCommentText)
+
+    " Temporarily disable auto-pairs wrapping so the comment delimiter doesn't repeat
+    let b:autopairs_enabled = 0
+
+    " Add inline comment
+    exe 'normal A ' . b:NERDCommenterDelims['left'] . ' ' . prompt
+
+    " Prepare string with escaped special characters for Tab plugin
+    let escapedCommaDelimiter = escape(b:NERDCommenterDelims['left'], '/')
+
+    " TODO-MB [180123] - The alignment needs to be fixed so it doesn't align the first row if it's a comment
+    " Align comments in paragraph
+    " exe "Tab /" . escapedCommaDelimiter
+
+    " Re-enable auto-pairs
+    let b:autopairs_enabled = 1
+
+endfunction
+
+function! CodeCleanUP() " {{{2
+    " Macros to clean up code
+
+    " Put a space after comment delimiter if it doesn't exist already
+    let escapedCommaDelimiter = escape(b:NERDCommenterDelims['left'], '/')
+    exe '%s/' . escapedCommaDelimiter . '\(\s\)\@!/' . escapedCommaDelimiter .' /g'
+
 endfunction
 
 function! EditCommonFile(filename) " {{{2
@@ -103,6 +138,84 @@ function! FindFunc(...) " {{{2
     GoToMatchedColumn
 endfunction
 
+" FoldText{{{2
+function! GetFoldStrings() " {{{3
+    " Make the status string a list of all the folds
+    " Iterate through each fold level and add fold string to list
+    let foldStringList = []
+    let i = 1
+    while i <= foldlevel(".")
+        " Append string to list
+        call add(foldStringList, FormatFoldString(GetLastFoldLineNum(i)))
+        let i += 1
+    endwhile
+
+    " Add each fold line to status string
+    let statusString = ""
+    for i in foldStringList
+        let statusString = statusString."|".i
+    endfor
+
+    return statusString."|"
+endfunction
+
+function! GetLastFoldString() " {{{3
+    " Get the text of the last fold
+    return FormatFoldString(GetLastFoldLineNum(foldlevel(".")))."|"
+endfunction
+
+function! GetLastFoldLineNum(foldLvl) " {{{3
+    " Get the line number of last Fold
+    " Only search current line for fold marker
+    let line = search(g:fold_marker_string.a:foldLvl,"n",line("."))
+    " Search backwards for fold marker
+    if (line==0)
+        let line = search(g:fold_marker_string.a:foldLvl,"bn")
+    endif
+    return line
+endfunction
+
+function! FormatFoldString(lineNum) " {{{3
+    " Format fold string so it looks neat
+    " Get the line string of the current fold and remove special chars
+    let line = getline(a:lineNum)
+    " Remove programming language specific words
+    let line = RemoveFiletypeSpecific(line)
+    " Remove special (comment related) characters and extra spaces
+    let line = RemoveSpecialCharacters(line)
+    return line
+endfunction
+
+function! RemoveSpecialCharacters(line) " {{{3
+    " Remove special (comment related) characters and extra spaces
+    " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
+    " Remove special characters
+    let text = substitute(a:line, '<!--\|-->\|\"\|#\|;\|/\*\|\*/\|//\|'.g:fold_marker_string.'\d\=', '', 'g')
+    " Replace 2 or more spaces with a single space
+    let text = substitute(text, ' \{2,}', ' ', 'g')
+    " Remove leading and trailing spaces
+    let text = substitute(text, '^\s*\|\s*$', '', 'g')
+    " Remove text between () in functions
+    let text = substitute(text, '(\(.*\)', '()', 'g')
+    " Add nice padding
+    return " ".text." "
+endfunction
+
+function! RemoveFiletypeSpecific(line) " {{{3
+    " Remove programming language specific words
+    let text = a:line
+    if (&ft=='python')
+        " Functions/Classes
+        let text = substitute(a:line, '\<def\>\|\<class\>', '', 'g')
+    elseif  (&ft=='cs')
+        " Functions/Events
+        let text = substitute(a:line, '\<static\>\|\<int\>\|\<float\>\|\<void\>\|\<string\>\|\<bool\>\|\<private\>\|\<public\>\s', '', 'g')
+    elseif  (&ft=='vim')
+        " Functions/Events
+        let text = substitute(a:line, '\<function\>!\s', '', 'g')
+    endif
+    return text
+endfunction
 " FontSize() {{{2
 if has("unix")
     function! FontSizePlus ()
@@ -291,7 +404,7 @@ function! WrapFold(foldlevel) range " {{{2
     endif
 
     " User entered fold name
-    let prompt = UserInput(g:prompt_wrapFold)
+    let prompt = UserInput(g:promptWrapFold)
 
     " TODO [171105] - Do I need this anymore?
 
@@ -306,84 +419,6 @@ function! WrapFold(foldlevel) range " {{{2
     execute 'normal! mm'
     execute 'normal! ' . a:firstline . 'GO' . prompt . g:fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
     execute 'normal! `m'
-endfunction
-
-function! GetFoldStrings() " {{{2
-    " Make the status string a list of all the folds
-    " Iterate through each fold level and add fold string to list
-    let foldStringList = []
-    let i = 1
-    while i <= foldlevel(".")
-        " Append string to list
-        call add(foldStringList, FormatFoldString(GetLastFoldLineNum(i)))
-        let i += 1
-    endwhile
-
-    " Add each fold line to status string
-    let statusString = ""
-    for i in foldStringList
-        let statusString = statusString."|".i
-    endfor
-
-    return statusString."|"
-endfunction
-
-function! GetLastFoldString() " {{{2
-    " Get the text of the last fold
-    return FormatFoldString(GetLastFoldLineNum(foldlevel(".")))."|"
-endfunction
-
-function! FormatFoldString(lineNum) " {{{2
-    " Format fold string so it looks neat
-    " Get the line string of the current fold and remove special chars
-    let line = getline(a:lineNum)
-    " Remove programming language specific words
-    let line = RemoveFiletypeSpecific(line)
-    " Remove special (comment related) characters and extra spaces
-    let line = RemoveSpecialCharacters(line)
-    return line
-endfunction
-
-function! GetLastFoldLineNum(foldLvl) " {{{2
-    " Get the line number of last Fold
-    " Only search current line for fold marker
-    let line = search(g:fold_marker_string.a:foldLvl,"n",line("."))
-    " Search backwards for fold marker
-    if (line==0)
-        let line = search(g:fold_marker_string.a:foldLvl,"bn")
-    endif
-    return line
-endfunction
-
-function! RemoveSpecialCharacters(line) " {{{2
-    " Remove special (comment related) characters and extra spaces
-    " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
-    " Remove special characters
-    let text = substitute(a:line, '<!--\|-->\|\"\|#\|;\|/\*\|\*/\|//\|'.g:fold_marker_string.'\d\=', '', 'g')
-    " Replace 2 or more spaces with a single space
-    let text = substitute(text, ' \{2,}', ' ', 'g')
-    " Remove leading and trailing spaces
-    let text = substitute(text, '^\s*\|\s*$', '', 'g')
-    " Remove text between () in functions
-    let text = substitute(text, '(\(.*\)', '()', 'g')
-    " Add nice padding
-    return " ".text." "
-endfunction
-
-function! RemoveFiletypeSpecific(line) " {{{2
-    " Remove programming language specific words
-    let text = a:line
-    if (&ft=='python')
-        " Functions/Classes
-        let text = substitute(a:line, '\<def\>\|\<class\>', '', 'g')
-    elseif  (&ft=='cs')
-        " Functions/Events
-        let text = substitute(a:line, '\<static\>\|\<int\>\|\<float\>\|\<void\>\|\<string\>\|\<bool\>\|\<private\>\|\<public\>\s', '', 'g')
-    elseif  (&ft=='vim')
-        " Functions/Events
-        let text = substitute(a:line, '\<function\>!\s', '', 'g')
-    endif
-    return text
 endfunction
 " Commands {{{1
 " Find {{{2
@@ -756,7 +791,7 @@ cmap <c-v> <c-r>+
 " Comment {{{2
 
 " Inline Comment
-nnoremap <leader>cii :silent execute "cal NERDComment('n',\"append\")"<CR>
+nnoremap <leader>cii :call CommentInline()<CR>
 
 " Inline comments with folds
 map <leader>ci1 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>1<ESC>
