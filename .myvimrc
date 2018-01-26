@@ -304,7 +304,7 @@ function! WrapFold(foldlevel) range " {{{2
 
     " Wrap selection with fold
     execute 'normal! mm'
-    execute 'normal! ' . a:firstline . 'GO' . prompt . g:fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
+    execute 'normal! ' . a:firstline . 'GO' . prompt . ' ' . g:fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
     execute 'normal! `m'
 endfunction
 
