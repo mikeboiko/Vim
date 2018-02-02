@@ -1,7 +1,22 @@
-#!/bin/bash
-# Enter bash terminal: chmod +x <script name>
-# Run Script: ./<script name>
-# TODO-MB [180106] - Check if in Linux/Windows and don't create vimfiles folder in Linux
+# =======================================================================
+# === Description ...: Clone all vim plugins
+# === Author ........: Mike Boiko
+# =======================================================================
+
+# TODO-MB [180201] - Cleanup Script and add fold levels. The Linux/Windows function should be global
+
+# Check whether windows or linux
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Microsoft*)     machine=Windows;;
+    Linux*)     machine=Linux;;
+    Darwin*)    machine=Mac;;
+    CYGWIN*)    machine=Windows;;
+    MINGW*)     machine=Windows;;
+    *)          machine="UNKNOWN:${unameOut}"
+esac
+
+# Vim config file paths
 MyFilePath[0]=~/.vim/bundle
 MyFilePath[1]=~/vimfiles/bundle
 
@@ -45,26 +60,31 @@ do
 
 done
 
-# TODO-MB [180106] - Only perform on Windows
 # Configure YouCompleteMe
-if [ ! -d "$HOME/ycm_build" ]; then
-    cd ~/vimfiles/bundle/youcompleteme
-    git submodule update --init --recursive
-    cd ~
-    mkdir ycm_build
-    cd ycm_build
-    # Visual Studio 2017 packages need to be installed first (not sure which ones)
-    cmake -G "Visual Studio 15 Win64" . ~/vimfiles/bundle/YouCompleteMe/third_party/ycmd/cpp
-    cmake --build . --target ycm_core --config Release
-    cd ~/vimfiles/bundle/youcompleteme
-    python install.py --omnisharp-completer
-fi
+if [ "$machine" == "Linux" ]; then
 
-# TODO-MB [180122] - Fix this for linux
-# # YouCompleteMe
-# cd ~/.vim/bundle/youcompleteme
-# git submodule update --init --recursive
-# ./install.py --js-completer
+    # Configure on Linux
+    cd ~/.vim/bundle/youcompleteme
+    git submodule update --init --recursive
+    ./install.py --js-completer
+
+else
+
+    # Configure on Windows
+    if [ ! -d "$HOME/ycm_build" ]; then
+        cd ~/vimfiles/bundle/youcompleteme
+        git submodule update --init --recursive
+        cd ~
+        mkdir ycm_build
+        cd ycm_build
+        # Visual Studio 2017 packages need to be installed first (not sure which ones)
+        cmake -G "Visual Studio 15 Win64" . ~/vimfiles/bundle/YouCompleteMe/third_party/ycmd/cpp
+        cmake --build . --target ycm_core --config Release
+        cd ~/vimfiles/bundle/youcompleteme
+        python install.py --omnisharp-completer
+    fi
+
+fi
 
 # # Configure Pylint
 # if [ ! -d "$HOME/vimfiles/bundle/pylint" ]; then
