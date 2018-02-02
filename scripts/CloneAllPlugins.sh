@@ -3,18 +3,9 @@
 # === Author ........: Mike Boiko
 # =======================================================================
 
-# TODO-MB [180201] - Cleanup Script and add fold levels. The Linux/Windows function should be global
-
 # Check whether windows or linux
-unameOut="$(uname -s)"
-case "${unameOut}" in
-    Microsoft*)     machine=Windows;;
-    Linux*)     machine=Linux;;
-    Darwin*)    machine=Mac;;
-    CYGWIN*)    machine=Windows;;
-    MINGW*)     machine=Windows;;
-    *)          machine="UNKNOWN:${unameOut}"
-esac
+bash ~/Documents/GitRepos/Linux/Scripts/IsComputerLinux.sh
+[ $? -eq 0 ] && machine="Linux" || machine="Windows"
 
 # Vim config file paths
 MyFilePath[0]=~/.vim/bundle
