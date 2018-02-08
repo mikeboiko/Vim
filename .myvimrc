@@ -16,6 +16,8 @@
 " TODO-MB [180123] - Figure out best way to abort user prompts in functions
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [180122] - Get equalprgs for commonly used languages
+" TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
+" TODO-MB [180207] - Create <leader>gc command to add all, commit and push. The command should prompt for commit message. Async.
 
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 " TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
