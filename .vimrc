@@ -7,5 +7,5 @@ else
 endif
 
 " Source main vimrc file
-let $MYVIMRC='$CODE/VIM/.myvimrc'
+let $MYVIMRC='$CODE/vim/.myvimrc'
 :so $MYVIMRC

@@ -357,7 +357,7 @@ function! SnipClass() " {{{3
 endfunction
 
 function! SnipComment() " {{{3
-    execute "read $CODE/Vim/Snippets/SectionComment.txt"
+    execute "read $CODE/vim/Snippets/SectionComment.txt"
     execute "cal NERDComment(0,\"toggle\")"
     execute "normal! jj"
     execute "cal NERDComment(0,\"toggle\")"
@@ -376,7 +376,7 @@ function! SnipFunction() " {{{3
 endfunction
 
 function! SnipHeader() " {{{3
-    execute "read $CODE/Vim/Snippets/Header.txt"
+    execute "read $CODE/vim/Snippets/Header.txt"
     execute "cal NERDComment(0,\"toggle\")"
     execute "normal! kddjjjpk"
     execute "cal NERDComment(0,\"toggle\")"
@@ -419,7 +419,7 @@ function! WrapFold(foldlevel) range " {{{2
 
     " Wrap selection with fold
     execute 'normal! mm'
-    execute 'normal! ' . a:firstline . 'GO' . prompt . g:fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
+    execute 'normal! ' . a:firstline . 'GO' . prompt . ' ' . g:fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
     execute 'normal! `m'
 endfunction
 " Commands {{{1
