@@ -913,11 +913,15 @@ endif
 nnoremap <leader>gd :Gdiff<Space>
 nnoremap <leader>gs :Gstatus<CR>
 
-" My scripts
-" nnoremap <leader>gcp :!"/c/users/mike/Documents/GitRepos/Linux/git/gcp.sh"<CR>
-nnoremap <leader>gcp :!"$HOME/Documents/GitRepos/Linux/git/gcp.sh"<CR>
+" Git history
 nnoremap <leader>gh :Git! hist<CR>
-nnoremap <leader>gca :Git! c -am<Space>
+
+" Git - add all, commit and push
+if has("unix") " Linux
+    nnoremap <leader>gcp :!bash ~/Documents/GitRepos/Linux/git/gcp.sh<CR>
+else " Windows
+    nnoremap <leader>gcp :!powershell ~/Documents/GitRepos/Linux/git/gcp.ps1<CR>
+endif
 
 " Insert Mode Escape {{{2
 " inoremap <silent> <esc> <nop>
