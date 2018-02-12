@@ -916,11 +916,12 @@ nnoremap <leader>gs :Gstatus<CR>
 " Git history
 nnoremap <leader>gh :Git! hist<CR>
 
+" TODO-MB [180212] - this function should prompt the user in vim, then do it's thing asynchronously
 " Git - add all, commit and push
 if has("unix") " Linux
-    nnoremap <leader>gcp :!bash ~/Documents/GitRepos/Linux/git/gcp.sh<CR>
+    nnoremap <leader>gcp :silent Start bash ~/Documents/GitRepos/Linux/git/gcp.sh<CR>
 else " Windows
-    nnoremap <leader>gcp :!powershell ~/Documents/GitRepos/Linux/git/gcp.ps1<CR>
+    nnoremap <leader>gcp :silent Start powershell ~/Documents/GitRepos/Linux/git/gcp.ps1<CR>
 endif
 
 " Insert Mode Escape {{{2
