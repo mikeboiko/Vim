@@ -12,19 +12,20 @@
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
 " TODOs {{{1
-" TODO-MB [180123] - echo b:NERDCommenterDelims in python and get rid of space in Left delimiter (also .bat)
+" TODO-MB [180123] - echo b:NERDCommenterDelims in python and get rid of space in Left delimiter (also .bat). Maybe it'd be best to stick to the orignaly hackyness though because it may mess things up even worse if the true delimiter needs the space and I remove it. Read some forums!
 " TODO-MB [180123] - Figure out best way to abort user prompts in functions
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [180122] - Get equalprgs for commonly used languages
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
 " TODO-MB [180207] - Create <leader>gc command to add all, commit and push. The command should prompt for commit message. Async.
+" TODO-MB [180208] - b:start initialization should use a different hook. It currently doesn't get set until you switch buffers.
+" TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive)
+" TODO-MB [180211] - Find Word remap jumps to the next record in AHK script
 
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
-" TODO-MB [171121] - There should be a TODO insert command high priority items and normal priority
 " TODO-MB [171101] - Fix QuickFix list regex that formats |
 " TODO-MB [170814] - Create skeleton file for markdown/others
 " TODO-MB [170712] - Powershell is loading slowly
-" TODO-MB [170712] - Fix ssh conection on start-up
 " TODO-MB [170921] - Vim as a Python IDE: https://www.youtube.com/watch?v=YhqsjUUHj6g&feature=youtu.be
 
 " Constants {{{1
@@ -64,6 +65,7 @@ function! CommentInline() " {{{2
     " Add inline comment
     exe 'normal A ' . b:NERDCommenterDelims['left'] . ' ' . prompt
 
+    " TODO-MB [180210] - The string should also include right delimiters. Try with markdown
     " Prepare string with escaped special characters for Tab plugin
     let escapedCommaDelimiter = escape(b:NERDCommenterDelims['left'], '/')
 
@@ -710,9 +712,21 @@ let NERDTreeShowLineNumbers=1
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
 " TODO-MB [170524] - Find a cleaner way to use syntastic
 nnoremap <leader>cp :SyntasticCheck<CR>
-" Vim-Indent-Guides{{{3
+" Vim-Indent-Guides {{{3
 " Indent Guides default is on
 let g:indent_guides_enable_on_vim_startup = 1
+
+" The Silver Searcher {{{3
+if executable('ag')
+    " Use ag instead of grep (performance increase)
+    set grepprg=ag\ --nogroup\ --nocolor
+
+    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+    " ag is fast enough that CtrlP doesn't need to cache
+    " let g:ctrlp_use_caching = 0
+endif
 
 " Vim-QF {{{3
 " let g:qf_mapping_ack_style = 1
@@ -885,14 +899,6 @@ noremap <silent> <leader>zz :call WrapFold(v:count)<CR>
 noremap <silent> <leader>zj :call WrapFold(foldlevel(line(".")) + 1)<CR>
 noremap <silent> <leader>zk :call WrapFold(foldlevel(line(".")) - 1)<CR>
 
-" Fugitive - Git {{{2
-nnoremap <leader>gca :Git! c -am<Space>
-nnoremap <leader>gcu :silent Git cu<CR>
-nnoremap <leader>gd :Gdiff<Space>
-nnoremap <leader>gh :Git! hist<CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gp :Gpush<CR>
-
 " Font Size Bigger/Smaller {{{2
 
 " Font Hotkeys
@@ -900,6 +906,18 @@ if has("gui_running")
     nmap <S-F6> :call FontSizeMinus()<CR>
     nmap <F6> :call FontSizePlus()<CR>
 endif
+
+" Git {{{2
+
+" Fugitive remappings
+nnoremap <leader>gd :Gdiff<Space>
+nnoremap <leader>gs :Gstatus<CR>
+
+" My scripts
+" nnoremap <leader>gcp :!"/c/users/mike/Documents/GitRepos/Linux/git/gcp.sh"<CR>
+nnoremap <leader>gcp :!"$HOME/Documents/GitRepos/Linux/git/gcp.sh"<CR>
+nnoremap <leader>gh :Git! hist<CR>
+nnoremap <leader>gca :Git! c -am<Space>
 
 " Insert Mode Escape {{{2
 " inoremap <silent> <esc> <nop>
