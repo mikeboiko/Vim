@@ -14,14 +14,15 @@
 " TODOs {{{1
 " TODO-MB [180123] - echo b:NERDCommenterDelims in python and get rid of space in Left delimiter (also .bat). Maybe it'd be best to stick to the orignaly hackyness though because it may mess things up even worse if the true delimiter needs the space and I remove it. Read some forums!
 " TODO-MB [180123] - Figure out best way to abort user prompts in functions
-" TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [180122] - Get equalprgs for commonly used languages
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
 " TODO-MB [180207] - Create <leader>gc command to add all, commit and push. The command should prompt for commit message. Async.
-" TODO-MB [180208] - b:start initialization should use a different hook. It currently doesn't get set until you switch buffers.
 " TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive)
 " TODO-MB [180211] - Find Word remap jumps to the next record in AHK script
+" TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc
+" TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 
+" TODO-MB [180208] - b:start initialization should use a different hook. It currently doesn't get set until you switch buffers.
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 " TODO-MB [171101] - Fix QuickFix list regex that formats |
 " TODO-MB [170814] - Create skeleton file for markdown/others
@@ -320,6 +321,18 @@ function! SetTODO() " {{{2
     return 'TODO-MB [' . strftime('%y%m%d') . '] - ' . UserInput(g:setTodoHeader)
 endfunction
 
+function! SetCurrentWorkingDirectory() " {{{2
+    " A standalone function to set the working directory to the project's root, or
+    " to the parent directory of the current file if a root can't be found:
+    let cph = expand('%:p:h', 1)
+    if cph =~ '^.\+://' | retu | en
+    for mkr in ['.git/', '.hg/', '.svn/', '.bzr/', '_darcs/', '.vimprojects']
+        let wd = call('find'.(mkr =~ '/$' ? 'dir' : 'file'), [mkr, cph.';'])
+        if wd != '' | let &acd = 0 | brea | en
+    endfo
+    exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
+endfunction
+
 function! ShowSpaces(...) " {{{2
     " Show trailing white spaces
     let @/='\v(\s+$)|( +\ze\t)'
@@ -425,6 +438,11 @@ function! WrapFold(foldlevel) range " {{{2
     execute 'normal! `m'
 endfunction
 " Commands {{{1
+" CtrlpToggle {{{2
+
+" Toggle between CtrlP MRU/Project Files
+command! ToggleCtrlP if (g:ctrlp_cmd == 'CtrlPMRU') | let g:ctrlp_cmd = 'CtrlP' | echo 'CtrlP in Project Files Mode' | else | let g:ctrlp_cmd = 'CtrlPMRU' | echo 'CtrlP in MRU Files Mode' | endif
+
 " Find {{{2
 " Search for string in current file and put results in Location window
 command! -nargs=+ -complete=command Find
@@ -564,8 +582,11 @@ else
     set clipboard=unnamed
 endif
 
+" TODO-MB [180213] - Remove after confirming that the new functionality is better
 " Automatically change current directory when new file is opened
-set autochdir
+" set autochdir
+" Automatically change current directory to project root
+autocmd BufEnter * call SetCurrentWorkingDirectory()
 
 " Enable Vim to check for modelines throughout your files
 " best practice to keep them at the top or the bottom of the file
@@ -672,7 +693,8 @@ let g:user_emmet_leader_key = '<c-b>'
 " Fuzzy file/buffer/tag open
 
 " Most recent files is default
-let g:ctrlp_cmd = 'CtrlPMRU'
+" let g:ctrlp_cmd = 'CtrlPMRU'
+let g:ctrlp_cmd = 'CtrlP'
 
 " Use filename instead of full path for searching
 let g:ctrlp_by_filename = 1
@@ -833,6 +855,12 @@ nnoremap <leader>ctm mz:e ++ff=mac<CR>`z
 
 " Convert to Unix
 nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
+
+" CtrlP {{{2
+
+" Either run CtrlP or CtrPMRU
+" This can be toggled with the ToggleCtrlP command
+nnoremap <c-p> :execute g:ctrlp_cmd<CR>
 
 " Cycle through Auto-Suggestions {{{2
 inoremap <m-j> <c-n>
