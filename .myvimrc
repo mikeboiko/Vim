@@ -692,9 +692,11 @@ let g:user_emmet_leader_key = '<c-b>'
 " CtrlP {{{3
 " Fuzzy file/buffer/tag open
 
+" Since I'm toggling CtrlP functionality, I remapped my own <c-p> command
+let g:ctrlp_map = ''
+
 " Most recent files is default
-" let g:ctrlp_cmd = 'CtrlPMRU'
-let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_cmd = 'CtrlPMRU'
 
 " Use filename instead of full path for searching
 let g:ctrlp_by_filename = 1
@@ -860,7 +862,7 @@ nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 
 " Either run CtrlP or CtrPMRU
 " This can be toggled with the ToggleCtrlP command
-nnoremap <c-p> :execute g:ctrlp_cmd<CR>
+nmap <c-p> :execute g:ctrlp_cmd<CR>
 
 " Cycle through Auto-Suggestions {{{2
 inoremap <m-j> <c-n>
