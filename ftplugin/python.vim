@@ -4,13 +4,6 @@
 " =======================================================================
 
 " Editor Config {{{1
-" Commenting {{{2
-" This is a patch so python wouldn't have 2 spaces after comment
-au BufWinEnter,BufEnter <buffer> let g:NERDSpaceDelims=0
-au BufLeave <buffer> let g:NERDSpaceDelims=1
-" TODO-MB [170830] - When I source vim while I'm in a python buffer, I need to
-" leave the buffer and come back to it to avoid the double spaces
-
 " Indentation {{{2
 setlocal nosmartindent
 

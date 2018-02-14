@@ -12,7 +12,6 @@
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
 " TODOs {{{1
-" TODO-MB [180123] - echo b:NERDCommenterDelims in python and get rid of space in Left delimiter (also .bat). Maybe it'd be best to stick to the orignaly hackyness though because it may mess things up even worse if the true delimiter needs the space and I remove it. Read some forums!
 " TODO-MB [180123] - Figure out best way to abort user prompts in functions
 " TODO-MB [180122] - Get equalprgs for commonly used languages
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
@@ -674,9 +673,6 @@ set undofile
 
 " SEBOL:
 au BufRead,BufNewFile *.sebol setfiletype sebol
-let g:NERDCustomDelimiters = {
-            \ 'sebol': { 'left': '!', 'right': '' }
-            \ }
 
 " Pathogen{{{3
 " Pathogen source all Vim bundles found in ~/.vim/bundle
@@ -711,10 +707,20 @@ let g:ctrlp_prompt_mappings = {
 
 
 " NerdCommenter{{{3
+
 " NerdCommenter add a space after comment
 let g:NERDSpaceDelims=1
+
 " Remove extra spaces when uncommenting
 let g:NERDRemoveExtraSpaces=1
+
+" Custom comment delimiters
+let g:NERDCustomDelimiters = {
+            \ 'python': { 'left': '#', 'right': '' },
+            \ 'dosbatch': { 'left': 'REM', 'right': '' },
+            \ 'sebol': { 'left': '!', 'right': '' }
+            \ }
+
 
 " NERDTree{{{3
 " Close NERDTree when opening file
