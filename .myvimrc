@@ -62,8 +62,12 @@ function! CommentInline() " {{{2
     " Temporarily disable auto-pairs wrapping so the comment delimiter doesn't repeat
     let b:autopairs_enabled = 0
 
-    " Add inline comment
-    exe 'normal A ' . b:NERDCommenterDelims['left'] . ' ' . prompt
+    " Add inline comment (add right delimiter if it exists)
+    if !b:NERDCommenterDelims['right']
+        exe 'normal A ' . b:NERDCommenterDelims['left'] . ' ' . prompt . ' ' . b:NERDCommenterDelims['right']
+    else
+        exe 'normal A ' . b:NERDCommenterDelims['left'] . ' ' . prompt
+    endif
 
     " TODO-MB [180210] - The string should also include right delimiters. Try with markdown
     " Prepare string with escaped special characters for Tab plugin
