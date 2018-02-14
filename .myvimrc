@@ -63,10 +63,10 @@ function! CommentInline() " {{{2
     let b:autopairs_enabled = 0
 
     " Add inline comment (add right delimiter if it exists)
-    if !b:NERDCommenterDelims['right']
-        exe 'normal A ' . b:NERDCommenterDelims['left'] . ' ' . prompt . ' ' . b:NERDCommenterDelims['right']
-    else
+    if (b:NERDCommenterDelims['right'] == '')
         exe 'normal A ' . b:NERDCommenterDelims['left'] . ' ' . prompt
+    else
+        exe 'normal A ' . b:NERDCommenterDelims['left'] . ' ' . prompt . ' ' . b:NERDCommenterDelims['right']
     endif
 
     " TODO-MB [180210] - The string should also include right delimiters. Try with markdown
