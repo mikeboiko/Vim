@@ -43,7 +43,7 @@ nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
 " Project Specific {{{1
 " AccuTuneMain " {{{2
 " Save all files, compile and open AccuTune.exe
-au BufWinEnter,BufEnter */AccuTuneMain/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\AccuTuneMain\AccuTune\bin\Release\AccuTune.com --unlockApp -t Simulink.Device1.Python -s Kepware.KEPServerEX.V5 --log'
+au BufWinEnter,BufEnter */AccuTune/Main/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\Main\AccuTune\bin\Release\AccuTune.com --unlockApp -t Simulink.Device1.Python -s Kepware.KEPServerEX.V5 --log'
 
 " AccuTuneLogs " {{{2
 " Save all files, compile and open AccuTune.exe
