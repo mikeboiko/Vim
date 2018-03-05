@@ -47,5 +47,9 @@ au BufWinEnter,BufEnter */AccuTune/Main/* let b:start='C:\Users\Mike\Documents\G
 
 " AccuTuneLogs " {{{2
 " Save all files, compile and open AccuTune.exe
-au BufWinEnter,BufEnter */AccuTuneLogs/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\AccuTuneLogs\LogDecrypt\LogDecrypt\bin\Release\LogDecrypt.exe'
+au BufWinEnter,BufEnter */AccuTune/Logs/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\Logs\LogDecrypt\LogDecrypt\bin\Release\LogDecrypt.exe'
+
+" AccuTuneTests " {{{2
+" AccuTune Automated Tests
+au BufWinEnter,BufEnter */AccuTune/Tests/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\Tests\Tests\bin\Release\Tests.exe'
 
