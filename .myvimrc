@@ -889,6 +889,8 @@ nnoremap <leader>eac :call EditCommonFile('$CODE/Windows/AHK/Common.ahk')<CR>
 " End/Beginning of Line {{{2
 nnoremap <silent> H ^
 nnoremap <silent> L $
+vnoremap <silent> H ^
+vnoremap <silent> L $
 omap H ^
 omap L $
 
