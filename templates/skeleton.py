@@ -5,10 +5,9 @@
 
 # Imports {{{1
 
-import argparse
-import csv
-import os
-import sys
+import argparse  # Parse CLI arguments
+import os        # OS functions
+import sys       # System functions
 
 # Arguments {{{1
 

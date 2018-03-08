@@ -15,17 +15,17 @@
 " TODO-MB [180123] - Figure out best way to abort user prompts in functions
 " TODO-MB [180122] - Get equalprgs for commonly used languages
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
-" TODO-MB [180207] - Create <leader>gc command to add all, commit and push. The command should prompt for commit message. Async.
+" TODO-MB [180207] - gcp should prompt for commit message in vim and should be Async.
 " TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive)
 " TODO-MB [180211] - Find Word remap jumps to the next record in AHK script
 " TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
+" TODO-MB [180223] - Create function to loop through each buffer and run lclose. map to<leader>cl
 
 " TODO-MB [180208] - b:start initialization should use a different hook. It currently doesn't get set until you switch buffers.
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 " TODO-MB [171101] - Fix QuickFix list regex that formats |
 " TODO-MB [170814] - Create skeleton file for markdown/others
-" TODO-MB [170712] - Powershell is loading slowly
 " TODO-MB [170921] - Vim as a Python IDE: https://www.youtube.com/watch?v=YhqsjUUHj6g&feature=youtu.be
 
 " Constants {{{1
@@ -961,9 +961,9 @@ nnoremap <leader>gh :Git! hist<CR>
 " TODO-MB [180212] - this function should prompt the user in vim, then do it's thing asynchronously
 " Git - add all, commit and push
 if has("unix") " Linux
-    nnoremap <leader>gcp :silent Start bash ~/Documents/GitRepos/Linux/git/gcp.sh<CR>
+    nnoremap <leader>gap :silent Start bash ~/Documents/GitRepos/Linux/git/gap<CR>
 else " Windows
-    nnoremap <leader>gcp :silent Start powershell ~/Documents/GitRepos/Linux/git/gcp.ps1<CR>
+    nnoremap <leader>gap :silent Start powershell ~/Documents/GitRepos/Linux/git/gap.ps1<CR>
 endif
 
 " Insert Mode Escape {{{2
