@@ -586,9 +586,9 @@ endif
 
 " TODO-MB [180213] - Remove after confirming that the new functionality is better
 " Automatically change current directory when new file is opened
-" set autochdir
+set autochdir
 " Automatically change current directory to project root
-autocmd BufEnter * call SetCurrentWorkingDirectory()
+" autocmd BufEnter * call SetCurrentWorkingDirectory()
 
 " Enable Vim to check for modelines throughout your files
 " best practice to keep them at the top or the bottom of the file
@@ -1091,8 +1091,8 @@ function! StartArgInitialize()
 endfunction
 
 " Run Script Asynchronously
-" nnoremap <leader>rr :wa<CR>:silent exe "Start ".@%." "b:start<CR>
 nnoremap <leader>rr :wa<CR>:silent exe "Start ".b:startapp." ".@%." "b:start<CR>
+" For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
 
 " Run Python
 nnoremap <leader>rsp :wa<CR>:silent exe "Start py -2 ".@%." "b:start<CR>
