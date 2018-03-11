@@ -220,6 +220,9 @@ function! RemoveFiletypeSpecific(line) " {{{3
     elseif  (&ft=='vim')
         " Functions/Events
         let text = substitute(a:line, '\<function\>!\s', '', 'g')
+    elseif  (&ft=='sql')
+        " Functions/Events
+        let text = substitute(a:line, '--', '', 'g')
     endif
     return text
 endfunction
