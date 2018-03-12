@@ -15,7 +15,7 @@
 " TODOs {{{1
 " TODO-MB [180122] - Get equalprgs for commonly used languages
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
-" TODO-MB [180207] - gcp should prompt for commit message in vim and should be Async.
+" TODO-MB [180207] - gap should prompt for commit message in vim and should be Async.
 " TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive)
 " TODO-MB [180211] - Find Word remap jumps to the next record in AHK script
 " TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc
@@ -281,6 +281,27 @@ function! GetTODOs() " {{{2
     vimgrep /TODO-MB \[\d\{6}]/ **/* **/.* | cw 5
     " Un-ignore the binary files
     set wildignore-=*.jpg,*.docx,*.xlsm,*.mp4
+endfunction
+
+function! GitAddCommitPush() " {{{2
+    " Git - add all, commit and push
+
+    " Prompt user for commit text
+    let prompt = UserInput('Commit Message: ')
+
+    " Abort the rest of the function if the user hit escape
+    if (prompt == '') | return | endif
+
+    if has("unix") " Linux
+        let exe_string = 'bash ~/Documents/GitRepos/Linux/git/gap'
+    else " Windows
+        " I'm targeting WSL here
+        let exe_string = 'bash /mnt/c/Users/Mike/Documents/GitRepos/Linux/git/gap'
+        " let exe_string = 'powershell ~/Documents/GitRepos/Linux/git/gap.ps1'
+    endif
+
+    exe 'silent Start ' . exe_string . ' ' . shellescape(prompt)
+
 endfunction
 
 function! ToggleList(bufname, pfx) " {{{2
@@ -962,13 +983,8 @@ nnoremap <leader>gs :Gstatus<CR>
 " Git history
 nnoremap <leader>gh :Git! hist<CR>
 
-" TODO-MB [180212] - this function should prompt the user in vim, then do it's thing asynchronously
 " Git - add all, commit and push
-if has("unix") " Linux
-    nnoremap <leader>gap :silent Start bash ~/Documents/GitRepos/Linux/git/gap<CR>
-else " Windows
-    nnoremap <leader>gap :silent Start powershell ~/Documents/GitRepos/Linux/git/gap.ps1<CR>
-endif
+nnoremap <leader>gap :call GitAddCommitPush()<CR>
 
 " Insert Mode Escape {{{2
 " inoremap <silent> <esc> <nop>
