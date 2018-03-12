@@ -11,8 +11,8 @@
 "       \(    )/      \(      \(          )/       \(     )/     \( |____|/
 "        '    '        '       '          '         '     '       '   )/
 "                                                                     '
+
 " TODOs {{{1
-" TODO-MB [180123] - Figure out best way to abort user prompts in functions
 " TODO-MB [180122] - Get equalprgs for commonly used languages
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
 " TODO-MB [180207] - gcp should prompt for commit message in vim and should be Async.
@@ -21,6 +21,8 @@
 " TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [180223] - Create function to loop through each buffer and run lclose. map to<leader>cl
+" TODO-MB [180311] - Get rid of prompt in TrimSpaces where I have to hit a. Just do it everytime.
+" TODO-MB [180312] - Create a way to save b:start and b:startapp. This should check if I'm on my development computer and load the variables automatically on file load.
 
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 " TODO-MB [171101] - Fix QuickFix list regex that formats |
@@ -52,32 +54,40 @@ function! CloseQuickFixWindow() " {{{2
     endif
 endfunction
 
-function! CommentInline() " {{{2
+function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
     " Add inline comment and align with other inline comments
 
     " Prompt user for comment text
-    let prompt = UserInput(g:promptCommentText)
+    let prompt = UserInput(a:prompt_text)
+
+    " Abort the rest of the function if the user hit escape
+    if (prompt == '') | return | endif
 
     " Temporarily disable auto-pairs wrapping so the comment delimiter doesn't repeat
     let b:autopairs_enabled = 0
 
+    " Either inline comment or comment above current line
+    let insert_command = (a:inline_comment) ? 'A ' : 'O'
+
+    " Prepare execution script for adding commented line
+    let exe_string = 'normal ' . insert_command . b:NERDCommenterDelims['left'] . ' ' . a:comment_prefix . prompt
+
     " Add inline comment (add right delimiter if it exists)
-    if (b:NERDCommenterDelims['right'] == '')
-        exe 'normal A ' . b:NERDCommenterDelims['left'] . ' ' . prompt
-    else
-        exe 'normal A ' . b:NERDCommenterDelims['left'] . ' ' . prompt . ' ' . b:NERDCommenterDelims['right']
+    if (b:NERDCommenterDelims['right'] != '')
+        let exe_string .= ' ' . b:NERDCommenterDelims['right']
     endif
 
-    " TODO-MB [180210] - The string should also include right delimiters. Try with markdown
-    " Prepare string with escaped special characters for Tab plugin
-    let escapedCommaDelimiter = escape(b:NERDCommenterDelims['left'], '/')
-
-    " TODO-MB [180123] - The alignment needs to be fixed so it doesn't align the first row if it's a comment
-    " Align comments in paragraph
-    " exe "Tab /" . escapedCommaDelimiter
+    " Add commented line to document
+    exe exe_string
 
     " Re-enable auto-pairs
     let b:autopairs_enabled = 1
+
+    " TODO-MB [180123] - The alignment needs to be fixed so it doesn't align the first row if it's a comment
+    " " Prepare string with escaped special characters for Tab plugin
+    " let escapedCommaDelimiter = escape(b:NERDCommenterDelims['left'], '/')
+    " Align comments in paragraph
+    " exe "Tab /" . escapedCommaDelimiter
 
 endfunction
 
@@ -320,12 +330,6 @@ function! RepoGrep(...) " {{{2
     exe 'top ' . g:qfListHeight . ' copen'
 endfunction
 
-function! SetTODO() " {{{2
-    " Insert a new TODOs
-    " Return the TODOs string
-    return 'TODO-MB [' . strftime('%y%m%d') . '] - ' . UserInput(g:setTodoHeader)
-endfunction
-
 function! SetCurrentWorkingDirectory() " {{{2
     " A standalone function to set the working directory to the project's root, or
     " to the parent directory of the current file if a root can't be found:
@@ -359,7 +363,6 @@ function! TrimSpaces() range " {{{2
 endfunction
 
 function! UserInput(prompt) " {{{2
-    " TODO [171104] - Need escape sequence
     " Get a string input from the user
     " Get input from user
     call inputsave()
@@ -428,7 +431,8 @@ function! WrapFold(foldlevel) range " {{{2
     " User entered fold name
     let prompt = UserInput(g:promptWrapFold)
 
-    " TODO [171105] - Do I need this anymore?
+    " Abort the rest of the function if the user hit escape
+    if (prompt == '') | return | endif
 
     " Prevent folding on seperate levels
     let foldLevelFirst = foldlevel(a:firstline)
@@ -843,7 +847,7 @@ cmap <c-v> <c-r>+
 " Comment {{{2
 
 " Inline Comment
-nnoremap <leader>cii :call CommentInline()<CR>
+nnoremap <leader>cii :call PromptAndComment(1, g:promptCommentText, '')<CR>
 
 " Inline comments with folds
 map <leader>ci1 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>1<ESC>
@@ -1108,7 +1112,8 @@ noremap <c-t> mm:tabe <c-r>%<CR>`m
 " TODOs {{{2
 
 " Add new TODO above current line
-nnoremap <silent> <leader>ti mmO<C-c>:call setline('.',SetTODO())<CR>:call NERDComment(0,'toggle')<CR>==`m
+let todoPrefix = 'TODO-MB [' . strftime('%y%m%d') . '] - '
+nnoremap <silent> <leader>ti :call PromptAndComment(0, g:setTodoHeader, todoPrefix)<CR>
 
 " Find all TODOs
 nnoremap <silent> <leader>tf :call GetTODOs()<CR>
@@ -1161,3 +1166,4 @@ autocmd BufReadPost *.sql let @z = expand('%:r')
 "autocmd BufReadPost *.sql nnoremap <leader>rms :silent !python Clone.py & cd C:/Users/Mike/.bin & python sqlShowResults.py <c-r>z<CR>
 autocmd BufReadPost *.sql nnoremap <leader>rms :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
 autocmd BufReadPost *.sql nnoremap <F5> :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
+
