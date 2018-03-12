@@ -36,8 +36,6 @@ let g:maxQFlistRecords = 8
 let g:qfListHeight = 5
 
 " Data entry prompts
-let g:setTodoHeader = 'TODO: '
-let g:promptWrapFold = 'Fold Text: '
 let g:promptCommentText = 'Comment Text: '
 
 " Fold marker string used through vimrc file without messing up folding
@@ -429,7 +427,7 @@ function! WrapFold(foldlevel) range " {{{2
     endif
 
     " User entered fold name
-    let prompt = UserInput(g:promptWrapFold)
+    let prompt = UserInput('Fold Text: ')
 
     " Abort the rest of the function if the user hit escape
     if (prompt == '') | return | endif
@@ -847,7 +845,7 @@ cmap <c-v> <c-r>+
 " Comment {{{2
 
 " Inline Comment
-nnoremap <leader>cii :call PromptAndComment(1, g:promptCommentText, '')<CR>
+nnoremap <leader>cii :call PromptAndComment(1, 'Comment Text: ', '')<CR>
 
 " Inline comments with folds
 map <leader>ci1 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>1<ESC>
@@ -1113,7 +1111,7 @@ noremap <c-t> mm:tabe <c-r>%<CR>`m
 
 " Add new TODO above current line
 let todoPrefix = 'TODO-MB [' . strftime('%y%m%d') . '] - '
-nnoremap <silent> <leader>ti :call PromptAndComment(0, g:setTodoHeader, todoPrefix)<CR>
+nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', todoPrefix)<CR>
 
 " Find all TODOs
 nnoremap <silent> <leader>tf :call GetTODOs()<CR>
