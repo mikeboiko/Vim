@@ -15,7 +15,6 @@
 " TODOs {{{1
 " TODO-MB [180122] - Get equalprgs for commonly used languages
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
-" TODO-MB [180207] - gap should prompt for commit message in vim and should be Async.
 " TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive)
 " TODO-MB [180211] - Find Word remap jumps to the next record in AHK script
 " TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc
@@ -295,9 +294,10 @@ function! GitAddCommitPush() " {{{2
     if has("unix") " Linux
         let exe_string = 'bash ~/Documents/GitRepos/Linux/git/gap'
     else " Windows
-        " I'm targeting WSL here
-        let exe_string = 'bash /mnt/c/Users/Mike/Documents/GitRepos/Linux/git/gap'
         " let exe_string = 'powershell ~/Documents/GitRepos/Linux/git/gap.ps1'
+        let exe_string = '"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap'
+        " I'm targeting WSL here
+        " let exe_string = 'bash /mnt/c/Users/Mike/Documents/GitRepos/Linux/git/gap'
     endif
 
     exe 'silent Start ' . exe_string . ' ' . shellescape(prompt)
