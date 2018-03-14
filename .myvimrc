@@ -203,8 +203,8 @@ endfunction
 function! RemoveSpecialCharacters(line) " {{{3
     " Remove special (comment related) characters and extra spaces
     " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
-    " Remove special characters
-    let text = substitute(a:line, '<!--\|-->\|\"\|#\|;\|/\*\|\*/\|//\|'.g:fold_marker_string.'\d\=', '', 'g')
+    " Remove fold marker string and comment characters
+    let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.b:NERDCommenterDelims['left'].'\|'.b:NERDCommenterDelims['right'], '', 'g')
     " Replace 2 or more spaces with a single space
     let text = substitute(text, ' \{2,}', ' ', 'g')
     " Remove leading and trailing spaces
@@ -227,9 +227,9 @@ function! RemoveFiletypeSpecific(line) " {{{3
     elseif  (&ft=='vim')
         " Functions/Events
         let text = substitute(a:line, '\<function\>!\s', '', 'g')
-    elseif  (&ft=='sql')
+    elseif  (&ft=='markdown')
         " Functions/Events
-        let text = substitute(a:line, '--', '', 'g')
+        let text = substitute(a:line, '#', '', 'g')
     endif
     return text
 endfunction
