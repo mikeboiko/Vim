@@ -726,12 +726,15 @@ let g:ctrlp_cmd = 'CtrlPMRU'
 " Use filename instead of full path for searching
 let g:ctrlp_by_filename = 1
 
+noremap <silent> <c-l> <nop>
+noremap <silent> <c-h> <nop>
+
 " Remap hotkeys
 let g:ctrlp_prompt_mappings = {
-            \ 'PrtSelectMove("j")':   ['<m-j>', '<down>'],
-            \ 'PrtSelectMove("k")':   ['<m-k>', '<up>'],
-            \ 'ToggleType(1)':        ['<m-l>'],
-            \ 'ToggleType(-1)':       ['<m-h>'],
+            \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
+            \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+            \ 'ToggleType(1)':        ['<c-f>'],
+            \ 'ToggleType(-1)':       ['<c-b>'],
             \ }
 
 
