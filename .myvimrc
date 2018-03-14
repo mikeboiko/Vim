@@ -471,9 +471,9 @@ endfunction
 " Toggle between CtrlP MRU/Project Files
 command! ToggleCtrlP if (g:ctrlp_cmd == 'CtrlPMRU') | let g:ctrlp_cmd = 'CtrlP' | echo 'CtrlP in Project Files Mode' | else | let g:ctrlp_cmd = 'CtrlPMRU' | echo 'CtrlP in MRU Files Mode' | endif
 
-" Find {{{2
+" FindLocal {{{2
 " Search for string in current file and put results in Location window
-command! -nargs=+ -complete=command Find
+command! -nargs=+ -complete=command FindLocal
             \| try | silent call FindFunc(<q-args>) | catch | endtry | set hls
 
 " FoldOpen {{{2
@@ -493,18 +493,22 @@ command! Lprev try | lprev | catch | llast | catch | endtry
 " Since the QF list isn't populated with col numbers, this function allows you to jump to the proper column.
 command! GoToMatchedColumn exe "normal b" | let @/=w:searchStr | call search(@/) | set hls
 
-" RepoFind {{{2
+" FindGlobal {{{2
 " Search for string in current repo and put results in QuickFix window
-command! -nargs=+ -complete=command RepoFind
+command! -nargs=+ -complete=command FindGlobal
             \| try | call RepoGrep(<q-args>) | catch | endtry
 
 " Show and Trim Spaces {{{2
 command! -bar -nargs=? ShowSpaces call ShowSpaces(<args>)
 command! -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
 
-" ReplaceMwithBlank {{{2
+" Replace ^M Line endings {{{2
+
 " Useful when converting from DOS to Unix line endings
 command! ReplaceMwithBlank try | %s/\r$// | catch | endtry
+
+" Useful when converting from DOS to Unix line endings
+command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
 
 " SpellToggle {{{2
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
@@ -519,7 +523,11 @@ set t_Co=256
 set background=dark
 
 " Preferred color scheme
-colorscheme desert
+if has("gui_running")
+    colorscheme desert
+else
+    colorscheme elflord
+endif
 
 " Set GVIM Font
 " To select form availbale fonts :set guifont=*
@@ -536,7 +544,7 @@ set number
 set relativenumber
 
 " Start scrolling <x> lines before window border
-set scrolloff=5
+" set scrolloff=5
 
 " Visual auto complete for command menu
 set wildmenu
@@ -585,20 +593,31 @@ syntax on
 " Enable plug-ins for indentation
 filetype plugin indent on
 
+" Eliminate command windows escape delay
+set timeoutlen=500 ttimeoutlen=0
+
 " Backspace over auto indent, line breaks, start of insert
 set backspace=indent,eol,start
+
 " Remove vi compatibility
 set nocompatible
+
 " Update when idle for 1000 msec (default is 4000 msec)
 set updatetime=1000
+
 " Virtual editing, position cursor where there is are no characters (all modes)
 set virtualedit=all
+
 " Ignore file patterns globally
 set wildignore+=*.swp
+
 " Standard Encoding
 set encoding=utf8
+
+" TODO-MB [180314] - I don't think this is required
 " Buffer should be modifable (GV-Vim needs this)
-set modifiable
+" set modifiable
+
 " No .swp backup files
 set noswapfile
 
@@ -845,8 +864,8 @@ let mapleader="\<space>"
 
 " Add colon to EOL
 " This is useful for C# and other programming languages
-inoremap <m-;> <esc>A;<esc>
-nnoremap <m-;> mzA;<esc>`z
+inoremap ;; <esc>mzA;<esc>`z
+nnoremap <leader>; mzA;<esc>`z
 
 " Auto-Indent {{{2
 " Indent entire file and return to current line
@@ -856,12 +875,6 @@ nnoremap <leader>ai mpgg=G'p
 
 " Get into command history
 nnoremap q; q:
-
-" Cycle through history
-cmap <m-j> <down>
-cmap <m-k> <up>
-cmap <m-h> <left>
-cmap <m-l> <right>
 
 " Paste
 cmap <c-v> <c-r>+
@@ -903,8 +916,8 @@ nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 nmap <c-p> :execute g:ctrlp_cmd<CR>
 
 " Cycle through Auto-Suggestions {{{2
-inoremap <m-j> <c-n>
-inoremap <m-k> <c-p>
+inoremap <c-j> <c-n>
+inoremap <c-k> <c-p>
 
 " Dump Register
 nnoremap <leader><space> "z
@@ -932,32 +945,24 @@ nnoremap <leader>on :NERDTreeToggle<CR>
 " Find - Local {{{2
 
 " Find string in current file
-nnoremap <C-f> :Find<space>
+nnoremap <leader>fl :FindLocal<space>
 
 " Find word under cursor
-map <leader>fw "xyiw:exe "Find \\<".@x."\\>"<CR>
+map <leader>fw "xyiw:exe "FindLocal \\<".@x."\\>"<CR>
 
 " TODO-MB [171019] - Finish up the find tag function
-" map <leader>ft :exe "Find \\<".tagbar#currenttag("[%s]","")."\\>"
+" map <leader>ft :exe "FindLocal \\<".tagbar#currenttag("[%s]","")."\\>"
 
 " Find - Global {{{2
 
 " Find in current Git Repo and put reslts in QuickFix window
-nnoremap <c-g> :RepoFind<space>
+nnoremap <leader>fg :FindGlobal<space>
 
 " Ggrep word under cursor
-map <leader>gw "xyiw:exe "RepoFind ".@x<CR>
+map <leader>gw "xyiw:exe "FindGlobal ".@x<CR>
 
 " Yank highlighted text into "z and Ggrep
-vnoremap <c-g> "xy:RepoFind <c-r>x<CR>
-
-" Fix ^M line ending {{{2
-
-" Find and replace ^M with ''
-nnoremap <M-m> :ReplaceMwithBlank<CR>
-
-" Find and replace ^M with New Line
-nnoremap <M-n> :%s/\r/\r/<CR>
+vnoremap <c-g> "xy:FindGlobal <c-r>x<CR>
 
 " Folding {{{2
 
@@ -990,7 +995,6 @@ nnoremap <leader>gh :Git! hist<CR>
 nnoremap <leader>gap :call GitAddCommitPush()<CR>
 
 " Insert Mode Escape {{{2
-" inoremap <silent> <esc> <nop>
 inoremap <silent> <enter> <esc>
 
 " Marks {{{2
@@ -999,9 +1003,14 @@ nnoremap ' `
 nnoremap ` '
 
 " New blank line {{{2
-" Add blank line before/after current line
-nnoremap <CR> :<CR>mzo<Esc>`z:<CR>
-nnoremap <s-CR> :<CR>mzO<Esc>`z:<CR>
+" Add blank line after current line
+nnoremap <leader>aj :<CR>mzo<Esc>`z:<CR>
+
+" Add blank line before current line
+nnoremap <leader>ak :<CR>mzO<Esc>`z:<CR>
+
+" Add blank line before and after current line
+nnoremap <leader>al :<CR>mzO<Esc>jo<Esc>`z:<CR>
 
 " Restore Enter key functionality for command history window
 autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
@@ -1014,9 +1023,9 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 " Scrolling{{{2
 
 " Scroll Up
-nnoremap <c-k> 5<c-u>
+nnoremap <c-m> 5<c-u>
 " Scroll Down
-nnoremap <c-j> 5<c-d>
+nnoremap <c-n> 5<c-d>
 
 " Open File/Folder {{{2
 
@@ -1052,12 +1061,11 @@ au BufWinEnter,BufEnter wordRenamingBuffer nnoremap <buffer> <Enter>
 " QuickFix/Location Lists {{{2
 
 " Go to next/previous search result
-" TODO-MB [171107] - These functions don't work when there's 2/3 results
 " nnoremap <leader>zf zMzvzz
-nnoremap <m-.> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
-nnoremap <m-,> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
-nnoremap <m->> :Cnext<CR>:FoldOpen<CR>
-nnoremap <m-<> :Cprev<CR>:FoldOpen<CR>
+nnoremap <C-f> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <C-d> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <C-x> :Cnext<CR>:FoldOpen<CR>
+nnoremap <C-z> :Cprev<CR>:FoldOpen<CR>
 
 nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
 nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
@@ -1070,7 +1078,7 @@ nnoremap <c-w> :lclose<CR>:q<CR>
 " A hack to close the Fugitive Plugin window with <c-w>
 nmap gf gf
 
-" Exit command line window q: or q/ with <c-w>
+" Exit command history window q: or q/ with <c-w>
 au CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR>
 
 " Save Buffer {{{2
@@ -1138,20 +1146,18 @@ nnoremap <silent> <leader>tf :call GetTODOs()<CR>
 " Window {{{2
 
 " Use Alt+h/j/k/l to move between windows
-nnoremap <M-j> <C-W>j
-nnoremap <M-k> <C-W>k
-nnoremap <M-h> <C-W>h
-nnoremap <M-l> <C-W>l
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
 
 " Resize
 nnoremap <leader>wgv :<C-U>exec "vertical resize +".v:count1<CR>
 nnoremap <leader>wgh :<C-U>exec "resize +".v:count1<CR>
 
 " Windows Style Commands {{{2
-"
-" Undo and redo
-nnoremap <c-z> :u<CR>
-inoremap <c-z> <Esc>:u<CR>
+
+" Redo
 nnoremap <c-y> <c-r>
 inoremap <c-y> <Esc><C-r>
 
