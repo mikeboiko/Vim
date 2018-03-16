@@ -13,13 +13,13 @@
 "                                                                     '
 
 " TODOs {{{1
+" TODO-MB [180315] - Checkout ale - asynchronous linting
 " TODO-MB [180122] - Get equalprgs for commonly used languages
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
 " TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive)
 " TODO-MB [180211] - Find Word remap jumps to the next record in AHK script
 " TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
-" TODO-MB [180223] - Create function to loop through each buffer and run lclose. map to<leader>cl
 " TODO-MB [180311] - Get rid of prompt in TrimSpaces where I have to hit a. Just do it everytime.
 " TODO-MB [180312] - Create a way to save b:start and b:startapp. This should check if I'm on my development computer and load the variables automatically on file load.
 
@@ -871,6 +871,10 @@ nnoremap <leader>; mzA;<esc>`z
 " Indent entire file and return to current line
 nnoremap <leader>ai mpgg=G'p
 
+" Close all location lists {{{2
+
+nnoremap <leader>cl :windo lclose<CR>
+
 " Command Line {{{2
 
 " Get into command history
@@ -941,7 +945,8 @@ omap L $
 nnoremap <esc> :noh<esc>
 
 " NERDTree{{{2
-nnoremap <leader>on :NERDTreeToggle<CR>
+nnoremap <leader>on :NERDTreeFind<CR>
+
 " Find - Local {{{2
 
 " Find string in current file
