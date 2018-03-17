@@ -219,17 +219,15 @@ function! RemoveFiletypeSpecific(line) " {{{3
     " Remove programming language specific words
     let text = a:line
     if (&ft=='python')
-        " Functions/Classes
         let text = substitute(a:line, '\<def\>\|\<class\>', '', 'g')
     elseif  (&ft=='cs')
-        " Functions/Events
         let text = substitute(a:line, '\<static\>\|\<int\>\|\<float\>\|\<void\>\|\<string\>\|\<bool\>\|\<private\>\|\<public\>\s', '', 'g')
     elseif  (&ft=='vim')
-        " Functions/Events
         let text = substitute(a:line, '\<function\>!\s', '', 'g')
     elseif  (&ft=='markdown')
-        " Functions/Events
         let text = substitute(a:line, '#', '', 'g')
+    elseif  (&ft=='javascript')
+        let text = substitute(a:line, '=\|{\s', '', 'g')
     endif
     return text
 endfunction
@@ -873,7 +871,7 @@ nnoremap <leader>ai mpgg=G'p
 
 " Close all location lists {{{2
 
-nnoremap <leader>cl :windo lclose<CR>
+nnoremap <leader>ac :windo lclose<CR>
 
 " Command Line {{{2
 
@@ -997,7 +995,7 @@ nnoremap <leader>gs :Gstatus<CR>
 nnoremap <leader>gh :Git! hist<CR>
 
 " Git - add all, commit and push
-nnoremap <leader>gap :call GitAddCommitPush()<CR>
+nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
 
 " Insert Mode Escape {{{2
 inoremap <silent> <enter> <esc>
