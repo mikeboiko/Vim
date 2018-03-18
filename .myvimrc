@@ -41,6 +41,13 @@ let g:promptCommentText = 'Comment Text: '
 let g:fold_marker_string = '{'. '{'. '{'
 
 " Functions {{{1
+function! BufDo(command) " {{{2
+" Just like bufdo, but restore the current buffer when done.
+  let currBuff=bufnr("%")
+  execute 'bufdo ' . a:command
+  execute 'buffer ' . currBuff
+endfunction
+
 function! CloseQuickFixWindow() " {{{2
     " If the window is quickfix, proceed
     if &buftype=="quickfix"
@@ -435,6 +442,13 @@ function! SnipIf() " {{{3
     endif
 endfunction
 
+function! WinDo(command) " {{{2
+" Just like windo, but restore the current window when done.
+  let currwin=winnr()
+  execute 'windo ' . a:command
+  execute currwin . 'wincmd w'
+endfunction
+
 function! WrapFold(foldlevel) range " {{{2
     " Create a fold on the current line(s)
     let foldlevel = a:foldlevel
@@ -464,6 +478,19 @@ function! WrapFold(foldlevel) range " {{{2
     execute 'normal! `m'
 endfunction
 " Commands {{{1
+" Bufdo {{{2
+
+" Just like bufdo, but restore the current buffer when done.
+com! -nargs=+ -complete=command Bufdo call BufDo(<q-args>)
+
+" Windo {{{2
+
+" Just like windo, but restore the current window when done.
+com! -nargs=+ -complete=command Windo call WinDo(<q-args>)
+
+" Just like Windo, but disable all autocommands for super fast processing.
+com! -nargs=+ -complete=command Windofast noautocmd call WinDo(<q-args>)
+
 " CtrlpToggle {{{2
 
 " Toggle between CtrlP MRU/Project Files
@@ -871,7 +898,7 @@ nnoremap <leader>ai mpgg=G'p
 
 " Close all location lists {{{2
 
-nnoremap <leader>ac :windo lclose<CR>
+nnoremap <leader>ac :Windofast lclose<CR>
 
 " Command Line {{{2
 
