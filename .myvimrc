@@ -569,7 +569,7 @@ set number
 set relativenumber
 
 " Start scrolling <x> lines before window border
-" set scrolloff=5
+set scrolloff=8
 
 " Visual auto complete for command menu
 set wildmenu
@@ -964,6 +964,11 @@ vnoremap <silent> L $
 omap H ^
 omap L $
 
+" Enter/CR Key {{{2
+
+" Disable in normal mode
+nnoremap <CR> <nop>
+
 " Escape Key {{{2
 
 " Disable Highlighting
@@ -1053,9 +1058,9 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 " Scrolling{{{2
 
 " Scroll Up
-nnoremap <c-m> 5<c-u>
+nnoremap <c-m> 5k
 " Scroll Down
-nnoremap <c-n> 5<c-d>
+nnoremap <c-n> 5j
 
 " Open File/Folder {{{2
 
@@ -1094,8 +1099,8 @@ au BufWinEnter,BufEnter wordRenamingBuffer nnoremap <buffer> <Enter>
 " nnoremap <leader>zf zMzvzz
 nnoremap <C-f> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
 nnoremap <C-d> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
-nnoremap <C-x> :Cnext<CR>:FoldOpen<CR>
-nnoremap <C-z> :Cprev<CR>:FoldOpen<CR>
+nnoremap <C-r> :Cnext<CR>:FoldOpen<CR>
+nnoremap <C-e> :Cprev<CR>:FoldOpen<CR>
 
 nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
 nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
