@@ -1029,6 +1029,11 @@ nnoremap <leader>gh :Git! hist<CR>
 " Git - add all, commit and push
 nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
 
+" Help {{{2
+
+" Pull up help for word under cursor in a new tab
+noremap <leader>hh :execute "tab h " . expand("<cword>")<cr>
+
 " Insert Mode Escape {{{2
 inoremap <silent> <enter> <esc>
 
@@ -1058,9 +1063,9 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 " Scrolling{{{2
 
 " Scroll Up
-nnoremap <c-m> 5k
+nnoremap K 5k
 " Scroll Down
-nnoremap <c-n> 5j
+nnoremap J 5j
 
 " Open File/Folder {{{2
 
