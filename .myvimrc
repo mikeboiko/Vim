@@ -17,7 +17,6 @@
 " TODO-MB [180122] - Get equalprgs for commonly used languages
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
 " TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive)
-" TODO-MB [180211] - Find Word remap jumps to the next record in AHK script
 " TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [180311] - Get rid of prompt in TrimSpaces where I have to hit a. Just do it everytime.
@@ -117,9 +116,12 @@ function! EditCommonFile(filename) " {{{2
 endfunction
 
 function! FindFunc(...) " {{{2
+
     " Move cursor to next pattern match
-    call search(a:1)
-    FoldOpen
+    if (a:2 == 'next')
+        call search(a:1)
+        FoldOpen
+    endif
 
     " Save search string into window local var
     let w:searchStr=a:1
@@ -499,7 +501,7 @@ command! ToggleCtrlP if (g:ctrlp_cmd == 'CtrlPMRU') | let g:ctrlp_cmd = 'CtrlP' 
 " FindLocal {{{2
 " Search for string in current file and put results in Location window
 command! -nargs=+ -complete=command FindLocal
-            \| try | silent call FindFunc(<q-args>) | catch | endtry | set hls
+            \| try | silent call FindFunc(<q-args>, 'next') | catch | endtry | set hls
 
 " FoldOpen {{{2
 
@@ -983,7 +985,7 @@ nnoremap <leader>on :NERDTreeFind<CR>
 nnoremap <leader>fl :FindLocal<space>
 
 " Find word under cursor
-map <leader>fw "xyiw:exe "FindLocal \\<".@x."\\>"<CR>
+map <leader>fw "xyiw:call FindFunc("\\<".@x."\\>", '')<CR>
 
 " TODO-MB [171019] - Finish up the find tag function
 " map <leader>ft :exe "FindLocal \\<".tagbar#currenttag("[%s]","")."\\>"
