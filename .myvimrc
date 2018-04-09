@@ -13,8 +13,11 @@
 "                                                                     '
 
 " TODOs {{{1
-" TODO-MB [180315] - Checkout ale - asynchronous linting
-" TODO-MB [180122] - Get equalprgs for commonly used languages
+" TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
+" TODO-MB [180408] - Get better plugin manager. It should work with offline computer. vim-plug? Help with map conflicts.
+" TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
+" TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing
+" TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
 " TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive)
 " TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc
@@ -25,7 +28,6 @@
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 " TODO-MB [171101] - Fix QuickFix list regex that formats |
 " TODO-MB [170814] - Create skeleton file for markdown/others
-" TODO-MB [170921] - Vim as a Python IDE: https://www.youtube.com/watch?v=YhqsjUUHj6g&feature=youtu.be
 
 " Constants {{{1
 
@@ -859,10 +861,15 @@ autocmd FileType html,javascript,vue setlocal shiftwidth=2 tabstop=2
 
 " Vue {{{2
 
-" NERDCommenter fix
+" Fix the syntax highlighting that randomly stops
+autocmd FileType vue syntax sync fromstart
 
-" En error occured when putting this code into a seperate vim.vue file
+" Speed up vim when in vue files
 let g:vue_disable_pre_processors=1
+
+" NERDCommenter fix
+" En error occured when putting this code into a seperate vim.vue file
+
 let g:ft = ''
 
 function! NERDCommenter_before()
@@ -1042,7 +1049,6 @@ inoremap <silent> <enter> <esc>
 " Marks {{{2
 " Jump to proper column when using marks
 nnoremap ' `
-nnoremap ` '
 
 " New blank line {{{2
 " Add blank line after current line
@@ -1173,8 +1179,13 @@ nnoremap <leader>rsp :wa<CR>:silent exe "Start py -2 ".@%." "b:start<CR>
 nnoremap <leader>rp :wa<CR>:exe "Start py -2 ".@%." "b:start<CR>
 
 " Tabs {{{2
+
 " Open current file in new tab
-noremap <c-t> mm:tabe <c-r>%<CR>`m
+nnoremap <c-t> mm:tabe <c-r>%<CR>`m
+
+" Toggle tabs
+nnoremap + gt
+nnoremap _ gT
 
 " TODOs {{{2
 
