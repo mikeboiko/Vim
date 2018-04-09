@@ -16,7 +16,7 @@
 " TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
 " TODO-MB [180408] - Get better plugin manager. It should work with offline computer. vim-plug? Help with map conflicts.
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
-" TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing
+" TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue.
 " TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
 " TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive)
@@ -43,10 +43,10 @@ let g:fold_marker_string = '{'. '{'. '{'
 
 " Functions {{{1
 function! BufDo(command) " {{{2
-" Just like bufdo, but restore the current buffer when done.
-  let currBuff=bufnr("%")
-  execute 'bufdo ' . a:command
-  execute 'buffer ' . currBuff
+    " Just like bufdo, but restore the current buffer when done.
+    let currBuff=bufnr("%")
+    execute 'bufdo ' . a:command
+    execute 'buffer ' . currBuff
 endfunction
 
 function! CloseQuickFixWindow() " {{{2
@@ -446,11 +446,23 @@ function! SnipIf() " {{{3
     endif
 endfunction
 
+function! SnipLog() " {{{3
+    " Log variable to console for debugging
+    if &filetype == "vue" || &filetype == "javascript"
+        let log_string = "console.log()"
+    elseif &filetype == "python"
+        let log_string = "print()"
+    else
+        let log_string = "echo  "
+    endif
+    execute "normal o" . log_string | startinsert
+endfunction
+
 function! WinDo(command) " {{{2
-" Just like windo, but restore the current window when done.
-  let currwin=winnr()
-  execute 'windo ' . a:command
-  execute currwin . 'wincmd w'
+    " Just like windo, but restore the current window when done.
+    let currwin=winnr()
+    execute 'windo ' . a:command
+    execute currwin . 'wincmd w'
 endfunction
 
 function! WrapFold(foldlevel) range " {{{2
@@ -1139,6 +1151,7 @@ nnoremap <leader>snc :call SnipComment()<CR>
 nnoremap <leader>snf :call SnipFunction()<CR>
 nnoremap <leader>snh :call SnipHeader()<CR>
 nnoremap <leader>sni :call SnipIf()<CR>
+nnoremap <leader>sl :call SnipLog()<CR>
 
 " Show and Trim Spaces {{{2
 
