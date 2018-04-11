@@ -13,8 +13,8 @@
 "                                                                     '
 
 " TODOs {{{1
-" TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
 " TODO-MB [180408] - Get better plugin manager. It should work with offline computer. vim-plug? Help with map conflicts.
+" TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
 " TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue.
 " TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
@@ -908,10 +908,15 @@ endfunction
 " Leader key {{{2
 let mapleader="\<space>"
 
-" Add colon to EOL
-" This is useful for C# and other programming languages
+" Add colon/comma to EOL {{{2
+
+" Colon
 inoremap ;; <esc>mzA;<esc>`z
-nnoremap <leader>; mzA;<esc>`z
+nnoremap <leader>a; mzA;<esc>`z
+
+" Comma
+inoremap ,, <esc>mzA,<esc>`z
+nnoremap <leader>a, mzA,<esc>`z
 
 " Auto-Indent {{{2
 " Indent entire file and return to current line
@@ -974,7 +979,7 @@ nnoremap <leader><space> "z
 nnoremap <leader>p "adiwP
 
 " Edit Common Files {{{2
-nnoremap <leader>ev :call EditCommonFile($MYVIMRC)<CR>
+nnoremap <leader>ev :call EditCommonFile('$CODE/vim/.myvimrc')<CR>
 nnoremap <leader>eac :call EditCommonFile('$CODE/Windows/AHK/Common.ahk')<CR>
 
 " End/Beginning of Line {{{2
@@ -1151,7 +1156,7 @@ nnoremap <leader>snc :call SnipComment()<CR>
 nnoremap <leader>snf :call SnipFunction()<CR>
 nnoremap <leader>snh :call SnipHeader()<CR>
 nnoremap <leader>sni :call SnipIf()<CR>
-nnoremap <leader>sl :call SnipLog()<CR>
+nnoremap <leader>snl :call SnipLog()<CR>
 
 " Show and Trim Spaces {{{2
 

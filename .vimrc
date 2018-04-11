@@ -1,11 +1,7 @@
-" Set Main Code Directory path based on computer name
-let hostname = substitute(system('hostname'), '\n', '', '')
-if (hostname == 'VM-Win7Pro')
-    let $CODE='E:/Code'
-else
-    let $CODE='$HOME/Documents/GitRepos'
-endif
+" =======================================================================
+" === Description ...: Source main vimrc file
+" === Author ........: Mike Boiko
+" =======================================================================
 
-" Source main vimrc file
-let $MYVIMRC='$CODE/vim/.myvimrc'
-:so $MYVIMRC
+let $CODE='$HOME/Documents/GitRepos'
+source $CODE/vim/.myvimrc
