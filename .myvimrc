@@ -19,7 +19,7 @@
 " TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue.
 " TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
-" TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive)
+" TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive). fa = find all code. fn = find notes.
 " TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc
 " TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
 " TODO-MB [180311] - Get rid of prompt in TrimSpaces where I have to hit a. Just do it everytime.
@@ -924,7 +924,7 @@ nnoremap <leader>ai mpgg=G'p
 
 " Close all location lists {{{2
 
-nnoremap <leader>ac :Windofast lclose<CR>
+nnoremap <leader>ac :Windofast lclose<CR>:cclose<CR>
 
 " Command Line {{{2
 
