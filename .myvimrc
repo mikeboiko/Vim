@@ -136,7 +136,7 @@ function! FindFunc(...) " {{{2
     lexpr []
 
     " Put Results into QuickFix Window
-    silent execute 'g/'.a:1.'/laddexpr line(".") . ":" . GetLastFoldString() . "$}{$" . getline(".") '
+    silent execute 'g/'.a:1.'/laddexpr expand("%") . ":" . line(".") . ":" . GetLastFoldString() . "$}{$" . getline(".") '
 
     " Prepare location list height - minimum or record count and max allowable limit
     let w:locListHeight = min([ g:maxQFlistRecords, len(getloclist(0)) ])
@@ -697,7 +697,7 @@ if has("autocmd")
 endif
 
 " Change error format for custom FindFunc() usage
-set efm+=%l:%m
+" set efm+=%f:%l:%m
 
 " Folding{{{3
 set foldenable
