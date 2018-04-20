@@ -5,9 +5,9 @@
 
 " Auto Format Document for Folding
 function! FormatMDFunc()
-    g/^#\s\(.*-->\)\@!/norm! A <!-- {{{1 -->
-    g/^##\s\(.*-->\)\@!/norm! A <!-- {{{2 -->
-    g/^###\s\(.*-->\)\@!/norm! A <!-- {{{3 -->
+    g/^#\s\(.*-->\)\@!/s/$/ <!-- {{{1 -->
+    g/^##\s\(.*-->\)\@!/s/$/ <!-- {{{2 -->
+    g/^###\s\(.*-->\)\@!/s/$/ <!-- {{{3 -->
 endfunction
 nnoremap <buffer> <c-s> :silent call FormatMDFunc()<CR>:noh<CR>:w<CR>
 

@@ -16,6 +16,7 @@
 " TODO-MB [180408] - Get better plugin manager. It should work with offline computer. vim-plug? Help with map conflicts.
 " TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
+" TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
 " TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue.
 " TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
@@ -868,8 +869,8 @@ autocmd BufReadPost *.tsv setlocal nowrap
 " autocmd BufReadPost *.csv 1sp
 " autocmd BufReadPost *.psv 1sp
 " autocmd BufReadPost *.tsv 1sp
-" HTML/JS {{{2
-autocmd FileType html,javascript,vue setlocal shiftwidth=2 tabstop=2
+" HTML/js/css/Vue {{{2
+autocmd FileType html,javascript,json,vue,css,scss setlocal shiftwidth=2 tabstop=2
 
 " Vue {{{2
 
