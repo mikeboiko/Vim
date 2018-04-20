@@ -20,15 +20,16 @@
 " TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue.
 " TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
-" TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive). fa = find all code. fn = find notes.
-" TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc
-" TODO-MB [180117] - Create macro to add/remove fold text (functions/classes/etc)
+" TODO-MB [180210] - Write command to use ag to find code samples in all my git repos quickly. Use file type option and -i (case-insensitive). fa = find all code. fn = find notes. The following settings will show columns too:
+" set gfm=%f:%l:%c:%m
+" grep --column RepoGrep *.*
+" TODO-MB [180213] - Re-write RepoGrep function to use the silver searcher and include fold text like FindFunc.
+" TODO-MB [180117] - Create macro (or python script) to add/remove fold text (functions/classes/etc)
 " TODO-MB [180311] - Get rid of prompt in TrimSpaces where I have to hit a. Just do it everytime.
 " TODO-MB [180312] - Create a way to save b:start and b:startapp. This should check if I'm on my development computer and load the variables automatically on file load.
-
+" TODO-MB [180420] - Checkout :GrepOptions of vim-easygrep plugin. I could do
+" a similar thing for my Jira interface
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
-" TODO-MB [171101] - Fix QuickFix list regex that formats |
-" TODO-MB [170814] - Create skeleton file for markdown/others
 
 " Constants {{{1
 
@@ -136,8 +137,7 @@ function! FindFunc(...) " {{{2
     lexpr []
 
     " Put Results into QuickFix Window
-    " Remove ':' from each line because it messes up the caddexpr filename/line num
-    silent execute 'g/'.a:1.'/laddexpr expand("%")  . ":" . line(".") . ":" . GetLastFoldString() . substitute(getline("."), ":", "", "g")'
+    silent execute 'g/'.a:1.'/laddexpr line(".") . ":" . GetLastFoldString() . "$}{$" . getline(".") '
 
     " Prepare location list height - minimum or record count and max allowable limit
     let w:locListHeight = min([ g:maxQFlistRecords, len(getloclist(0)) ])
@@ -516,7 +516,8 @@ command! ToggleCtrlP if (g:ctrlp_cmd == 'CtrlPMRU') | let g:ctrlp_cmd = 'CtrlP' 
 " FindLocal {{{2
 " Search for string in current file and put results in Location window
 command! -nargs=+ -complete=command FindLocal
-            \| try | silent call FindFunc(<q-args>, 'next') | catch | endtry | set hls
+            \| silent call FindFunc(<q-args>, 'next') | set hls
+" \| try | silent call FindFunc(<q-args>, 'next') | catch | endtry | set hls
 
 " FoldOpen {{{2
 
@@ -696,6 +697,9 @@ if has("autocmd")
                 \| exe "normal! g'\"" | endif
 endif
 
+" Change error format for custom FindFunc() usage
+set efm+=%l:%m
+
 " Folding{{{3
 set foldenable
 set foldlevelstart=0
@@ -731,17 +735,16 @@ set smartcase
 
 " QuickFix/Location {{{3
 
-" TODO-MB [171030] - The second regex expression will match every second |
-" Align QuickFix List (only first 3 '|')
+" Align QuickFix on ver unique string '$}{$'
 au BufReadPost QuickFix,Location setlocal modifiable
-            \| silent exe 'Tab /^.\{-}\zs|'
-            \| silent exe 'Tab /\(.\{-}\zs|\)\{2}'
-            \| silent exe 'Tab /\(.\{-}\zs|\)\{3}'
+            \| silent exe 'Tab /|\$}{\$'
+            \| silent exe 'g/\$}{\$/s/'
             \| setlocal nowrap
             \| setlocal norelativenumber
             \| setlocal cursorline
-            \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>
             \| setlocal nomodifiable
+
+" \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>
 " \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>:GoToMatchedColumn<CR>
 
 " Close QuickFix/Location lists automatically when it's the last window in current tab
@@ -825,6 +828,13 @@ let NERDTreeShowBookmarks = 1
 " Line Numbers
 let NERDTreeShowLineNumbers=1
 
+" QFEnter {{{3
+
+let g:qfenter_keymap = {}
+let g:qfenter_keymap.vopen = ['<C-v>']
+let g:qfenter_keymap.hopen = ['<C-s>']
+let g:qfenter_keymap.topen = ['<C-t>']
+
 " Syntastic{{{3
 " TODO-MB [170506] - Add Python Virtual Environments and make pylint work for
 " Python 2 and 3
@@ -835,10 +845,6 @@ let NERDTreeShowLineNumbers=1
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
 " TODO-MB [170524] - Find a cleaner way to use syntastic
 nnoremap <leader>cp :SyntasticCheck<CR>
-" Vim-Indent-Guides {{{3
-" Indent Guides default is on
-let g:indent_guides_enable_on_vim_startup = 1
-
 " The Silver Searcher {{{3
 if executable('ag')
     " Use ag instead of grep (performance increase)
@@ -850,6 +856,10 @@ if executable('ag')
     " ag is fast enough that CtrlP doesn't need to cache
     " let g:ctrlp_use_caching = 0
 endif
+
+" Vim-Indent-Guides {{{3
+" Indent Guides default is on
+let g:indent_guides_enable_on_vim_startup = 1
 
 " Vim-QF {{{3
 " let g:qf_mapping_ack_style = 1
@@ -994,7 +1004,7 @@ omap L $
 " Enter/CR Key {{{2
 
 " Disable in normal mode
-nnoremap <CR> <nop>
+" nnoremap <CR> <nop>
 
 " Escape Key {{{2
 

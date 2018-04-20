@@ -48,6 +48,7 @@ do
     git clone https://github.com/tpope/vim-surround "$i/vim-surround"                       # Surround all the stuff
     git clone https://github.com/vim-airline/vim-airline "$i/vim-airline"                   # Nice status bar
     git clone https://github.com/mikeboiko/auto-pairs "$i/auto-pairs"                       # Auto-close brackets
+    git clone https://github.com/yssl/QFEnter "$i/QFEnter"                                 # QuickFix lists - open in tabs/split windows
 
 done
 
