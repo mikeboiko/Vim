@@ -22,9 +22,7 @@
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
 " TODO-MB [180210] - Write command to use ag to find code samples in all my
 " git repos quickly. Use file type option and -i (case-insensitive). fa = find
-" all code. fn = find notes. The following ag settings will show columns too:
-" set gfm=%f:%l:%c:%m
-" grep --column RepoGrep *.*
+" all code. fn = find notes. See --vimgrep docs: github.com/ggreer/the_silver_searcher/blob/master/doc/ag.1.md
 " TODO-MB [180117] - Create macro (or python script) to add/remove fold text (functions/classes/etc)
 " TODO-MB [180311] - Get rid of prompt in TrimSpaces where I have to hit a. Just do it everytime.
 " TODO-MB [180312] - Create a way to save b:start and b:startapp. This should check if I'm on my development computer and load the variables automatically on file load.
@@ -737,7 +735,7 @@ set smartcase
 " QuickFix/Location {{{3
 
 " Align QuickFix on ver unique string '$}{$'
-au BufReadPost QuickFix,Location setlocal modifiable
+au BufReadPost quickfix setlocal modifiable
             \| silent exe 'Tab /|\$}{\$'
             \| silent exe 'g/\$}{\$/s/'
             \| setlocal nowrap
