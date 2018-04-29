@@ -50,6 +50,21 @@ function! BufDo(command) " {{{2
     execute 'buffer ' . currBuff
 endfunction
 
+function! BuildYCM(info) " {{{2
+    " Build YouCompleteMe after vim-plug clones the repo
+    " info is a dictionary with 3 fields
+    " - name:   name of the plugin
+    " - status: 'installed', 'updated', or 'unchanged'
+    " - force:  set on PlugInstall! or PlugUpdate!
+    if a:info.status == 'installed' || a:info.force
+        if has("unix")
+            !./install.py --all
+        else
+            !.\install.py --all
+        endif
+    endif
+endfunction
+
 function! CloseQuickFixWindow() " {{{2
     " If the window is quickfix, proceed
     if &buftype=="quickfix"
@@ -751,13 +766,13 @@ au BufEnter * call CloseQuickFixWindow()
 
 " Undo Files {{{3
 " Let's save undo info!
-if !isdirectory($HOME."/vimfiles")
-    call mkdir($HOME."/vimfiles", "", 0770)
+if !isdirectory($HOME."/.vim")
+    call mkdir($HOME."/.vim", "", 0770)
 endif
-if !isdirectory($HOME."/vimfiles/undo-dir")
-    call mkdir($HOME."/vimfiles/undo-dir", "", 0700)
+if !isdirectory($HOME."/.vim/undo-dir")
+    call mkdir($HOME."/.vim/undo-dir", "", 0700)
 endif
-set undodir=~/vimfiles/undo-dir
+set undodir=~/.vim/undo-dir
 set undofile
 
 " Plugins{{{2
@@ -766,9 +781,44 @@ set undofile
 " SEBOL:
 au BufRead,BufNewFile *.sebol setfiletype sebol
 
-" Pathogen{{{3
-" Pathogen source all Vim bundles found in ~/.vim/bundle
-execute pathogen#infect()
+" vim-plug{{{3
+
+" Plugin manager
+
+" Specify a directory for plugins
+if has("unix")
+    let vimplugDir = '~/.vim/plugged'
+else
+    let vimplugDir = '~/vimfiles/plugged'
+endif
+
+" Initialize plugin system
+call plug#begin(vimplugDir)
+
+" Plug 'PyCQA/pylint' " Anaylize python code
+" Plug 'Vimjas/vim-python-pep8-indent' " PEP8 standard
+
+Plug 'PProvost/vim-ps1'                                       " Powershell file types
+Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
+Plug 'godlygeek/tabular'                                      " Align things
+Plug 'junegunn/gv.vim'                                        " Access git files easier
+Plug 'kien/ctrlp.vim'                                         " Browse recent/project files
+Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
+Plug 'mattn/emmet-vim'                                        " Edit HTML/CSS quickly
+Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
+Plug 'nathanaelkane/vim-indent-guides'                        " Visual indent levels
+Plug 'posva/vim-vue'                                          " Vue filetype recognition
+Plug 'scrooloose/nerdcommenter'                               " Commenting
+Plug 'scrooloose/nerdtree'                                    " Tree file browser
+Plug 'tpope/vim-dispatch'                                     " Asynchronous compilation/commands
+Plug 'tpope/vim-fugitive'                                     " Git wrapper
+Plug 'tpope/vim-repeat'                                       " Repeat surround and commenting with .
+Plug 'tpope/vim-surround'                                     " Surround all the stuff
+Plug 'vim-airline/vim-airline'                                " Nice status bar
+Plug 'yssl/QFEnter'                                           " QuickFix lists - open in tabs/split windows
+
+" End initialization of plugin system
+call plug#end()
 
 " AirLine{{{3
 let g:airline_section_a = '%f'
@@ -864,6 +914,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 " let g:qf_mapping_ack_style = 1
 
 " YouCompleteMe{{{3
+
 " Close preview window after completion
 let g:ycm_autoclose_preview_window_after_completion=1
 
@@ -1243,7 +1294,7 @@ nnoremap <c-y> <c-r>
 inoremap <c-y> <Esc><C-r>
 
 " Paste from clipboard
-nnoremap <c-v> o<esc>P
+nnoremap <c-v> o<esc>P==
 inoremap <c-v> <c-r>+
 
 " Yank {{{2

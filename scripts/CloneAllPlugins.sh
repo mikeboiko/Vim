@@ -69,7 +69,7 @@ else
         cd ~
         mkdir ycm_build
         cd ycm_build
-        # Visual Studio 2017 packages need to be installed first (not sure which ones)
+        # Visual Studio 2017 packages need to be installed first (Desktop development with C++ in Workloads)
         cmake -G "Visual Studio 15 Win64" . ~/vimfiles/bundle/YouCompleteMe/third_party/ycmd/cpp
         cmake --build . --target ycm_core --config Release
         cd ~/vimfiles/bundle/youcompleteme
