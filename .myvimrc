@@ -13,7 +13,6 @@
 "                                                                     '
 
 " TODOs {{{1
-" TODO-MB [180408] - Get better plugin manager. It should work with offline computer. vim-plug? Help with map conflicts.
 " TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
 " TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
@@ -26,8 +25,7 @@
 " TODO-MB [180117] - Create macro (or python script) to add/remove fold text (functions/classes/etc)
 " TODO-MB [180311] - Get rid of prompt in TrimSpaces where I have to hit a. Just do it everytime.
 " TODO-MB [180312] - Create a way to save b:start and b:startapp. This should check if I'm on my development computer and load the variables automatically on file load.
-" TODO-MB [180420] - Checkout :GrepOptions of vim-easygrep plugin. I could do
-" a similar thing for my Jira interface
+" TODO-MB [180420] - Checkout :GrepOptions of vim-easygrep plugin. I could do a similar thing for my Jira interface
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 
 " Constants {{{1
@@ -41,6 +39,13 @@ let g:promptCommentText = 'Comment Text: '
 
 " Fold marker string used through vimrc file without messing up folding
 let g:fold_marker_string = '{'. '{'. '{'
+
+" Vim home directory
+if has("unix")
+    let vimHomeDir = $HOME . '/.vim'
+else
+    let vimHomeDir = $HOME . '/vimfiles'
+endif
 
 " Functions {{{1
 function! BufDo(command) " {{{2
@@ -766,11 +771,11 @@ au BufEnter * call CloseQuickFixWindow()
 
 " Undo Files {{{3
 " Let's save undo info!
-if !isdirectory($HOME."/.vim")
-    call mkdir($HOME."/.vim", "", 0770)
+if !isdirectory(vimHomeDir)
+    call mkdir(vimHomeDir, "", 0770)
 endif
-if !isdirectory($HOME."/.vim/undo-dir")
-    call mkdir($HOME."/.vim/undo-dir", "", 0700)
+if !isdirectory(vimHomeDir . "/undo-dir")
+    call mkdir(vimHomeDir."/undo-dir", "", 0700)
 endif
 set undodir=~/.vim/undo-dir
 set undofile
@@ -785,15 +790,9 @@ au BufRead,BufNewFile *.sebol setfiletype sebol
 
 " Plugin manager
 
-" Specify a directory for plugins
-if has("unix")
-    let vimplugDir = '~/.vim/plugged'
-else
-    let vimplugDir = '~/vimfiles/plugged'
-endif
-
 " Initialize plugin system
-call plug#begin(vimplugDir)
+let vimPlugDir = vimHomeDir . '/plugged'
+call plug#begin(vimPlugDir)
 
 " Plug 'PyCQA/pylint' " Anaylize python code
 " Plug 'Vimjas/vim-python-pep8-indent' " PEP8 standard
