@@ -13,6 +13,8 @@
 "                                                                     '
 
 " TODOs {{{1
+" TODO-MB [180501] - Add set autoread. Make sure it informs me and I also that I can undo and go back when I mess up or delete a file.
+" TODO-MB [180501] - Rename this repo from vim to Vim to fix the folder switching conflict in zsh
 " TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
 " TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
@@ -405,7 +407,7 @@ endfunction
 function! TrimSpaces() range " {{{2
     " Trim trailing white spaces
     let oldhlsearch=ShowSpaces(1)
-    execute a:firstline.",".a:lastline."substitute ///gec"
+    execute a:firstline.",".a:lastline."substitute ///"
     let &hlsearch=oldhlsearch
     execute "normal! `m"
 endfunction
@@ -676,10 +678,6 @@ set wildignore+=*.swp
 " Standard Encoding
 set encoding=utf8
 
-" TODO-MB [180314] - I don't think this is required
-" Buffer should be modifable (GV-Vim needs this)
-" set modifiable
-
 " No .swp backup files
 set noswapfile
 
@@ -718,6 +716,9 @@ endif
 
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
+
+" Auto reload file when changed from another source
+set autoread
 
 " Folding{{{3
 set foldenable
@@ -1034,7 +1035,7 @@ nmap <c-p> :execute g:ctrlp_cmd<CR>
 inoremap <c-j> <c-n>
 inoremap <c-k> <c-p>
 
-" Dump Register
+" Dump Register {{{2
 nnoremap <leader><space> "z
 nnoremap <leader>p "adiwP
 
@@ -1060,7 +1061,7 @@ omap L $
 " Disable Highlighting
 nnoremap <esc> :noh<esc>
 
-" NERDTree{{{2
+" NERDTree {{{2
 nnoremap <leader>on :NERDTreeFind<CR>
 
 " Find - Local {{{2
