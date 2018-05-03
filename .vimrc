@@ -4,4 +4,4 @@
 " =======================================================================
 
 let $CODE='$HOME/Documents/GitRepos'
-source $CODE/vim/.myvimrc
+source $CODE/Vim/.myvimrc
