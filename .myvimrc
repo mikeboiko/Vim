@@ -13,7 +13,7 @@
 "                                                                     '
 
 " TODOs {{{1
-" TODO-MB [180503] - Try solarized color scheme to match terminal emulator. Also set the same for hyper.
+" TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
 " TODO-MB [180501] - Add set autoread. Make sure it informs me and I also that I can undo and go back when I mess up or delete a file.
 " TODO-MB [180501] - Rename this repo from vim to Vim to fix the folder switching conflict in zsh
 " TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
@@ -578,6 +578,146 @@ command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
 
 " Editor Settings{{{1
+" Plugins{{{2
+" Custom Languages {{{3
+
+" SEBOL:
+au BufRead,BufNewFile *.sebol setfiletype sebol
+
+" vim-plug{{{3
+
+" Plugin manager
+
+" Initialize plugin system
+let vimPlugDir = vimHomeDir . '/plugged'
+call plug#begin(vimPlugDir)
+
+" Plug 'PyCQA/pylint' " Anaylize python code
+" Plug 'Vimjas/vim-python-pep8-indent' " PEP8 standard
+
+Plug 'PProvost/vim-ps1'                                       " Powershell file types
+Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
+Plug 'altercation/vim-colors-solarized'                       " Color-scheme
+Plug 'godlygeek/tabular'                                      " Align things
+Plug 'junegunn/gv.vim'                                        " Access git files easier
+Plug 'kien/ctrlp.vim'                                         " Browse recent/project files
+Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
+Plug 'mattn/emmet-vim'                                        " Edit HTML/CSS quickly
+Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
+Plug 'nathanaelkane/vim-indent-guides'                        " Visual indent levels
+Plug 'posva/vim-vue'                                          " Vue filetype recognition
+Plug 'scrooloose/nerdcommenter'                               " Commenting
+Plug 'scrooloose/nerdtree'                                    " Tree file browser
+Plug 'tpope/vim-dispatch'                                     " Asynchronous compilation/commands
+Plug 'tpope/vim-fugitive'                                     " Git wrapper
+Plug 'tpope/vim-repeat'                                       " Repeat surround and commenting with .
+Plug 'tpope/vim-surround'                                     " Surround all the stuff
+Plug 'vim-airline/vim-airline'                                " Nice status bar
+Plug 'yssl/QFEnter'                                           " QuickFix lists - open in tabs/split windows
+
+" End initialization of plugin system
+call plug#end()
+
+" AirLine{{{3
+let g:airline_section_a = '%f'
+let g:airline_section_c = '%{GetFoldStrings()}'
+
+" Emmet HTML/JS {{{3
+let g:user_emmet_leader_key = '<c-b>'
+
+" CtrlP {{{3
+" Fuzzy file/buffer/tag open
+
+" Since I'm toggling CtrlP functionality, I remapped my own <c-p> command
+let g:ctrlp_map = ''
+
+" Most recent files is default
+let g:ctrlp_cmd = 'CtrlPMRU'
+
+" Use filename instead of full path for searching
+let g:ctrlp_by_filename = 1
+
+noremap <silent> <c-l> <nop>
+noremap <silent> <c-h> <nop>
+
+" Remap hotkeys
+let g:ctrlp_prompt_mappings = {
+            \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
+            \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+            \ 'ToggleType(1)':        ['<c-f>'],
+            \ 'ToggleType(-1)':       ['<c-b>'],
+            \ }
+
+
+" NerdCommenter{{{3
+
+" NerdCommenter add a space after comment
+let g:NERDSpaceDelims=1
+
+" Remove extra spaces when uncommenting
+let g:NERDRemoveExtraSpaces=1
+
+" Custom comment delimiters
+let g:NERDCustomDelimiters = {
+            \ 'python': { 'left': '#', 'right': '' },
+            \ 'dosbatch': { 'left': 'REM', 'right': '' },
+            \ 'sebol': { 'left': '!', 'right': '' }
+            \ }
+
+
+" NERDTree{{{3
+" Close NERDTree when opening file
+let NERDTreeQuitOnOpen = 1
+" Show hidden files by default
+let NERDTreeShowHidden = 1
+" Enable Bookmarks by default
+let NERDTreeShowBookmarks = 1
+" Line Numbers
+let NERDTreeShowLineNumbers=1
+
+" QFEnter {{{3
+
+let g:qfenter_keymap = {}
+let g:qfenter_keymap.vopen = ['<C-v>']
+let g:qfenter_keymap.hopen = ['<C-s>']
+let g:qfenter_keymap.topen = ['<C-t>']
+
+" Syntastic{{{3
+" TODO-MB [170506] - Add Python Virtual Environments and make pylint work for
+" Python 2 and 3
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+" TODO-MB [170524] - Find a cleaner way to use syntastic
+nnoremap <leader>cp :SyntasticCheck<CR>
+" The Silver Searcher {{{3
+if executable('ag')
+    " Use ag instead of grep (performance increase)
+    set grepprg=ag\ --nogroup\ --nocolor
+
+    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+    " ag is fast enough that CtrlP doesn't need to cache
+    " let g:ctrlp_use_caching = 0
+endif
+
+" Vim-Indent-Guides {{{3
+" Indent Guides default is on
+let g:indent_guides_enable_on_vim_startup = 1
+
+" Vim-QF {{{3
+" let g:qf_mapping_ack_style = 1
+
+" YouCompleteMe{{{3
+
+" Close preview window after completion
+let g:ycm_autoclose_preview_window_after_completion=1
+
+nnoremap <space>fi :YcmCompleter FixIt<CR>
+
 " Display{{{2
 
 " 256 color
@@ -590,7 +730,7 @@ set background=dark
 if has("gui_running")
     colorscheme desert
 else
-    colorscheme elflord
+    colorscheme solarized
 endif
 
 " Set GVIM Font
@@ -781,145 +921,6 @@ endif
 set undodir=~/.vim/undo-dir
 set undofile
 
-" Plugins{{{2
-" Custom Languages {{{3
-
-" SEBOL:
-au BufRead,BufNewFile *.sebol setfiletype sebol
-
-" vim-plug{{{3
-
-" Plugin manager
-
-" Initialize plugin system
-let vimPlugDir = vimHomeDir . '/plugged'
-call plug#begin(vimPlugDir)
-
-" Plug 'PyCQA/pylint' " Anaylize python code
-" Plug 'Vimjas/vim-python-pep8-indent' " PEP8 standard
-
-Plug 'PProvost/vim-ps1'                                       " Powershell file types
-Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
-Plug 'godlygeek/tabular'                                      " Align things
-Plug 'junegunn/gv.vim'                                        " Access git files easier
-Plug 'kien/ctrlp.vim'                                         " Browse recent/project files
-Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
-Plug 'mattn/emmet-vim'                                        " Edit HTML/CSS quickly
-Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
-Plug 'nathanaelkane/vim-indent-guides'                        " Visual indent levels
-Plug 'posva/vim-vue'                                          " Vue filetype recognition
-Plug 'scrooloose/nerdcommenter'                               " Commenting
-Plug 'scrooloose/nerdtree'                                    " Tree file browser
-Plug 'tpope/vim-dispatch'                                     " Asynchronous compilation/commands
-Plug 'tpope/vim-fugitive'                                     " Git wrapper
-Plug 'tpope/vim-repeat'                                       " Repeat surround and commenting with .
-Plug 'tpope/vim-surround'                                     " Surround all the stuff
-Plug 'vim-airline/vim-airline'                                " Nice status bar
-Plug 'yssl/QFEnter'                                           " QuickFix lists - open in tabs/split windows
-
-" End initialization of plugin system
-call plug#end()
-
-" AirLine{{{3
-let g:airline_section_a = '%f'
-let g:airline_section_c = '%{GetFoldStrings()}'
-
-" Emmet HTML/JS {{{3
-let g:user_emmet_leader_key = '<c-b>'
-
-" CtrlP {{{3
-" Fuzzy file/buffer/tag open
-
-" Since I'm toggling CtrlP functionality, I remapped my own <c-p> command
-let g:ctrlp_map = ''
-
-" Most recent files is default
-let g:ctrlp_cmd = 'CtrlPMRU'
-
-" Use filename instead of full path for searching
-let g:ctrlp_by_filename = 1
-
-noremap <silent> <c-l> <nop>
-noremap <silent> <c-h> <nop>
-
-" Remap hotkeys
-let g:ctrlp_prompt_mappings = {
-            \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
-            \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
-            \ 'ToggleType(1)':        ['<c-f>'],
-            \ 'ToggleType(-1)':       ['<c-b>'],
-            \ }
-
-
-" NerdCommenter{{{3
-
-" NerdCommenter add a space after comment
-let g:NERDSpaceDelims=1
-
-" Remove extra spaces when uncommenting
-let g:NERDRemoveExtraSpaces=1
-
-" Custom comment delimiters
-let g:NERDCustomDelimiters = {
-            \ 'python': { 'left': '#', 'right': '' },
-            \ 'dosbatch': { 'left': 'REM', 'right': '' },
-            \ 'sebol': { 'left': '!', 'right': '' }
-            \ }
-
-
-" NERDTree{{{3
-" Close NERDTree when opening file
-let NERDTreeQuitOnOpen = 1
-" Show hidden files by default
-let NERDTreeShowHidden = 1
-" Enable Bookmarks by default
-let NERDTreeShowBookmarks = 1
-" Line Numbers
-let NERDTreeShowLineNumbers=1
-
-" QFEnter {{{3
-
-let g:qfenter_keymap = {}
-let g:qfenter_keymap.vopen = ['<C-v>']
-let g:qfenter_keymap.hopen = ['<C-s>']
-let g:qfenter_keymap.topen = ['<C-t>']
-
-" Syntastic{{{3
-" TODO-MB [170506] - Add Python Virtual Environments and make pylint work for
-" Python 2 and 3
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-" TODO-MB [170524] - Find a cleaner way to use syntastic
-nnoremap <leader>cp :SyntasticCheck<CR>
-" The Silver Searcher {{{3
-if executable('ag')
-    " Use ag instead of grep (performance increase)
-    set grepprg=ag\ --nogroup\ --nocolor
-
-    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-    " ag is fast enough that CtrlP doesn't need to cache
-    " let g:ctrlp_use_caching = 0
-endif
-
-" Vim-Indent-Guides {{{3
-" Indent Guides default is on
-let g:indent_guides_enable_on_vim_startup = 1
-
-" Vim-QF {{{3
-" let g:qf_mapping_ack_style = 1
-
-" YouCompleteMe{{{3
-
-" Close preview window after completion
-let g:ycm_autoclose_preview_window_after_completion=1
-
-nnoremap <space>fi :YcmCompleter FixIt<CR>
-
 " Language/Project Specific{{{1
 " Comma/Pipe/Tab Seperated Values{{{2
 " autocmd BufReadPost *.tsv,*.csv,*.psv execute 'Tabularize /,'
@@ -1040,7 +1041,7 @@ nnoremap <leader><space> "z
 nnoremap <leader>p "adiwP
 
 " Edit Common Files {{{2
-nnoremap <leader>ev :call EditCommonFile('$CODE/vim/.myvimrc')<CR>
+nnoremap <leader>ev :call EditCommonFile('$CODE/Vim/.myvimrc')<CR>
 nnoremap <leader>eac :call EditCommonFile('$CODE/Windows/AHK/Common.ahk')<CR>
 
 " End/Beginning of Line {{{2
