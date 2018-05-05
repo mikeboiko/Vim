@@ -727,11 +727,11 @@ set t_Co=256
 set background=dark
 
 " Preferred color scheme
-if has("gui_running")
-    colorscheme desert
-else
-    colorscheme solarized
-endif
+colorscheme solarized
+
+" Solarized settings
+let g:solarized_italic=0
+let g:solarized_bold=0
 
 " Set GVIM Font
 " To select form availbale fonts :set guifont=*
@@ -1201,6 +1201,10 @@ nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
 " Close location list then quit
 nnoremap <c-w> :lclose<CR>:q<CR>
+
+" Close without saving
+nnoremap Q :q!<CR>
+
 
 " A hack to close the Fugitive Plugin window with <c-w>
 nmap gf gf
