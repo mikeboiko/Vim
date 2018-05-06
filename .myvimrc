@@ -1,16 +1,8 @@
-"    ____      ____  ____      ______  _______        _____         _____
-"   |    |    |    ||    |    |      \/       \   ___|\    \    ___|\    \
-"   |    |    |    ||    |   /          /\     \ |    |\    \  /    /\    \
-"   |    |    |    ||    |  /     /\   / /\     ||    | |    ||    |  |    |
-"   |    |    |    ||    | /     /\ \_/ / /    /||    |/____/ |    |  |____|
-"   |    |    |    ||    ||     |  \|_|/ /    / ||    |\    \ |    |   ____
-"   |\    \  /    /||    ||     |       |    |  ||    | |    ||    |  |    |
-"   | \ ___\/___ / ||____||\____\       |____|  /|____| |____||\ ___\/    /|
-"    \ |   ||   | / |    || |    |      |    | / |    | |    || |   /____/ |
-"     \|___||___|/  |____| \|____|      |____|/  |____| |____| \|___|    | /
-"       \(    )/      \(      \(          )/       \(     )/     \( |____|/
-"        '    '        '       '          '         '     '       '   )/
-"                                                                     '
+"        _                    
+" __   _(_)_ __ ___  _ __ ___ 
+" \ \ / / | '_ ` _ \| '__/ __|
+"  \ V /| | | | | | | | | (__ 
+"   \_/ |_|_| |_| |_|_|  \___|
 
 " TODOs {{{1
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
@@ -771,7 +763,25 @@ let g:display_hidden = "hidden"
 " Change the text that is displayed while in a fold
 set foldtext=v:folddashes.FormatFoldString(v:foldstart)
 
-" Functionality{{{2
+" Functionality {{{2
+" Vim Start {{{2
+
+" Save last file when exiting vim
+autocmd VimLeave * nested if (!isdirectory(vimHomeDir)) |
+    \ call mkdir(vimHomeDir) |
+    \ endif |
+    \ execute "mksession! " . vimHomeDir . "/Session.vim"
+
+" Go to last file(s) if invoked without arguments.
+autocmd VimEnter * nested if argc() == 0 && filereadable(vimHomeDir . "/Session.vim") |
+    \ execute "source " . vimHomeDir . "/Session.vim"
+
+" Have Vim jump to the last position when reopening a file
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+                \| exe "normal! g'\"" | endif
+endif
+
 " General{{{3
 
 " Optimize GVim
@@ -847,12 +857,6 @@ au FileType * setlocal formatoptions-=cro
 
 " Spelling
 set spellfile=$HOME/OneDrive/Software/Settings/en.utf-8.add
-
-" Have Vim jump to the last position when reopening a file
-if has("autocmd")
-    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-                \| exe "normal! g'\"" | endif
-endif
 
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
