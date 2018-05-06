@@ -125,11 +125,6 @@ function! EditCommonFile(filename) " {{{2
     let current_filename = expand('%:t')
     let openfilestring = 'tabedit ' . a:filename
     silent exec openfilestring
-    " Close the blank buffer
-    if (current_filename == '')
-        tabprev
-        bd
-    endif
 endfunction
 
 function! FindFunc(...) " {{{2
@@ -768,13 +763,16 @@ set foldtext=v:folddashes.FormatFoldString(v:foldstart)
 
 " Save last file when exiting vim
 autocmd VimLeave * nested if (!isdirectory(vimHomeDir)) |
-    \ call mkdir(vimHomeDir) |
-    \ endif |
-    \ execute "mksession! " . vimHomeDir . "/Session.vim"
+            \ call mkdir(vimHomeDir) |
+            \ endif |
+            \ execute "mksession! " . vimHomeDir . "/Session.vim"
 
 " Go to last file(s) if invoked without arguments.
-autocmd VimEnter * nested if argc() == 0 && filereadable(vimHomeDir . "/Session.vim") |
-    \ execute "source " . vimHomeDir . "/Session.vim"
+autocmd VimEnter * nested if argc() == 0 &&
+            \ filereadable(vimHomeDir . "/Session.vim") |
+            \ try |
+            \ execute "source " . vimHomeDir . "/Session.vim"
+            \ | catch | endtry
 
 " Have Vim jump to the last position when reopening a file
 if has("autocmd")
