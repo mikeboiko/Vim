@@ -1,7 +1,7 @@
-"        _                    
-" __   _(_)_ __ ___  _ __ ___ 
+"        _
+" __   _(_)_ __ ___  _ __ ___
 " \ \ / / | '_ ` _ \| '__/ __|
-"  \ V /| | | | | | | | | (__ 
+"  \ V /| | | | | | | | | (__
 "   \_/ |_|_| |_| |_|_|  \___|
 
 " TODOs {{{1
@@ -125,6 +125,25 @@ function! EditCommonFile(filename) " {{{2
     let current_filename = expand('%:t')
     let openfilestring = 'tabedit ' . a:filename
     silent exec openfilestring
+endfunction
+
+function! FigletDraw(...) " {{{2
+    " Print ascii art comment
+
+    " TODO-MB [180508] - This doesn't comment yet
+    exe 'read !figlet "' . a:1 . '"'
+
+    " let start = line('.')
+    " " let end = search("^$") - 1
+    " " let lines = getline(start, end)
+    " let lines = getline(start)
+    " echo lines
+
+    " " let text = substitute(a:line, b:NERDCommenterDelims['left'].a:line.b:NERDCommenterDelims['right'], '', 'g')
+    " let text = substitute(getline("."),
+    " b:NERDCommenterDelims['left'].getline(".").b:NERDCommenterDelims['right'], '', 'g')
+    " echo text
+
 endfunction
 
 function! FindFunc(...) " {{{2
@@ -503,6 +522,11 @@ function! WrapFold(foldlevel) range " {{{2
     execute 'normal! `m'
 endfunction
 " Commands {{{1
+" Ascii {{{2
+" Draw ascii art comments
+command! -nargs=+ -complete=command Ascii
+            \| silent call FigletDraw(<q-args>)
+
 " Bufdo {{{2
 
 " Just like bufdo, but restore the current buffer when done.
@@ -717,7 +741,7 @@ set background=dark
 colorscheme solarized
 
 " Solarized settings
-let g:solarized_italic=0
+" let g:solarized_italic=0
 let g:solarized_bold=0
 
 " Set GVIM Font
@@ -759,7 +783,7 @@ let g:display_hidden = "hidden"
 set foldtext=v:folddashes.FormatFoldString(v:foldstart)
 
 " Functionality {{{2
-" Vim Start {{{2
+" Vim Start {{{3
 
 " Save last file when exiting vim
 autocmd VimLeave * nested if (!isdirectory(vimHomeDir)) |
@@ -1054,18 +1078,10 @@ vnoremap <silent> L $
 omap H ^
 omap L $
 
-" Enter/CR Key {{{2
-
-" Disable in normal mode
-" nnoremap <CR> <nop>
-
 " Escape Key {{{2
 
 " Disable Highlighting
 nnoremap <esc> :noh<esc>
-
-" NERDTree {{{2
-nnoremap <leader>on :NERDTreeFind<CR>
 
 " Find - Local {{{2
 
@@ -1131,7 +1147,19 @@ inoremap <silent> <enter> <esc>
 " Jump to proper column when using marks
 nnoremap ' `
 
-" New blank line {{{2
+" Navigation {{{2
+" Do not automatically adjust for line wrapping
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+
+" NERDTree {{{2
+nnoremap <leader>on :NERDTreeFind<CR>
+
+" New line {{{2
+
+" New line in insert mode
+inoremap <c-o> <CR>
+
 " Add blank line after current line
 nnoremap <leader>aj :<CR>mzo<Esc>`z:<CR>
 
@@ -1143,11 +1171,6 @@ nnoremap <leader>al :<CR>mzO<Esc>jo<Esc>`z:<CR>
 
 " Restore Enter key functionality for command history window
 autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
-
-" Navigation {{{2
-" Do not automatically adjust for line wrapping
-nnoremap <expr> j v:count ? 'j' : 'gj'
-nnoremap <expr> k v:count ? 'k' : 'gk'
 
 " Scrolling{{{2
 
