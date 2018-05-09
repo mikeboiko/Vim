@@ -1,13 +1,20 @@
-"        _
-" __   _(_)_ __ ___  _ __ ___
-" \ \ / / | '_ ` _ \| '__/ __|
-"  \ V /| | | | | | | | | (__
-"   \_/ |_|_| |_| |_|_|  \___|
+"    ____      ____  ____      ______  _______
+"   |    |    |    ||    |    |      \/       \
+"   |    |    |    ||    |   /          /\     \
+"   |    |    |    ||    |  /     /\   / /\     |
+"   |    |    |    ||    | /     /\ \_/ / /    /|
+"   |    |    |    ||    ||     |  \|_|/ /    / |
+"   |\    \  /    /||    ||     |       |    |  |
+"   | \ ___\/___ / ||____||\____\       |____|  /
+"    \ |   ||   | / |    || |    |      |    | /
+"     \|___||___|/  |____| \|____|      |____|/
+"       \(    )/      \(      \(          )/
+"        '    '        '       '          '
+"
 
 " TODOs {{{1
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
 " TODO-MB [180501] - Add set autoread. Make sure it informs me and I also that I can undo and go back when I mess up or delete a file.
-" TODO-MB [180501] - Rename this repo from vim to Vim to fix the folder switching conflict in zsh
 " TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
 " TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
@@ -885,6 +892,7 @@ set spellfile=$HOME/OneDrive/Software/Settings/en.utf-8.add
 
 " Auto reload file when changed from another source
 set autoread
+au CursorHold * checktime
 
 " Folding{{{3
 set foldenable
@@ -897,7 +905,7 @@ set foldlevel=2
 " Indenting/Tabs{{{3
 " Do smart auto indenting when starting a new line
 set autoindent
-set smartindent
+" set smartindent
 
 " Set tab width
 set tabstop=4
@@ -1258,6 +1266,11 @@ nnoremap <leader>so vip:sort<CR>
 
 " Source {{{2
 nnoremap <leader>sv :w<CR>:so $HOME/.vimrc<CR>
+
+" Suspend {{{2
+
+" Don't suspend!
+noremap <c-z> <nop>
 
 " Spell Toggle {{{2
 " Toggle the spelling on/off
