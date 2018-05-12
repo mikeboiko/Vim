@@ -14,7 +14,6 @@
 
 " TODOs {{{1
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
-" TODO-MB [180501] - Add set autoread. Make sure it informs me and I also that I can undo and go back when I mess up or delete a file.
 " TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
 " TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
@@ -391,6 +390,7 @@ function! RepoGrep(...) " {{{2
     exe 'silent Ggrep! -i ' . a:1
     let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ])
     exe 'top ' . g:qfListHeight . ' copen'
+    redraw!
 endfunction
 
 function! SetCurrentWorkingDirectory() " {{{2
@@ -1270,7 +1270,11 @@ nnoremap <leader>sv :w<CR>:so $HOME/.vimrc<CR>
 " Suspend {{{2
 
 " Don't suspend!
+" TODO-MB [180512] - TEST
 noremap <c-z> <nop>
+" noremap <c-z> :silent !~/clipboard.sh<CR>:redraw!<CR>
+" noremap <c-z>c :Start! ~/clipboard.sh --write<CR>
+" noremap <c-z>v :Start! ~/clipboard.sh --read<CR>
 
 " Spell Toggle {{{2
 " Toggle the spelling on/off
