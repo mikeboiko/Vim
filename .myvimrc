@@ -966,7 +966,7 @@ autocmd BufReadPost *.tsv setlocal nowrap
 " autocmd BufReadPost *.psv 1sp
 " autocmd BufReadPost *.tsv 1sp
 " HTML/js/css/Vue {{{2
-autocmd FileType html,javascript,json,vue,css,scss setlocal shiftwidth=2 tabstop=2
+autocmd FileType html,javascript,json,vue,css,scss,yml,yaml setlocal shiftwidth=2 tabstop=2
 
 " Vue {{{2
 
@@ -1191,7 +1191,7 @@ nnoremap J 5j
 " Open File/Folder {{{2
 
 " Explorer
-nnoremap <leader>oe :silent !explorer .<CR>
+nnoremap <leader>oe :silent !explorer.exe .<CR>:redraw!<CR>
 
 " Chrome
 nnoremap <leader>oc :silent !"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" ".\<c-r>%"<CR>
@@ -1271,9 +1271,7 @@ nnoremap <leader>sv :w<CR>:so $HOME/.vimrc<CR>
 " Suspend {{{2
 
 " Don't suspend!
-" TODO-MB [180512] - TEST
 noremap <c-z> <nop>
-" noremap <c-z> :silent !~/clipboard.sh<CR>:redraw!<CR>
 " noremap <c-z>c :Start! ~/clipboard.sh --write<CR>
 " noremap <c-z>v :Start! ~/clipboard.sh --read<CR>
 
