@@ -329,15 +329,12 @@ function! GitAddCommitPush() " {{{2
     " Git - add all, commit and push
 
     if has("unix") " Linux
-        let exe_string = '~/Documents/GitRepos/Linux/git/gap'
+        exe '!~/Documents/GitRepos/Linux/git/gap'
     else " Windows
-        " let exe_string = 'powershell ~/Documents/GitRepos/Linux/git/gap.ps1'
-        let exe_string = '"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap'
-        " I'm targeting WSL here
-        " let exe_string = 'bash /mnt/c/Users/Mike/Documents/GitRepos/Linux/git/gap'
+        exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap'
     endif
 
-    exe '!' . exe_string
+    redraw!
 
 endfunction
 
