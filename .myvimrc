@@ -329,12 +329,6 @@ endfunction
 function! GitAddCommitPush() " {{{2
     " Git - add all, commit and push
 
-    " Prompt user for commit text
-    let prompt = UserInput('Commit Message: ')
-
-    " Abort the rest of the function if the user hit escape
-    if (prompt == '') | return | endif
-
     if has("unix") " Linux
         let exe_string = 'bash ~/Documents/GitRepos/Linux/git/gap'
     else " Windows
@@ -344,7 +338,7 @@ function! GitAddCommitPush() " {{{2
         " let exe_string = 'bash /mnt/c/Users/Mike/Documents/GitRepos/Linux/git/gap'
     endif
 
-    exe 'silent Start ' . exe_string . ' ' . shellescape(prompt)
+    exe 'silent Start ' . exe_string
 
 endfunction
 
