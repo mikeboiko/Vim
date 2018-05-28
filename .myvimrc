@@ -26,7 +26,6 @@
 " all code. fn = find notes. See --vimgrep docs: github.com/ggreer/the_silver_searcher/blob/master/doc/ag.1.md
 " TODO-MB [180117] - Create macro (or python script) to add/remove fold text (functions/classes/etc)
 " TODO-MB [180312] - Create a way to save b:start and b:startapp. This should check if I'm on my development computer and load the variables automatically on file load.
-" TODO-MB [180420] - Checkout :GrepOptions of vim-easygrep plugin. I could do a similar thing for my Jira interface
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 
 " Constants {{{1
@@ -330,7 +329,7 @@ function! GitAddCommitPush() " {{{2
     " Git - add all, commit and push
 
     if has("unix") " Linux
-        let exe_string = 'bash ~/Documents/GitRepos/Linux/git/gap'
+        let exe_string = '~/Documents/GitRepos/Linux/git/gap'
     else " Windows
         " let exe_string = 'powershell ~/Documents/GitRepos/Linux/git/gap.ps1'
         let exe_string = '"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap'
@@ -338,7 +337,7 @@ function! GitAddCommitPush() " {{{2
         " let exe_string = 'bash /mnt/c/Users/Mike/Documents/GitRepos/Linux/git/gap'
     endif
 
-    exe 'silent Start ' . exe_string
+    exe '!' . exe_string
 
 endfunction
 
@@ -1137,6 +1136,7 @@ nnoremap <leader>gh :tabe %<CR>:Git! hist<CR>
 
 " Git - add all, commit and push
 nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
+" nnoremap <leader>gap :silent Git add --all<cr>:silent Gcommit<cr>:silent Gpush<cr>:redraw!<cr>
 
 " Help {{{2
 
