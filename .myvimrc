@@ -1296,12 +1296,12 @@ function! StartArgInitialize()
 endfunction
 
 " Run Script Asynchronously
-nnoremap <leader>rr :wa<CR>:silent exe "Start ".b:startapp." ".@%." "b:start<CR>
 " For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
-
-" Run Python
-nnoremap <leader>rsp :wa<CR>:silent exe "Start py -2 ".@%." "b:start<CR>
-nnoremap <leader>rp :wa<CR>:exe "Start py -2 ".@%." "b:start<CR>
+if has("unix")
+    nnoremap <leader>rr :wa<CR>:silent exe "terminal ".b:startapp." ".@%." "b:start<CR>
+else
+    nnoremap <leader>rr :wa<CR>:silent exe "Start ".b:startapp." ".@%." "b:start<CR>
+endif
 
 " Tabs {{{2
 

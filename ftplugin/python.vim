@@ -12,10 +12,6 @@ setlocal nosmartindent
 let g:syntastic_python_checkers = ['pylint']
 let python_highlight_all=1
 
-" Running Script {{{1
-
-au BufWinEnter,BufEnter <buffer> map <buffer> <leader>rr :wa<CR>:silent exe "Start python ".@%." "b:start<CR>
-
 " Virtual Environments {{{1
 " Python with virtualenv support
 " py << EOF
