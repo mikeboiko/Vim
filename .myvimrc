@@ -607,6 +607,7 @@ call plug#begin(vimPlugDir)
 Plug 'PProvost/vim-ps1'                                       " Powershell file types
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
 Plug 'altercation/vim-colors-solarized'                       " Color-scheme
+Plug 'christoomey/vim-tmux-navigator'                         " Switch beween vim splits & tmux panes seamslessly
 Plug 'godlygeek/tabular'                                      " Align things
 Plug 'junegunn/gv.vim'                                        " Access git files easier
 Plug 'kien/ctrlp.vim'                                         " Browse recent/project files
@@ -675,14 +676,22 @@ let g:NERDCustomDelimiters = {
 
 
 " NERDTree{{{3
+
 " Close NERDTree when opening file
 let NERDTreeQuitOnOpen = 1
+
 " Show hidden files by default
 let NERDTreeShowHidden = 1
+
 " Enable Bookmarks by default
 let NERDTreeShowBookmarks = 1
+
 " Line Numbers
 let NERDTreeShowLineNumbers=1
+
+" vim-tmux-navigator conflict
+let g:NERDTreeMapJumpNextSibling = ''
+let g:NERDTreeMapJumpPrevSibling = ''
 
 " QFEnter {{{3
 
@@ -1319,6 +1328,10 @@ nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
+tnoremap <C-j> <C-W>j
+tnoremap <C-k> <C-W>k
+tnoremap <C-h> <C-W>h
+tnoremap <C-l> <C-W>l
 
 " Resize
 nnoremap <leader>wgv :<C-U>exec "vertical resize +".v:count1<CR>
