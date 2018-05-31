@@ -13,6 +13,7 @@
 "
 
 " TODOs {{{1
+" TODO-MB [180531] - In StartArgInitialize(), if the file isn't executable, run it through the program identified by vim.
 " TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files.
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
 " TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
@@ -329,7 +330,7 @@ function! GitAddCommitPush() " {{{2
     " Git - add all, commit and push
 
     if has("unix") " Linux
-        exe '!~/Documents/GitRepos/Linux/git/gap'
+        exe 'term bash '.$HOME.'/Documents/GitRepos/Linux/git/gap'
     else " Windows
         exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap'
     endif
@@ -1291,14 +1292,14 @@ function! StartArgInitialize()
         let b:start = ''
     endif
     if !exists('b:startapp')
-        let b:startapp = ''
+        let b:startapp = './'
     endif
 endfunction
 
 " Run Script Asynchronously
 " For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
 if has("unix")
-    nnoremap <leader>rr :wa<CR>:silent exe "terminal ".b:startapp." ".@%." "b:start<CR>
+    nnoremap <leader>rr :wa<CR>:silent exe "terminal ".b:startapp.@%." "b:start<CR>
 else
     nnoremap <leader>rr :wa<CR>:silent exe "Start ".b:startapp." ".@%." "b:start<CR>
 endif
