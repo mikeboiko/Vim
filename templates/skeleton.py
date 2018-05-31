@@ -56,7 +56,3 @@ def main(): # {{{2
 # Run script if this file is executed directly
 if __name__ == '__main__':
     main()
-
-# This module is a way to identify ubuntu
-if 'apport_python_hook' not in sys.modules:
-    os.system('pause')
