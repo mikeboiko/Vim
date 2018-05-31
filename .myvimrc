@@ -330,7 +330,7 @@ function! GitAddCommitPush() " {{{2
     " Git - add all, commit and push
 
     if has("unix") " Linux
-        exe 'term bash '.$HOME.'/Documents/GitRepos/Linux/git/gap'
+        exe 'term ++close bash '.$HOME.'/Documents/GitRepos/Linux/git/gap'
     else " Windows
         exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap'
     endif
