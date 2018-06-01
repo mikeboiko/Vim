@@ -1145,6 +1145,9 @@ endif
 nnoremap <leader>gd :Gdiff<Space>
 nnoremap <leader>gs :Gstatus<CR>
 
+" Display git diff in terminal
+nnoremap <leader>gt :terminal git --no-pager diff<CR>
+
 " Git history
 nnoremap <leader>gh :tabe %<CR>:Git! hist<CR>
 
