@@ -16,7 +16,6 @@
 " TODO-MB [180531] - In StartArgInitialize(), if the file isn't executable, run it through the program identified by vim.
 " TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files.
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
-" TODO-MB [180407] - Replace dispatch with better plugin, perhaps asyncrun.vim - Test on Linux
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
 " TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
 " TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue.
@@ -1146,10 +1145,10 @@ nnoremap <leader>gd :Gdiff<Space>
 nnoremap <leader>gs :Gstatus<CR>
 
 " Display git diff in terminal
-nnoremap <leader>gt :terminal git --no-pager diff<CR>
+nnoremap <leader>rd :terminal git --no-pager diff<CR>
 
 " Git history
-nnoremap <leader>gh :tabe %<CR>:Git! hist<CR>
+nnoremap <leader>gh :tabe %<CR>:terminal ++curwin git --no-pager hist<CR>
 
 " Git - add all, commit and push
 nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
