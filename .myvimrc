@@ -584,6 +584,13 @@ command! ReplaceMwithBlank try | %s/\r$// | catch | endtry
 " Useful when converting from DOS to Unix line endings
 command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
 
+" Repo {{{2
+" My repo tool commands
+
+command! -nargs=+ -complete=command Repo try |
+            \ exe "terminal bash -c \"~/Documents/GitRepos/Linux/git/repo.sh -c \\\""
+            \ . <q-args> . "\\\"\""| catch | endtry
+
 " SpellToggle {{{2
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
 
@@ -1285,8 +1292,9 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 " Repo {{{2
 
-" Repo Status
-nnoremap <leader>rp :term bash -c ~/Documents/GitRepos/Linux/git/repo.sh<CR>
+" My repo tool commands
+nnoremap <leader>rp :Repo st -s<cr>
+nnoremap <leader>rpc :Repo<space>
 
 " Run Scripts {{{2
 
