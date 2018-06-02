@@ -475,7 +475,7 @@ endfunction
 function! SnipLog() " {{{3
     " Log variable to console for debugging
     if &filetype == "vue" || &filetype == "javascript"
-        let log_string = "console.log()"
+        let log_string = "console.clear()\<c-o>console.log()"
     elseif &filetype == "python"
         let log_string = "print()"
     else
@@ -1191,13 +1191,6 @@ nnoremap <leader>al :<CR>mzO<Esc>jo<Esc>`z:<CR>
 " Restore Enter key functionality for command history window
 autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
 
-" Scrolling{{{2
-
-" Scroll Up
-nnoremap K 5k
-" Scroll Down
-nnoremap J 5j
-
 " Open File/Folder {{{2
 
 " Explorer
@@ -1259,6 +1252,14 @@ au CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR>
 " Save Buffer {{{2
 
 nnoremap <c-s> :w<CR>
+inoremap <c-s> <esc>:w<CR>
+
+" Scrolling{{{2
+
+" Scroll Up
+nnoremap K 5k
+" Scroll Down
+nnoremap J 5j
 
 " Snippets {{{2
 " nnoremap <leader>snc :call SnipClass()<CR>
