@@ -13,7 +13,6 @@
 "
 
 " TODOs {{{1
-" TODO-MB [180531] - In StartArgInitialize(), if the file isn't executable, run it through the program identified by vim.
 " TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files.
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
@@ -482,6 +481,55 @@ function! SnipLog() " {{{3
         let log_string = "echo  "
     endif
     execute "normal o" . log_string | startinsert
+endfunction
+
+function! StartArgInitialize() " {{{2
+    " Read lines the first 10 lines of file and set vars required for executing script
+    " This is the execution command:
+    " 'terminal ' . b:startapp . @% . ' 'b:start<CR>
+    " b:startapp: the program to execute the script with
+    " b:startfile: the program to execute the script with
+    " b:start: arguments/options at the end of cmd string
+
+    " The custom string used to identify these let modelines
+    let customModelineStr = 'dev:'
+
+    try
+        " Read the first 10 lines of this text file into list
+        let initialLines = getline(1, 10)
+        for line in initialLines
+            " Only run custom modelines if 'dev:' is present
+            if line =~ customModelineStr
+                " Remove 'dev;' and comments and trim
+                let varInitString = substitute(StripComments(line), customModelineStr, '', 'g')
+                execute varInitString
+            endif
+        endfor
+    catch
+    endtry
+
+    " Set default args if I didn't temporarily set them already
+    if !exists('b:startapp') | let b:startapp = './' | endif
+
+    " Set default b:startfile if I haven't defined it temporarily already
+    if !exists('b:startfile') | let b:startfile = @% | endif
+
+    " Set default b:start if I haven't defined it temporarily already
+    if !exists('b:start') | let b:start = '' | endif
+
+endfunction
+
+function! StripComments(input) " {{{2
+    " Strip comments and trim
+
+    " Remove comments
+    let substitution = substitute(a:input, b:NERDCommenterDelims['left'].'\|'.b:NERDCommenterDelims['right'], '', 'g')
+
+    " Remove leading and trailing spaces
+    let substitution = substitute(substitution, '^\s*\|\s*$', '', 'g')
+
+    return substitution
+
 endfunction
 
 function! WinDo(command) " {{{2
@@ -1165,7 +1213,7 @@ nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
 " Help {{{2
 
 " Pull up help for word under cursor in a new tab
-noremap <leader>hh :execute "tab h " . expand("<cword>")<cr>
+noremap <leader>hh :execute "help " . expand("<cword>")<cr>
 
 " Insert Mode Escape {{{2
 inoremap <silent> <enter> <esc>
@@ -1308,24 +1356,13 @@ nnoremap <leader>rpc :Repo<space>
 
 " Run Scripts {{{2
 
-" Initialize Start argument. Can't be null
+" Initialize arguments required to run script
+" TODO-MB [180603] - TEST
 au BufEnter,BufCreate * call StartArgInitialize()
-function! StartArgInitialize()
-    if !exists('b:start')
-        let b:start = ''
-    endif
-    if !exists('b:startapp')
-        let b:startapp = './'
-    endif
-endfunction
 
 " Run Script Asynchronously
 " For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
-if has("unix")
-    nnoremap <leader>rr :wa<CR>:silent exe "terminal ".b:startapp.@%." "b:start<CR>
-else
-    nnoremap <leader>rr :wa<CR>:silent exe "Start ".b:startapp." ".@%." "b:start<CR>
-endif
+nnoremap <leader>rr :wa<CR>:silent exe "terminal ".b:startapp.b:startfile." ".b:start<CR>
 
 " Tabs {{{2
 
