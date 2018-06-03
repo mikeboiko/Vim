@@ -593,6 +593,11 @@ command! -nargs=+ -complete=command Repo try |
 " SpellToggle {{{2
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
 
+" Quit {{{2
+
+" Close location list and quit
+command! Quit if (&buftype != "quickfix") | lclose | endif | quit
+
 " Editor Settings{{{1
 " Plugins{{{2
 " Custom Languages {{{3
@@ -1029,7 +1034,10 @@ nnoremap <leader>ai mpgg=G'p
 
 nnoremap <leader>ac :Windofast lclose<CR>:cclose<CR>
 
-" Command Line {{{2
+" Commands {{{2
+
+" Rerun last command
+nnoremap ql @:
 
 " Get into command history
 nnoremap q; q:
@@ -1237,11 +1245,10 @@ nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 " Quit {{{2
 
 " Close location list then quit
-nnoremap <c-w> :lclose<CR>:q<CR>
+nnoremap <c-w> :Quit<CR>
 
 " Close without saving
 nnoremap Q :q!<CR>
-
 
 " A hack to close the Fugitive Plugin window with <c-w>
 nmap gf gf
