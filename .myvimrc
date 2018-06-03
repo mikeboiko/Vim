@@ -23,8 +23,8 @@
 " TODO-MB [180210] - Write command to use ag to find code samples in all my
 " git repos quickly. Use file type option and -i (case-insensitive). fa = find
 " all code. fn = find notes. See --vimgrep docs: github.com/ggreer/the_silver_searcher/blob/master/doc/ag.1.md
+" TODO-MB [180603] - Replace dispatch code in cs.vim with native :terminal code and remove plugin. After this b:start can be renamed to b:startargs
 " TODO-MB [180117] - Create macro (or python script) to add/remove fold text (functions/classes/etc)
-" TODO-MB [180312] - Create a way to save b:start and b:startapp. This should check if I'm on my development computer and load the variables automatically on file load.
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 
 " Constants {{{1
@@ -374,7 +374,6 @@ function! ToggleList(bufname, pfx) " {{{2
 endfunction
 
 function! RepoGrep(...) " {{{2
-    " TODO-MB [171106] - Make this function work with multi-word arguments
     " Fugitive Ggrep Wrapper
     " Load QuickFix window with grep results
     exe 'silent Ggrep! -i ' . a:1
@@ -502,6 +501,7 @@ function! StartArgInitialize() " {{{2
             if line =~ customModelineStr
                 " Remove 'dev;' and comments and trim
                 let varInitString = substitute(StripComments(line), customModelineStr, '', 'g')
+                " TODO-MB [180603] - Make this more secure by only allowing one let statement to be executed
                 execute varInitString
             endif
         endfor
@@ -1370,8 +1370,8 @@ nnoremap <leader>rr :wa<CR>:silent exe "terminal ".b:startapp.b:startfile." ".b:
 nnoremap <c-t> mm:tabe <c-r>%<CR>`m
 
 " Toggle tabs
-nnoremap + gt
-nnoremap _ gT
+nnoremap qk gt
+nnoremap qj gT
 
 " TODOs {{{2
 
