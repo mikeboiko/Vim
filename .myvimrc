@@ -132,7 +132,7 @@ function! EditCommonFile(filename) " {{{2
     silent exec openfilestring
 endfunction
 
-function! FigletDraw(...) " {{{2
+function! Figlet(...) " {{{2
     " Print ascii art comment
 
     " Output figlet command to file
@@ -573,10 +573,10 @@ function! WrapFold(foldlevel) range " {{{2
     execute 'normal! `m'
 endfunction
 " Commands {{{1
-" Ascii {{{2
+" Figlet {{{2
 " Draw ascii art comments
-command! -nargs=+ -complete=command Ascii
-            \| silent call FigletDraw(<q-args>)
+command! -nargs=+ -complete=command Figlet
+            \| silent call Figlet(<q-args>)
 
 " Bufdo {{{2
 
