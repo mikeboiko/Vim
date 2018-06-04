@@ -135,19 +135,24 @@ endfunction
 function! FigletDraw(...) " {{{2
     " Print ascii art comment
 
-    " TODO-MB [180508] - This doesn't comment yet
-    exe 'read !figlet "' . a:1 . '"'
+    " Output figlet command to file
+    exe '!figlet ' . a:1 . ' > ~/figlet.txt'
 
-    " let start = line('.')
-    " " let end = search("^$") - 1
-    " " let lines = getline(start, end)
-    " let lines = getline(start)
-    " echo lines
+    " Read file into list
+    let lines = readfile(expand("~/figlet.txt"))
 
-    " " let text = substitute(a:line, b:NERDCommenterDelims['left'].a:line.b:NERDCommenterDelims['right'], '', 'g')
-    " let text = substitute(getline("."),
-    " b:NERDCommenterDelims['left'].getline(".").b:NERDCommenterDelims['right'], '', 'g')
-    " echo text
+    " Add comments to ascii file
+    call map(lines, 'b:NERDCommenterDelims["left"] . " " . v:val . " " . b:NERDCommenterDelims["right"]')
+    call writefile(lines, expand("~/figlet.txt"))
+
+    " Read file into document
+    exe 'read ~/figlet.txt'
+
+    " Delete temporary file
+    silent !rm ~/figlet.txt
+
+    " Fix screen
+    redraw!
 
 endfunction
 
@@ -1362,7 +1367,7 @@ au BufEnter,BufCreate * call StartArgInitialize()
 
 " Run Script Asynchronously
 " For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
-nnoremap <leader>rr :wa<CR>:silent exe "terminal ".b:startapp.b:startfile." ".b:start<CR>
+nnoremap <leader>rr :wa<CR>:silent exe "terminal ++rows=15 ".b:startapp.b:startfile." ".b:start<CR>
 
 " Tabs {{{2
 
@@ -1370,8 +1375,8 @@ nnoremap <leader>rr :wa<CR>:silent exe "terminal ".b:startapp.b:startfile." ".b:
 nnoremap <c-t> mm:tabe <c-r>%<CR>`m
 
 " Toggle tabs
-nnoremap qk gt
-nnoremap qj gT
+nnoremap qj gt
+nnoremap qk gT
 
 " TODOs {{{2
 
