@@ -1311,6 +1311,7 @@ au CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR>
 
 " Save Buffer {{{2
 
+nnoremap qw :w<CR>
 nnoremap <c-s> :w<CR>
 inoremap <c-s> <esc>:w<CR>
 
