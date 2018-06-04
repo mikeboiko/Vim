@@ -1368,7 +1368,7 @@ au BufEnter,BufCreate * call StartArgInitialize()
 
 " Run Script Asynchronously
 " For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
-nnoremap <leader>rr :wa<CR>:silent exe "terminal ++rows=15 ".b:startapp.b:startfile." ".b:start<CR>
+nnoremap <leader>rr :wa<CR>:silent exe trim("terminal ++rows=15 ".b:startapp.b:startfile." ".b:start)<CR>
 
 " Tabs {{{2
 
