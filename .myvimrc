@@ -342,39 +342,7 @@ function! GitAddCommitPush() " {{{2
 
 endfunction
 
-function! ToggleList(bufname, pfx) " {{{2
-    " Toggle QuickFix/Location List, don't change focus
-    let buflist = GetBufferList()
-    for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
-        if bufwinnr(bufnum) != -1
-            exec(a:pfx.'close')
-            return
-        endif
-    endfor
-
-    " Set orignal window
-    let winnr = winnr()
-
-    " Location List
-    if a:pfx == 'l'
-        " Nicer error message than original
-        if len(getloclist(0)) == 0
-            echohl ErrorMsg
-            echo "Location List is Empty."
-            return
-        endif
-        " Open window with minimum height
-        exec 'bot '. w:locListHeight .a:pfx.'open'
-        " QuickFix List
-    elseif a:pfx == 'c'
-        " Open window with minimum height
-        exec 'top '. g:qfListHeight .a:pfx.'open'
-    endif
-
-    " Change focus back to the orignal window
-    if winnr() != winnr
-        wincmd p
-    endif
+function! OnSave() " {{{2
 
 endfunction
 
@@ -409,6 +377,42 @@ function! ShowSpaces(...) " {{{2
         let &hlsearch=a:1
     end
     return oldhlsearch
+endfunction
+
+function! ToggleList(bufname, pfx) " {{{2
+    " Toggle QuickFix/Location List, don't change focus
+    let buflist = GetBufferList()
+    for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
+        if bufwinnr(bufnum) != -1
+            exec(a:pfx.'close')
+            return
+        endif
+    endfor
+
+    " Set orignal window
+    let winnr = winnr()
+
+    " Location List
+    if a:pfx == 'l'
+        " Nicer error message than original
+        if len(getloclist(0)) == 0
+            echohl ErrorMsg
+            echo "Location List is Empty."
+            return
+        endif
+        " Open window with minimum height
+        exec 'bot '. w:locListHeight .a:pfx.'open'
+        " QuickFix List
+    elseif a:pfx == 'c'
+        " Open window with minimum height
+        exec 'top '. g:qfListHeight .a:pfx.'open'
+    endif
+
+    " Change focus back to the orignal window
+    if winnr() != winnr
+        wincmd p
+    endif
+
 endfunction
 
 function! TrimSpaces() range " {{{2
@@ -959,6 +963,9 @@ set spellfile=$HOME/OneDrive/Software/Settings/en.utf-8.add
 set autoread
 au CursorHold * if &buftype != "nofile" | checktime | endif
 
+" Peform actions right before saving bugger
+au BufWritePre * call OnSave()
+
 " Folding{{{3
 set foldenable
 set foldlevelstart=0
@@ -1364,8 +1371,7 @@ nnoremap <leader>rpc :Repo<space>
 " Run Scripts {{{2
 
 " Initialize arguments required to run script
-" TODO-MB [180603] - TEST
-au BufEnter,BufCreate * call StartArgInitialize()
+au BufEnter,BufCreate,BufWrite * call StartArgInitialize()
 
 " Run Script Asynchronously
 " For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
