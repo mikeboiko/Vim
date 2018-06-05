@@ -136,20 +136,20 @@ function! Figlet(...) " {{{2
     " Print ascii art comment
 
     " Output figlet command to file
-    exe '!figlet ' . a:1 . ' > ~/figlet.txt'
+    exe 'silent !figlet ' . a:1 . ' > ~/figlet.txt'
 
     " Read file into list
     let lines = readfile(expand("~/figlet.txt"))
 
     " Add comments to ascii file
-    call map(lines, 'b:NERDCommenterDelims["left"] . " " . v:val . " " . b:NERDCommenterDelims["right"]')
+    call map(lines, {index, val -> trim(b:NERDCommenterDelims["left"] . " " . val . " " . b:NERDCommenterDelims["right"])})
     call writefile(lines, expand("~/figlet.txt"))
 
     " Read file into document
     exe 'read ~/figlet.txt'
 
     " Delete temporary file
-    silent !rm ~/figlet.txt
+    " silent !rm ~/figlet.txt
 
     " Fix screen
     redraw!
@@ -1299,6 +1299,7 @@ nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
 " Close location list then quit
 nnoremap <c-w> :Quit<CR>
+nnoremap qq :Quit<CR>
 
 " Close without saving
 nnoremap Q :q!<CR>
