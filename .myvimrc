@@ -499,8 +499,8 @@ function! StartArgInitialize() " {{{2
     let customModelineStr = 'dev:'
 
     try
-        " Read the first 10 lines of this text file into list
-        let initialLines = getline(1, 10)
+        " Read the first x lines of this text file into list
+        let initialLines = getline(1, 20)
         for line in initialLines
             " Only run custom modelines if 'dev:' is present
             if line =~ customModelineStr
@@ -1432,11 +1432,4 @@ augroup templates
     " Substitute equations between the VIM_EVAL and END_EVAL equations
     autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
 augroup END
-
-" Temporary{{{1
-" SQL Assist Mapping {{{2
-autocmd BufReadPost *.sql let @z = expand('%:r')
-"autocmd BufReadPost *.sql nnoremap <leader>rms :silent !python Clone.py & cd C:/Users/Mike/.bin & python sqlShowResults.py <c-r>z<CR>
-autocmd BufReadPost *.sql nnoremap <leader>rms :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
-autocmd BufReadPost *.sql nnoremap <F5> :silent !python Analyze.py & cd C:/Users/Mike/.bin & python sqlShowResults.py<CR>
 
