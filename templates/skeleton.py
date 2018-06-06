@@ -1,6 +1,9 @@
 #!/usr/bin/env python3.6
 '''
 '''
+# dev: let b:startapp = "./"
+# dev: let b:startfile = %
+# dev: let b:start = ""
 
 # Imports {{{1
 

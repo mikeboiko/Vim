@@ -13,12 +13,18 @@
 "
 
 " TODOs {{{1
+" TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
+"   - see vue instructions for ale: https://github.com/posva/vim-vue
+" TODO-MB [180605] - Setup better python environment (linting, documentation, etc) see python-mode
+"   - https://stackoverflow.com/questions/21743323/youcompleteme-freezes-when-used-with-python-mode
+"   - Perhaps deoplete is bettery than YCM for my usage. Try it after trying python-mode.
+" TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
+"   - https://github.com/Vimjas/vim-python-pep8-indent
+
 " TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files.
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
-" TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
 " TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
-" TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue.
-" TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
+" TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue. Perhaps it would be better to look into syntax based folding - it would be less hacky. My status bar/search should still work though.
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
 " TODO-MB [180210] - Write command to use ag to find code samples in all my
 " git repos quickly. Use file type option and -i (case-insensitive). fa = find
@@ -655,14 +661,14 @@ command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabl
 " Close location list and quit
 command! Quit if (&buftype != "quickfix") | lclose | endif | quit
 
-" Editor Settings{{{1
+" Editor Settings {{{1
 " Plugins{{{2
 " Custom Languages {{{3
 
 " SEBOL:
 au BufRead,BufNewFile *.sebol setfiletype sebol
 
-" vim-plug{{{3
+" vim-plug {{{3
 
 " Plugin manager
 
