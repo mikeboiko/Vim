@@ -700,8 +700,21 @@ Plug 'tpope/vim-surround'                                     " Surround all the
 Plug 'vim-airline/vim-airline'                                " Nice status bar
 Plug 'yssl/QFEnter'                                           " QuickFix lists - open in tabs/split windows
 
+Plug 'davidhalter/jedi-vim' " Python auto-completion
+
 " End initialization of plugin system
 call plug#end()
+
+" TODO-MB [180607] - Testing jedi settings
+set noshowmode
+set cmdheight=2
+let g:jedi#documentation_command='<space>hp'
+let g:jedi#completions_command='<tab>'
+let g:jedi#force_py_version = 3.6
+let g:jedi#auto_close_doc = 0
+
+" inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+" inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 " AirLine{{{3
 let g:airline_section_a = '%f'
@@ -1082,9 +1095,13 @@ endfunction
 " Leader key {{{2
 let mapleader="\<space>"
 
-" Add colon/comma to EOL {{{2
+" Add char to EOL {{{2
 
 " Colon
+inoremap :: <esc>mzA:<esc>`z
+nnoremap <leader>a: mzA:<esc>`z
+
+" Semi-Colon
 inoremap ;; <esc>mzA;<esc>`z
 nnoremap <leader>a; mzA;<esc>`z
 
