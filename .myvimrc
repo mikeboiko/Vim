@@ -19,6 +19,7 @@
 " TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
 "   - https://github.com/Vimjas/vim-python-pep8-indent
 
+" TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
 " TODO-MB [180608] - Convert my old snippets into UtilSnips
 " TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files.
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
@@ -678,6 +679,7 @@ call plug#begin(vimPlugDir)
 " Plug 'PyCQA/pylint' " Anaylize python code
 " Plug 'Vimjas/vim-python-pep8-indent' " PEP8 standard
 
+Plug 'mattboehm/vim-unstack'
 Plug 'PProvost/vim-ps1'                                       " Powershell file types
 Plug 'SirVer/ultisnips'                                       " Snippet engine
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
@@ -822,6 +824,10 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 
 " Additional UltiSnips config.
 let g:UltiSnipsSnippetsDir = '~/Documents/GitRepos/Vim/Snippets'
+
+" vim-unstack {{{3
+
+let g:unstack_populate_quickfix=1
 
 " Vim-Indent-Guides {{{3
 " Indent Guides default is on
