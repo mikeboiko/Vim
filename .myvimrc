@@ -15,9 +15,6 @@
 " TODOs {{{1
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
 "   - see vue instructions for ale: https://github.com/posva/vim-vue
-" TODO-MB [180605] - Setup better python environment (linting, documentation, etc) see python-mode
-"   - https://stackoverflow.com/questions/21743323/youcompleteme-freezes-when-used-with-python-mode
-"   - Perhaps deoplete is bettery than YCM for my usage. Try it after trying python-mode.
 " TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
 "   - https://github.com/Vimjas/vim-python-pep8-indent
 
@@ -683,6 +680,7 @@ Plug 'PProvost/vim-ps1'                                       " Powershell file 
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
 Plug 'altercation/vim-colors-solarized'                       " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                         " Switch beween vim splits & tmux panes seamslessly
+Plug 'davidhalter/jedi-vim'                                   " Python auto-completion engine
 Plug 'godlygeek/tabular'                                      " Align things
 Plug 'junegunn/gv.vim'                                        " Access git files easier
 Plug 'kien/ctrlp.vim'                                         " Browse recent/project files
@@ -700,28 +698,12 @@ Plug 'tpope/vim-surround'                                     " Surround all the
 Plug 'vim-airline/vim-airline'                                " Nice status bar
 Plug 'yssl/QFEnter'                                           " QuickFix lists - open in tabs/split windows
 
-Plug 'davidhalter/jedi-vim' " Python auto-completion
-
 " End initialization of plugin system
 call plug#end()
-
-" TODO-MB [180607] - Testing jedi settings
-set noshowmode
-set cmdheight=2
-let g:jedi#documentation_command='<space>hp'
-let g:jedi#completions_command='<tab>'
-let g:jedi#force_py_version = 3.6
-let g:jedi#auto_close_doc = 0
-
-" inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-" inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 " AirLine{{{3
 let g:airline_section_a = '%f'
 let g:airline_section_c = '%{GetFoldStrings()}'
-
-" Emmet HTML/JS {{{3
-let g:user_emmet_leader_key = '<c-b>'
 
 " CtrlP {{{3
 " Fuzzy file/buffer/tag open
@@ -746,6 +728,15 @@ let g:ctrlp_prompt_mappings = {
             \ 'ToggleType(-1)':       ['<c-b>'],
             \ }
 
+
+" Emmet HTML/JS {{{3
+let g:user_emmet_leader_key = '<c-b>'
+
+" Jedi-vim {{{3
+
+let g:jedi#documentation_command='<leader>h'
+let g:jedi#force_py_version = 3
+let g:jedi#auto_close_doc = 0
 
 " NerdCommenter{{{3
 
@@ -820,7 +811,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 " YouCompleteMe{{{3
 
 " Close preview window after completion
-let g:ycm_autoclose_preview_window_after_completion=1
+" let g:ycm_autoclose_preview_window_after_completion=1
 
 nnoremap <space>fi :YcmCompleter FixIt<CR>
 
@@ -862,6 +853,9 @@ set wildmenu
 " Show command in bottom bar
 set showcmd
 
+" Don't show Insert/Normal Mode status on last line
+set noshowmode
+
 " Do not redraw during operations such as macro
 set lazyredraw
 
@@ -880,18 +874,20 @@ set foldtext=v:folddashes.FormatFoldString(v:foldstart)
 " Functionality {{{2
 " Vim Start {{{3
 
-" Save last file when exiting vim
-autocmd VimLeave * nested if (!isdirectory(vimHomeDir)) |
-            \ call mkdir(vimHomeDir) |
-            \ endif |
-            \ execute "mksession! " . vimHomeDir . "/Session.vim"
+" TODO-MB [180607] - This seemed to give me a lot of problems with YCM and other stuff breaking
 
-" Go to last file(s) if invoked without arguments.
-autocmd VimEnter * nested if argc() == 0 &&
-            \ filereadable(vimHomeDir . "/Session.vim") |
-            \ try |
-            \ execute "source " . vimHomeDir . "/Session.vim"
-            \ | catch | endtry
+" " Save last file when exiting vim
+" autocmd VimLeave * nested if (!isdirectory(vimHomeDir)) |
+            " \ call mkdir(vimHomeDir) |
+            " \ endif |
+            " \ execute "mksession! " . vimHomeDir . "/Session.vim"
+
+" " Go to last file(s) if invoked without arguments.
+" autocmd VimEnter * nested if argc() == 0 &&
+            " \ filereadable(vimHomeDir . "/Session.vim") |
+            " \ try |
+            " \ execute "source " . vimHomeDir . "/Session.vim"
+            " \ | catch | endtry
 
 " Have Vim jump to the last position when reopening a file
 if has("autocmd")
@@ -1248,7 +1244,7 @@ nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
 " Help {{{2
 
 " Pull up help for word under cursor in a new tab
-noremap <leader>hh :execute "help " . expand("<cword>")<cr>
+noremap <leader>h :execute "help " . expand("<cword>")<cr>
 
 " Insert Mode Escape {{{2
 inoremap <silent> <enter> <esc>
@@ -1456,12 +1452,13 @@ nnoremap <leader>ya mzggyG`z
 
 " Templates {{{1
 " Load template based on current file extension (:help template)
-augroup templates
-    " Remove ALL auto commands for the current group
-    autocmd!
-    " Expand file extension and search templates placing content at top of file
-    autocmd BufNewFile *.* silent! execute '0r $CODE/Vim/templates/skeleton.'.expand("<afile>:e")
-    " Substitute equations between the VIM_EVAL and END_EVAL equations
-    autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
-augroup END
+
+" augroup templates
+    " " Remove ALL auto commands for the current group
+    " autocmd!
+    " " Expand file extension and search templates placing content at top of file
+    " autocmd BufNewFile *.* silent! execute '0r $CODE/Vim/templates/skeleton.'.expand("<afile>:e")
+    " " Substitute equations between the VIM_EVAL and END_EVAL equations
+    " autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
+" augroup END
 
