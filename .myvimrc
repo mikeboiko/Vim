@@ -734,9 +734,12 @@ let g:user_emmet_leader_key = '<c-b>'
 
 " Jedi-vim {{{3
 
-let g:jedi#documentation_command='<leader>h'
-let g:jedi#force_py_version = 3
 let g:jedi#auto_close_doc = 0
+let g:jedi#documentation_command = '<leader>h'
+let g:jedi#force_py_version = 3
+let g:jedi#goto_assignments_command = 'gd'
+let g:jedi#popup_on_dot = 0
+let g:jedi#use_tabs_not_buffers = 1
 
 " NerdCommenter{{{3
 
@@ -1387,8 +1390,7 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 " Repo {{{2
 
 " My repo tool commands
-nnoremap <leader>rp :Repo st -s<cr>
-nnoremap <leader>rpc :Repo<space>
+nnoremap <leader>rs :Repo st -s<cr>
 
 " Run Scripts {{{2
 
