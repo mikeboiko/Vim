@@ -15,9 +15,11 @@
 " TODOs {{{1
 " TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
 "   - see vue instructions for ale: https://github.com/posva/vim-vue
+"   - perhaps use tern.js
 " TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
 "   - https://github.com/Vimjas/vim-python-pep8-indent
 
+" TODO-MB [180608] - Convert my old snippets into UtilSnips
 " TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files.
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
 " TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
@@ -1309,10 +1311,14 @@ autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
 nnoremap <leader>oe :silent !explorer.exe .<CR>:redraw!<CR>
 
 " Chrome
-nnoremap <leader>oc :silent !"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" ".\<c-r>%"<CR>
+if $WSL == "true"
+    nnoremap <leader>oc :silent !"/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe" ".\<c-r>%"<CR>:redraw!<CR>
+else
+    nnoremap <leader>oc :silent !"firefox" ".\<c-r>%"<CR>:redraw!<CR>
+endif
 
 " Double Commander
-nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\doublecmd.exe" %:p:h<CR>
+nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\doublecmd.exe" %:p:h<CR>:redraw!<CR>
 
 " Go to Definition{{{2
 
