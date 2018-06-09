@@ -23,3 +23,11 @@ let python_highlight_all=1
 " 'bin/activate_this.py')
 " execfile(activate_this, dict(__file__=activate_this))
 " EOF
+
+" Mappings {{{1
+
+" YouCompleteMe
+nnoremap <buffer> <leader>d  :YcmCompleter GoToDefinition<CR>
+nnoremap <buffer> gd  :YcmCompleter GoToDeclaration<CR>
+nnoremap <buffer> <leader>h  :YcmCompleter GetDoc<CR>
+
