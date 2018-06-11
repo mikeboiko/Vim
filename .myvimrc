@@ -1011,6 +1011,9 @@ au CursorHold * if &buftype != "nofile" | checktime | endif
 " Peform actions right before saving bugger
 au BufWritePre * call OnSave()
 
+" Preview Window
+autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
+
 " Folding{{{3
 set foldenable
 set foldlevelstart=0
