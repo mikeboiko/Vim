@@ -53,6 +53,13 @@ else
 endif
 
 " Functions {{{1
+function! AllClose() " {{{2
+    " Close all loc lists, qf, preview and terminal windows
+    Windofast lclose
+    cclose
+    pclose
+endf
+
 function! BufDo(command) " {{{2
     " Just like bufdo, but restore the current buffer when done.
     let currBuff=bufnr("%")
@@ -353,6 +360,19 @@ function! OnSave() " {{{2
 
 endfunction
 
+" Quit {{{2
+
+" Close location list, preview window and quit
+function! Quit()
+    if (&buftype != "quickfix") 
+        lclose
+    endif
+    if (!&previewwindow) 
+        pclose
+    endif
+    quit
+endf
+
 function! RepoGrep(...) " {{{2
     " Fugitive Ggrep Wrapper
     " Load QuickFix window with grep results
@@ -384,60 +404,6 @@ function! ShowSpaces(...) " {{{2
         let &hlsearch=a:1
     end
     return oldhlsearch
-endfunction
-
-function! ToggleList(bufname, pfx) " {{{2
-    " Toggle QuickFix/Location List, don't change focus
-    let buflist = GetBufferList()
-    for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
-        if bufwinnr(bufnum) != -1
-            exec(a:pfx.'close')
-            return
-        endif
-    endfor
-
-    " Set orignal window
-    let winnr = winnr()
-
-    " Location List
-    if a:pfx == 'l'
-        " Nicer error message than original
-        if len(getloclist(0)) == 0
-            echohl ErrorMsg
-            echo "Location List is Empty."
-            return
-        endif
-        " Open window with minimum height
-        exec 'bot '. w:locListHeight .a:pfx.'open'
-        " QuickFix List
-    elseif a:pfx == 'c'
-        " Open window with minimum height
-        exec 'top '. g:qfListHeight .a:pfx.'open'
-    endif
-
-    " Change focus back to the orignal window
-    if winnr() != winnr
-        wincmd p
-    endif
-
-endfunction
-
-function! TrimSpaces() range " {{{2
-    " Trim trailing white spaces
-    let oldhlsearch=ShowSpaces(1)
-    try | execute a:firstline.",".a:lastline."substitute ///" | catch | endtry
-    let &hlsearch=oldhlsearch
-    execute "normal! `m"
-endfunction
-
-function! UserInput(prompt) " {{{2
-    " Get a string input from the user
-    " Get input from user
-    call inputsave()
-    let reply=input(a:prompt)
-    call inputrestore()
-    " Return the user's reply
-    return l:reply
 endfunction
 
 " Snippets{{{2
@@ -548,6 +514,60 @@ function! StripComments(input) " {{{2
 
 endfunction
 
+function! ToggleList(bufname, pfx) " {{{2
+    " Toggle QuickFix/Location List, don't change focus
+    let buflist = GetBufferList()
+    for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
+        if bufwinnr(bufnum) != -1
+            exec(a:pfx.'close')
+            return
+        endif
+    endfor
+
+    " Set orignal window
+    let winnr = winnr()
+
+    " Location List
+    if a:pfx == 'l'
+        " Nicer error message than original
+        if len(getloclist(0)) == 0
+            echohl ErrorMsg
+            echo "Location List is Empty."
+            return
+        endif
+        " Open window with minimum height
+        exec 'bot '. w:locListHeight .a:pfx.'open'
+        " QuickFix List
+    elseif a:pfx == 'c'
+        " Open window with minimum height
+        exec 'top '. g:qfListHeight .a:pfx.'open'
+    endif
+
+    " Change focus back to the orignal window
+    if winnr() != winnr
+        wincmd p
+    endif
+
+endfunction
+
+function! TrimSpaces() range " {{{2
+    " Trim trailing white spaces
+    let oldhlsearch=ShowSpaces(1)
+    try | execute a:firstline.",".a:lastline."substitute ///" | catch | endtry
+    let &hlsearch=oldhlsearch
+    execute "normal! `m"
+endfunction
+
+function! UserInput(prompt) " {{{2
+    " Get a string input from the user
+    " Get input from user
+    call inputsave()
+    let reply=input(a:prompt)
+    call inputrestore()
+    " Return the user's reply
+    return l:reply
+endfunction
+
 function! WinDo(command) " {{{2
     " Just like windo, but restore the current window when done.
     let currwin=winnr()
@@ -656,11 +676,6 @@ command! -nargs=+ -complete=command Repo try |
 
 " SpellToggle {{{2
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
-
-" Quit {{{2
-
-" Close location list and quit
-command! Quit if (&buftype != "quickfix") | lclose | endif | quit
 
 " Editor Settings {{{1
 " Plugins{{{2
@@ -1144,7 +1159,7 @@ nnoremap <leader>ai mpgg=G'p
 
 " Close all location lists {{{2
 
-nnoremap <leader>ac :Windofast lclose<CR>:cclose<CR>
+nnoremap <leader>ac :call AllClose()<CR>
 
 " Commands {{{2
 
@@ -1364,8 +1379,8 @@ nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 " Quit {{{2
 
 " Close location list then quit
-nnoremap <c-w> :Quit<CR>
-nnoremap qq :Quit<CR>
+nnoremap <c-w> :call Quit()<CR>
+nnoremap qq :call Quit()<CR>
 
 " Close all windows in tab
 nnoremap qt :tabclose<CR>
