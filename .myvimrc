@@ -18,10 +18,10 @@
 "   - perhaps use tern.js
 " TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
 "   - https://github.com/Vimjas/vim-python-pep8-indent
+" TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files. Set YCM g:ycm_collect_identifiers_from_tags_files
 
 " TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
 " TODO-MB [180608] - Convert my old snippets into UtilSnips
-" TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files.
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
 " TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
 " TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue. Perhaps it would be better to look into syntax based folding - it would be less hacky. My status bar/search should still work though.
@@ -364,10 +364,10 @@ endfunction
 
 " Close location list, preview window and quit
 function! Quit()
-    if (&buftype != "quickfix") 
+    if (&buftype != "quickfix")
         lclose
     endif
-    if (!&previewwindow) 
+    if (!&previewwindow)
         pclose
     endif
     quit
@@ -738,9 +738,6 @@ let g:ctrlp_cmd = 'CtrlPMRU'
 " Use filename instead of full path for searching
 let g:ctrlp_by_filename = 1
 
-noremap <silent> <c-l> <nop>
-noremap <silent> <c-h> <nop>
-
 " Remap hotkeys
 let g:ctrlp_prompt_mappings = {
             \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
@@ -748,7 +745,6 @@ let g:ctrlp_prompt_mappings = {
             \ 'ToggleType(1)':        ['<c-f>'],
             \ 'ToggleType(-1)':       ['<c-b>'],
             \ }
-
 
 " Emmet HTML/JS {{{3
 let g:user_emmet_leader_key = '<c-b>'
@@ -847,11 +843,11 @@ let g:indent_guides_enable_on_vim_startup = 1
 " For some reason, there's a bug with jedi <c+space> autocompletion, so I have to disable previews
 set completeopt-=preview
 
-
 " Additional YouCompleteMe config.
 let g:ycm_complete_in_comments = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_goto_buffer_command = 'horizontal-split'
 
 " This is required for venv and pipenv to work properly
 let g:ycm_python_binary_path = 'python3'
@@ -1207,6 +1203,7 @@ nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 " Either run CtrlP or CtrPMRU
 " This can be toggled with the ToggleCtrlP command
 nmap <c-p> :execute g:ctrlp_cmd<CR>
+nnoremap <leader>. :CtrlPTag<cr>
 
 " Cycle through Auto-Suggestions {{{2
 inoremap <c-j> <c-n>
@@ -1378,7 +1375,7 @@ nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
 " Quit {{{2
 
-" Close location list then quit
+" Close extra windows then quit
 nnoremap <c-w> :call Quit()<CR>
 nnoremap qq :call Quit()<CR>
 
