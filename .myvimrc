@@ -970,8 +970,8 @@ set backspace=indent,eol,start
 " Remove vi compatibility
 set nocompatible
 
-" Update when idle for 1000 msec (default is 4000 msec)
-set updatetime=1000
+" Update when idle for x ms (default is 4000 msec)
+set updatetime=500
 
 " Virtual editing, position cursor where there is are no characters (all modes)
 set virtualedit=all
@@ -1468,11 +1468,9 @@ nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', todoPrefix)<CR>
 " Find all TODOs
 nnoremap <silent> <leader>tf :call GetTODOs()<CR>
 
-" Window {{{2
+" Windows {{{2
 
-" Use Alt+h/j/k/l to move between windows
-" nnoremap <C-j> <C-W>j
-" nnoremap <C-k> <C-W>k
+" Move between windows/panes
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
 tnoremap <C-j> <C-W>j
