@@ -1361,18 +1361,6 @@ au BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
             \| nnoremap <buffer> <Enter>
             \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/gI<CR>`z
 
-" QuickFix/Location Lists {{{2
-
-" Go to next/previous search result
-" nnoremap <leader>zf zMzvzz
-nnoremap <C-f> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
-nnoremap <C-d> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
-nnoremap <C-r> :Cnext<CR>:FoldOpen<CR>
-nnoremap <C-e> :Cprev<CR>:FoldOpen<CR>
-
-nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
-nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
-
 " Quit {{{2
 
 " Close extra windows then quit
@@ -1499,6 +1487,20 @@ nnoremap Y y$
 " Yank all
 nnoremap <leader>ya mzggyG`z
 
+" QuickFix/Location Lists {{{2
+
+" I put this at the end of the mapping section because of some conflicts with <c-r>
+
+" Go to next/previous search result
+" nnoremap <leader>zf zMzvzz
+nnoremap <C-f> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <C-d> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <C-r> :Cnext<CR>:FoldOpen<CR>
+nnoremap <C-e> :Cprev<CR>:FoldOpen<CR>
+
+nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
+nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
+
 " Templates {{{1
 " Load template based on current file extension (:help template)
 
@@ -1510,4 +1512,3 @@ nnoremap <leader>ya mzggyG`z
     " " Substitute equations between the VIM_EVAL and END_EVAL equations
     " autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
 " augroup END
-
