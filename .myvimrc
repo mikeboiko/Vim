@@ -32,6 +32,7 @@
 " TODO-MB [180603] - Replace dispatch code in cs.vim with native :terminal code and remove plugin. After this b:start can be renamed to b:startargs
 " TODO-MB [180117] - Create macro (or python script) to add/remove fold text (functions/classes/etc)
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
+" TODO-MB [180711] - Try out cheat.sh
 
 " Constants {{{1
 

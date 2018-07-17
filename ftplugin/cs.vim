@@ -40,7 +40,8 @@ endfunction
 " Compile and Run C# Application
 " TODO-MB [180714] - Fixup this function properly
 " nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
-nnoremap <buffer> <leader>rr :wa<CR>:term ++close bash -c "cd ~/Documents/GitRepos/AccuTune/Main; powershell.exe ./AccuTest.ps1"<CR>
+" nnoremap <buffer> <leader>rr :wa<CR>:term ++close bash -c "cd ~/Documents/GitRepos/AccuTune/Main; powershell.exe ./AccuTest.ps1"<CR>
+nnoremap <buffer> <leader>rr :wa<CR>:term ++close bash -c "cd ~/Documents/GitRepos/AccuTune/Main; powershell.exe ./AccuTest.ps1 --decryptedLog"<CR>
 
 " Project Specific {{{1
 " AccuTuneMain " {{{2
