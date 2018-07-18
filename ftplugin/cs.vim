@@ -17,31 +17,35 @@ nnoremap <buffer> gd  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Set properties for MsBuild compilation
 setlocal errorformat=\ %#%f(%l\\\,%c):\ %m
-setlocal makeprg=msbuild\ /nologo\ /v:q\ /property:GenerateFullPaths=true\ /p:Configuration=Release
+setlocal makeprg=MSBuild.exe\ /nologo\ /v:q\ /property:GenerateFullPaths=true\ /p:Configuration=Release
 
 " Compile C# project and Run the exe if there are no errors
 function! CompileCsharp()
+
+    " Synchronous compile
     silent make!
 
     let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ])
 
     if (len(filter(getqflist(), 'v:val.text =~ "error"')) == 0)
         " Run Asynchronously - keep focus on vim
-        silent Start
+        silent exe trim("terminal ++rows=15 ".b:startapp.b:startfile." ".b:start)
         cclose
     else
         " Open QF window
         exe 'top ' . g:qfListHeight . ' copen'
     endif
 
+    redraw!
+
     return
 endfunction
 
 " Compile and Run C# Application
 " TODO-MB [180714] - Fixup this function properly
-" nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
+nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
 " nnoremap <buffer> <leader>rr :wa<CR>:term ++close bash -c "cd ~/Documents/GitRepos/AccuTune/Main; powershell.exe ./AccuTest.ps1"<CR>
-nnoremap <buffer> <leader>rr :wa<CR>:term ++close bash -c "cd ~/Documents/GitRepos/AccuTune/Main; powershell.exe ./AccuTest.ps1 --decryptedLog"<CR>
+" nnoremap <buffer> <leader>rr :wa<CR>:term ++close bash -c "cd ~/Documents/GitRepos/AccuTune/Main; powershell.exe ./AccuTest.ps1 --decryptedLog"<CR>
 
 " Project Specific {{{1
 " AccuTuneMain " {{{2
@@ -51,6 +55,10 @@ au BufWinEnter,BufEnter */AccuTune/Main/* let b:start='C:\Users\Mike\Documents\G
 " AccuTuneLogs " {{{2
 " Save all files, compile and open AccuTune.exe
 au BufWinEnter,BufEnter */AccuTune/Logs/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\Logs\LogDecrypt\LogDecrypt\bin\Release\LogDecrypt.exe'
+
+" AccuTuneDocs " {{{2
+" AccuTune Documentation/ScreenCapture
+au BufWinEnter,BufEnter */AccuTune/Docs/* let b:startapp='' | let b:startfile='/mnt/c/Users/Mike/Documents/GitRepos/AccuTune/Docs/ScreenCapture/ScreenCapture/bin/Release/ScreenCapture.exe'
 
 " AccuTuneTests " {{{2
 " AccuTune Automated Tests
