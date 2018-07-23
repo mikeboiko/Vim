@@ -139,6 +139,14 @@ function! CodeCleanUP() " {{{2
 
 endfunction
 
+function! ConvertPathWinToUnix(path) " {{{2
+    " I tested this on path in quickfix list
+    " nnoremap <leader>rp :execute 's@^[^\|]*\|@\=Con(submatch(0))@'<CR>
+    let path = substitute(a:path, "|$", "", "")
+    let formattedPath = system('wslpath "' . path . '"')
+    return substitute(formattedPath, "\n", "", "")  . "|"
+endfunction
+
 function! EditCommonFile(filename) " {{{2
     " Open file in new teb
     let current_filename = expand('%:t')
