@@ -29,7 +29,7 @@ function! CompileCsharp()
 
     if (len(filter(getqflist(), 'v:val.text =~ "error"')) == 0)
         " Run Asynchronously - keep focus on vim
-        silent exe trim("terminal ++rows=15 ".b:startapp.b:startfile." ".b:start)
+        silent exe trim("terminal ++close ++rows=15 ".b:startapp.b:startfile." ".b:start)
         cclose
     else
         " Open QF window
@@ -42,25 +42,27 @@ function! CompileCsharp()
 endfunction
 
 " Compile and Run C# Application
-" TODO-MB [180714] - Fixup this function properly
 nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
-" nnoremap <buffer> <leader>rr :wa<CR>:term ++close bash -c "cd ~/Documents/GitRepos/AccuTune/Main; powershell.exe ./AccuTest.ps1"<CR>
-" nnoremap <buffer> <leader>rr :wa<CR>:term ++close bash -c "cd ~/Documents/GitRepos/AccuTune/Main; powershell.exe ./AccuTest.ps1 --decryptedLog"<CR>
 
 " Project Specific {{{1
 " AccuTuneMain " {{{2
 " Save all files, compile and open AccuTune.exe
-au BufWinEnter,BufEnter */AccuTune/Main/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\Main\AccuTune\bin\Release\AccuTune.com --unlockApp -t Simulink.Device1.Python -s Kepware.KEPServerEX.V5 --log'
+au BufWinEnter,BufEnter */AccuTune/Main/*
+            \ let b:startapp='' |
+            \ let b:startfile=$HOME.'/Documents/GitRepos/AccuTune/Main/AccuTune/bin/Release/AccuTune.com' |
+            \ let b:start='--unlockApp -t Simulink.Device1.Python -s Kepware.KEPServerEX.V5 --log'
 
-" AccuTuneLogs " {{{2
-" Save all files, compile and open AccuTune.exe
-au BufWinEnter,BufEnter */AccuTune/Logs/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\Logs\LogDecrypt\LogDecrypt\bin\Release\LogDecrypt.exe'
-
-" AccuTuneDocs " {{{2
+" AccuTuneDocDump " {{{2
 " AccuTune Documentation/ScreenCapture
-au BufWinEnter,BufEnter */AccuTune/Docs/* let b:startapp='' | let b:startfile='/mnt/c/Users/Mike/Documents/GitRepos/AccuTune/Docs/ScreenCapture/ScreenCapture/bin/Release/ScreenCapture.exe'
+au BufWinEnter,BufEnter */AccuTune/Docs/*
+            \ let b:startapp='' |
+            \ let b:startfile=$HOME.'/Documents/GitRepos/AccuTune/Docs/AccuTune/Docs/ScreenCapture/ScreenCapture/bin/Release/ScreenCapture.exe' |
+            \ let b:start=''
 
 " AccuTuneTests " {{{2
 " AccuTune Automated Tests
-au BufWinEnter,BufEnter */AccuTune/Tests/* let b:start='C:\Users\Mike\Documents\GitRepos\AccuTune\Tests\Tests\bin\Release\Tests.exe'
+au BufWinEnter,BufEnter */AccuTune/Tests/*
+            \ let b:startapp='' |
+            \ let b:startfile=$HOME.'/Documents/GitRepos/AccuTune/Tests/Tests/bin/Release/Tests.exe' |
+            \ let b:start=''
 
