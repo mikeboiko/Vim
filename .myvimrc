@@ -157,24 +157,15 @@ endfunction
 function! Figlet(...) " {{{2
     " Print ascii art comment
 
-    " Output figlet command to file
-    exe 'silent !figlet ' . a:1 . ' > ~/figlet.txt'
+    " Read figlet output into list
+    let lines = systemlist('figlet ' . a:1)
 
-    " Read file into list
-    let lines = readfile(expand("~/figlet.txt"))
-
-    " Add comments to ascii file
+    " Add comments to each lines
     call map(lines, {index, val -> trim(b:NERDCommenterDelims["left"] . " " . val . " " . b:NERDCommenterDelims["right"])})
-    call writefile(lines, expand("~/figlet.txt"))
+    " call writefile(lines, expand("~/figlet.txt"))
 
-    " Read file into document
-    exe 'read ~/figlet.txt'
-
-    " Delete temporary file
-    " silent !rm ~/figlet.txt
-
-    " Fix screen
-    redraw!
+    " Dump list on screen
+    put=lines
 
 endfunction
 
@@ -679,7 +670,7 @@ command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
 " My repo tool commands
 
 command! -nargs=+ -complete=command Repo try |
-            \ exe "terminal bash -c \"~/Documents/GitRepos/Linux/git/repo.sh -c \\\""
+            \ exe "terminal bash -c \"~/Documents/GitRepos/Linux/git/repo.sh -f cmdOnEachRepo -c \\\""
             \ . <q-args> . "\\\"\""| catch | endtry
 
 " SpellToggle {{{2
