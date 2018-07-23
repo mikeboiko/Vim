@@ -29,7 +29,7 @@ function! CompileCsharp()
 
     if (len(filter(getqflist(), 'v:val.text =~ "error"')) == 0)
         " Run Asynchronously - keep focus on vim
-        silent exe trim("terminal ++close ++rows=15 ".b:startapp.b:startfile." ".b:start)
+        silent exe trim("terminal ++close ++rows=15 ".b:startapp.b:startfile." ".b:startargs)
         cclose
     else
         " Open QF window
@@ -50,19 +50,19 @@ nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
 au BufWinEnter,BufEnter */AccuTune/Main/*
             \ let b:startapp='' |
             \ let b:startfile=$HOME.'/Documents/GitRepos/AccuTune/Main/AccuTune/bin/Release/AccuTune.com' |
-            \ let b:start='--unlockApp -t Simulink.Device1.Python -s Kepware.KEPServerEX.V5 --log'
+            \ let b:startargs='--unlockApp -t Simulink.Device1.Python -s Kepware.KEPServerEX.V5 --log'
 
 " AccuTuneDocDump " {{{2
 " AccuTune Documentation/ScreenCapture
 au BufWinEnter,BufEnter */AccuTune/Docs/*
             \ let b:startapp='' |
             \ let b:startfile=$HOME.'/Documents/GitRepos/AccuTune/Docs/AccuTune/Docs/ScreenCapture/ScreenCapture/bin/Release/ScreenCapture.exe' |
-            \ let b:start=''
+            \ let b:startargs=''
 
 " AccuTuneTests " {{{2
 " AccuTune Automated Tests
 au BufWinEnter,BufEnter */AccuTune/Tests/*
             \ let b:startapp='' |
             \ let b:startfile=$HOME.'/Documents/GitRepos/AccuTune/Tests/Tests/bin/Release/Tests.exe' |
-            \ let b:start=''
+            \ let b:startargs=''
 
