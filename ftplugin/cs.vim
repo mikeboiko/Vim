@@ -17,7 +17,9 @@ nnoremap <buffer> gd  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Set properties for MsBuild compilation
 setlocal errorformat=\ %#%f(%l\\\,%c):\ %m
-setlocal makeprg=MSBuild.exe\ /nologo\ /v:q\ /property:GenerateFullPaths=true\ /p:Configuration=Release
+setlocal makeprg=MSBuild.exe\ /nologo\ /v:q\ /p:Configuration=Release
+" TODO-MB [180723] - To properly parse paths, use full paths and build externally, dump logfile and parse in vim with :cfile after running wslpath for converting from Windows to Unix paths
+" setlocal makeprg=MSBuild.exe\ /nologo\ /v:q\ /property:GenerateFullPaths=true\ /p:Configuration=Release
 
 " Compile C# project and Run the exe if there are no errors
 function! CompileCsharp()
