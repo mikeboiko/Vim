@@ -76,8 +76,8 @@ function! BuildYCM(info) " {{{2
     " - force:  set on PlugInstall! or PlugUpdate!
     if a:info.status == 'installed' || a:info.force
         if has("unix")
-            " !./install.py --all
-            !./install.py --cs-completer --js-completer
+            !./install.py --all
+            " !./install.py --cs-completer --js-completer
         else
             !.\install.py --all
         endif
@@ -696,7 +696,7 @@ call plug#begin(vimPlugDir)
 " Plug 'PyCQA/pylint' " Anaylize python code
 " Plug 'Vimjas/vim-python-pep8-indent' " PEP8 standard
 
-Plug 'mattboehm/vim-unstack'
+Plug 'OmniSharp/omnisharp-vim'                                " C# magic
 Plug 'PProvost/vim-ps1'                                       " Powershell file types
 Plug 'SirVer/ultisnips'                                       " Snippet engine
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
@@ -708,6 +708,7 @@ Plug 'honza/vim-snippets'                                     " Snippet library
 Plug 'junegunn/gv.vim'                                        " Access git files easier
 Plug 'kien/ctrlp.vim'                                         " Browse recent/project files
 Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
+Plug 'mattboehm/vim-unstack'
 Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
 Plug 'nathanaelkane/vim-indent-guides'                        " Visual indent levels
 Plug 'posva/vim-vue'                                          " Vue filetype recognition
@@ -856,6 +857,17 @@ let g:ycm_python_binary_path = 'python3'
 " Remaps
 nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <space>fi :YcmCompleter FixIt<CR>
+
+" OmniSharp {{{3
+
+" C# completion
+" First download the WINDOWS HTTP 64 bit release and place into directory below:
+" https://github.com/OmniSharp/omnisharp-roslyn/releases
+
+let g:OmniSharp_server_path = '/mnt/c/omnisharp.http-win-x64/OmniSharp.exe'
+let g:OmniSharp_translate_cygwin_wsl = 1
+let g:OmniSharp_selector_ui = 'ctrlp'
+let g:OmniSharp_timeout = 10
 
 " Display{{{2
 
