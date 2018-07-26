@@ -700,13 +700,14 @@ Plug 'SirVer/ultisnips'                                       " Snippet engine
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
 Plug 'altercation/vim-colors-solarized'                       " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                         " Switch beween vim splits & tmux panes seamslessly
+Plug 'dbeniamine/cheat.sh-vim'                                " cheat sheet
 Plug 'ervandew/supertab'                                      " Insert mode completions
 Plug 'godlygeek/tabular'                                      " Align things
 Plug 'honza/vim-snippets'                                     " Snippet library
 Plug 'junegunn/gv.vim'                                        " Access git files easier
 Plug 'kien/ctrlp.vim'                                         " Browse recent/project files
 Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
-Plug 'mattboehm/vim-unstack'
+Plug 'mattboehm/vim-unstack'                                  " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
 Plug 'nathanaelkane/vim-indent-guides'                        " Visual indent levels
 Plug 'posva/vim-vue'                                          " Vue filetype recognition
