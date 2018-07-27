@@ -31,7 +31,6 @@
 " all code. fn = find notes. See --vimgrep docs: github.com/ggreer/the_silver_searcher/blob/master/doc/ag.1.md
 " TODO-MB [180117] - Create macro (or python script) to add/remove fold text (functions/classes/etc)
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
-" TODO-MB [180711] - Try out cheat.sh
 
 " Constants {{{1
 
@@ -717,6 +716,7 @@ Plug 'tpope/vim-fugitive'                                     " Git wrapper
 Plug 'tpope/vim-repeat'                                       " Repeat surround and commenting with .
 Plug 'tpope/vim-surround'                                     " Surround all the stuff
 Plug 'vim-airline/vim-airline'                                " Nice status bar
+Plug 'w0rp/ale'                                               " Async Linting
 Plug 'yssl/QFEnter'                                           " QuickFix lists - open in tabs/split windows
 
 " End initialization of plugin system
@@ -1392,7 +1392,8 @@ nnoremap Q :q!<CR>
 nmap gf gf
 
 " Exit command history window q: or q/ with <c-w>
-au CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR>
+au CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR> |
+            \ nnoremap <buffer> qq :q!<CR>
 
 " Save Buffer {{{2
 
