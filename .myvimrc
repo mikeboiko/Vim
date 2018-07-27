@@ -726,6 +726,10 @@ call plug#end()
 let g:airline_section_a = '%f'
 let g:airline_section_c = '%{GetFoldStrings()}'
 
+" ALE {{{3
+
+" let g:ale_linters = {}
+
 " CtrlP {{{3
 " Fuzzy file/buffer/tag open
 
@@ -1418,7 +1422,8 @@ nnoremap <leader>snl :call SnipLog()<CR>
 
 " Show and Trim Spaces {{{2
 
-nnoremap <leader>ts mm:TrimSpaces<CR>
+" nnoremap <leader>ts mm:TrimSpaces<CR>
+nnoremap <leader>ts :ALEFix trim_whitespace<CR>
 
 " Sorting {{{2
 nnoremap <leader>so vip:sort<CR>
