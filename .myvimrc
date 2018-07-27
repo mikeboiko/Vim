@@ -13,11 +13,6 @@
 "
 
 " TODOs {{{1
-" TODO-MB [180315] - Checkout ale - asynchronous linting. Then get prettier for js/vue.
-"   - see vue instructions for ale: https://github.com/posva/vim-vue
-"   - perhaps use tern.js
-" TODO-MB [180122] - Get equalprgs for commonly used languages. Or get vim-prettier equivalent for python and c#. Test with fold markers.
-"   - https://github.com/Vimjas/vim-python-pep8-indent
 " TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files. Set YCM g:ycm_collect_identifiers_from_tags_files
 
 " TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
@@ -728,7 +723,14 @@ let g:airline_section_c = '%{GetFoldStrings()}'
 
 " ALE {{{3
 
-" let g:ale_linters = {}
+let g:ale_fixers = {
+            \ 'python': ['autopep8'],
+            \ 'vue': ['prettier']
+            \ }
+
+" let g:ale_linters = {
+            " \ 'python': ['autopep8']
+            " \ }
 
 " CtrlP {{{3
 " Fuzzy file/buffer/tag open
@@ -862,7 +864,6 @@ let g:ycm_csharp_server_port = 2000
 
 " Remaps
 nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <space>fi :YcmCompleter FixIt<CR>
 
 " OmniSharp {{{3
 
@@ -1270,6 +1271,9 @@ map <leader>gw "xyiw:exe "FindGlobal ".@x<CR>
 
 " Yank highlighted text into "z and Ggrep
 vnoremap <c-g> "xy:FindGlobal <c-r>x<CR>
+
+" Fix errors {{{2
+nnoremap <space>fi :ALEFix<CR>
 
 " Folding {{{2
 
