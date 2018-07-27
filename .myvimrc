@@ -387,18 +387,6 @@ function! SetCurrentWorkingDirectory() " {{{2
     exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
 endfunction
 
-function! ShowSpaces(...) " {{{2
-    " Show trailing white spaces
-    let @/='\v(\s+$)|( +\ze\t)'
-    let oldhlsearch=&hlsearch
-    if !a:0
-        let &hlsearch=!&hlsearch
-    else
-        let &hlsearch=a:1
-    end
-    return oldhlsearch
-endfunction
-
 " Snippets{{{2
 function! SnipClass() " {{{3
     if &filetype == "php"
@@ -543,14 +531,6 @@ function! ToggleList(bufname, pfx) " {{{2
 
 endfunction
 
-function! TrimSpaces() range " {{{2
-    " Trim trailing white spaces
-    let oldhlsearch=ShowSpaces(1)
-    try | execute a:firstline.",".a:lastline."substitute ///" | catch | endtry
-    let &hlsearch=oldhlsearch
-    execute "normal! `m"
-endfunction
-
 function! UserInput(prompt) " {{{2
     " Get a string input from the user
     " Get input from user
@@ -647,10 +627,6 @@ command! GoToMatchedColumn exe "normal b" | let @/=w:searchStr | call search(@/)
 " Search for string in current repo and put results in QuickFix window
 command! -nargs=+ -complete=command FindGlobal
             \| try | call RepoGrep(<q-args>) | catch | endtry
-
-" Show and Trim Spaces {{{2
-command! -bar -nargs=? ShowSpaces call ShowSpaces(<args>)
-command! -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
 
 " Replace ^M Line endings {{{2
 
