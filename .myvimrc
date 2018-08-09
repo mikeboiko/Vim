@@ -1229,7 +1229,8 @@ omap L $
 " Escape Key {{{2
 
 " Disable Highlighting
-nnoremap <esc> :noh<esc>
+" When I used a single escape, vim started in Replace mode everytime
+nnoremap <esc><esc> :noh<esc>
 
 " Find - Local {{{2
 
