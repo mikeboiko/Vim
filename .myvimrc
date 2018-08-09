@@ -701,12 +701,17 @@ let g:airline_section_c = '%{GetFoldStrings()}'
 
 let g:ale_fixers = {
             \ 'python': ['autopep8'],
+            \ 'javascript': ['prettier'],
             \ 'vue': ['prettier']
             \ }
 
 " let g:ale_linters = {
             " \ 'python': ['autopep8']
             " \ }
+
+" This will prevent my searches from getting messed up
+let g:ale_set_quickfix = 0
+let g:ale_set_loclist = 0
 
 " CtrlP {{{3
 " Fuzzy file/buffer/tag open
