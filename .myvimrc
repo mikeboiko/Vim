@@ -866,7 +866,7 @@ set t_Co=256
 set background=dark
 
 " Preferred color scheme
-colorscheme solarized
+silent! colorscheme solarized
 
 " Solarized settings
 " let g:solarized_italic=0
