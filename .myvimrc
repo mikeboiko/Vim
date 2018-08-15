@@ -1351,7 +1351,9 @@ nnoremap <leader>oe :silent !explorer.exe .<CR>:redraw!<CR>
 
 " Chrome
 if $WSL == "true"
-    nnoremap <leader>oc :silent !"/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe" ".\<c-r>%"<CR>:redraw!<CR>
+    nnoremap <leader>oc :exe 'term ++close "/mnt/c/Program Files ' .
+                \ '(x86)/Google/Chrome/Application/chrome.exe"' .
+                \ ' "' . ConvertWSLpath(expand("%:p"), '-m') . '"'<CR>
 else
     nnoremap <leader>oc :silent !"firefox" ".\<c-r>%"<CR>:redraw!<CR>
 endif
