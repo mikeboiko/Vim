@@ -133,12 +133,28 @@ function! CodeCleanUP() " {{{2
 
 endfunction
 
-function! ConvertPathWinToUnix(path) " {{{2
+function! ConvertWSLpath(path, ...) " {{{2
     " I tested this on path in quickfix list
     " nnoremap <leader>rp :execute 's@^[^\|]*\|@\=Con(submatch(0))@'<CR>
+
+    " Aligns with wslpath.exe flags
+    " -a    force result to absolute path format
+    " -u    translate from a Windows path to a WSL path (default)
+    " -w    translate from a WSL path to a Windows path
+    " -m    translate from a WSL path to a Windows path, with ‘/’ instead of ‘\\’
+    if a:0 > 0
+        let flag = a:1
+    else
+        let flag = ""
+    end
+
+    " This is only necessary for location list parsing/converting
     let path = substitute(a:path, "|$", "", "")
-    let formattedPath = system('wslpath "' . path . '"')
-    return substitute(formattedPath, "\n", "", "")  . "|"
+
+    " Use wslpath utility to convert path
+    let formattedPath = system('wslpath ' . flag . ' "' . path . '"')
+    return substitute(formattedPath, "\n", "", "")
+
 endfunction
 
 function! EditCommonFile(filename) " {{{2
