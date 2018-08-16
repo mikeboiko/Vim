@@ -656,7 +656,7 @@ command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
 " My repo tool commands
 
 command! -nargs=+ -complete=command Repo try |
-            \ exe "terminal bash -c \"~/Documents/GitRepos/Linux/git/repo.sh -f cmdOnEachRepo -c \\\""
+            \ exe "terminal bash -c \"~/Documents/GitRepos/Linux/git/repo.sh -f runParallelCommands -c \\\""
             \ . <q-args> . "\\\"\""| catch | endtry
 
 " SpellToggle {{{2
@@ -714,6 +714,8 @@ let g:airline_section_a = '%f'
 let g:airline_section_c = '%{GetFoldStrings()}'
 
 " ALE {{{3
+
+let g:ale_lint_on_text_changed = 'never'
 
 let g:ale_fixers = {
             \ 'python': ['yapf'],
