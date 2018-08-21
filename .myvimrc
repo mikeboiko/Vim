@@ -656,7 +656,7 @@ command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
 " My repo tool commands
 
 command! -nargs=+ -complete=command Repo try |
-            \ exe "terminal bash -c \"~/Documents/GitRepos/Linux/git/repo.sh -f runParallelCommands -c \\\""
+            \ exe "terminal bash -c \"~/Documents/GitRepos/Linux/git/repo.sh -f _runParallelCommands -c \\\""
             \ . <q-args> . "\\\"\""| catch | endtry
 
 " SpellToggle {{{2
@@ -1296,7 +1296,7 @@ endif
 " Git {{{2
 
 " Fugitive remappings
-nnoremap <leader>gd :Gdiff<Space>
+nnoremap <leader>gd :Gvdiff<Space>
 nnoremap <leader>gs :Gstatus<CR>
 
 " Display git diff in terminal
