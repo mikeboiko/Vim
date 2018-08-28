@@ -14,6 +14,9 @@
 
 " TODOs {{{1
 " TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files. Set YCM g:ycm_collect_identifiers_from_tags_files
+" TODO-MB [180210] - Write command to use ag to find code samples in all my
+" git repos quickly. Use file type option and -i (case-insensitive). fa = find
+" all code. fn = find notes. See --vimgrep docs: github.com/ggreer/the_silver_searcher/blob/master/doc/ag.1.md
 
 " TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
 " TODO-MB [180608] - Convert my old snippets into UtilSnips
@@ -21,9 +24,6 @@
 " TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
 " TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue. Perhaps it would be better to look into syntax based folding - it would be less hacky. My status bar/search should still work though.
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
-" TODO-MB [180210] - Write command to use ag to find code samples in all my
-" git repos quickly. Use file type option and -i (case-insensitive). fa = find
-" all code. fn = find notes. See --vimgrep docs: github.com/ggreer/the_silver_searcher/blob/master/doc/ag.1.md
 " TODO-MB [180117] - Create macro (or python script) to add/remove fold text (functions/classes/etc)
 " TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
 
@@ -795,16 +795,6 @@ let g:qfenter_keymap.vopen = ['<C-v>']
 let g:qfenter_keymap.hopen = ['<C-s>']
 let g:qfenter_keymap.topen = ['<C-t>']
 
-" Syntastic{{{3
-" TODO-MB [170506] - Add Python Virtual Environments and make pylint work for
-" Python 2 and 3
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-" TODO-MB [170524] - Find a cleaner way to use syntastic
-nnoremap <leader>cp :SyntasticCheck<CR>
 " The Silver Searcher {{{3
 if executable('ag')
     " Use ag instead of grep (performance increase)
