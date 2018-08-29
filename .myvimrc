@@ -13,7 +13,6 @@
 "
 
 " TODOs {{{1
-" TODO-MB [180513] - Properly setup ctags and CtrlP. See if tagbar is fast with js and vue files. Set YCM g:ycm_collect_identifiers_from_tags_files
 " TODO-MB [180210] - Write command to use ag to find code samples in all my
 " git repos quickly. Use file type option and -i (case-insensitive). fa = find
 " all code. fn = find notes. See --vimgrep docs: github.com/ggreer/the_silver_searcher/blob/master/doc/ag.1.md
@@ -677,8 +676,8 @@ au BufRead,BufNewFile *.sebol setfiletype sebol
 let vimPlugDir = vimHomeDir . '/plugged'
 call plug#begin(vimPlugDir)
 
-" Plug 'PyCQA/pylint' " Anaylize python code
-" Plug 'Vimjas/vim-python-pep8-indent' " PEP8 standard
+" Cheat.sh was not letting me perform Gdiff on Ubuntu18
+" Plug 'dbeniamine/cheat.sh-vim'                              " cheat sheet
 
 Plug 'OmniSharp/omnisharp-vim'                                " C# magic
 Plug 'PProvost/vim-ps1'                                       " Powershell file types
@@ -686,12 +685,12 @@ Plug 'SirVer/ultisnips'                                       " Snippet engine
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
 Plug 'altercation/vim-colors-solarized'                       " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                         " Switch beween vim splits & tmux panes seamslessly
-Plug 'dbeniamine/cheat.sh-vim'                                " cheat sheet
 Plug 'ervandew/supertab'                                      " Insert mode completions
 Plug 'godlygeek/tabular'                                      " Align things
 Plug 'honza/vim-snippets'                                     " Snippet library
 Plug 'junegunn/gv.vim'                                        " Access git files easier
 Plug 'kien/ctrlp.vim'                                         " Browse recent/project files
+Plug 'ludovicchabant/vim-gutentags'                           " Manage ctags
 Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
 Plug 'mattboehm/vim-unstack'                                  " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
@@ -841,6 +840,7 @@ set completeopt-=preview
 " Additional YouCompleteMe config.
 let g:ycm_complete_in_comments = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_goto_buffer_command = 'horizontal-split'
 
