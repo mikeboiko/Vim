@@ -38,6 +38,10 @@ let g:promptCommentText = 'Comment Text: '
 " Fold marker string used through vimrc file without messing up folding
 let g:fold_marker_string = '{'. '{'. '{'
 
+" By default, don't close term after <leader>rr
+" This can be toggled
+let g:term_close = ''
+
 " Vim home directory
 if has("unix")
     let vimHomeDir = $HOME . '/.vim'
@@ -610,6 +614,9 @@ com! -nargs=+ -complete=command Windo call WinDo(<q-args>)
 " Just like Windo, but disable all autocommands for super fast processing.
 com! -nargs=+ -complete=command Windofast noautocmd call WinDo(<q-args>)
 
+" CloseToggle {{{2
+command! CloseToggle if (g:term_close == '') | let g:term_close = '++close' | echo 'Term will close' | else | let g:term_close = '' | echo 'Term will not close' | endif
+
 " CtrlpToggle {{{2
 
 " Toggle between CtrlP MRU/Project Files
@@ -1166,6 +1173,10 @@ nnoremap <leader>ai mpgg=G'p
 
 nnoremap <leader>ac :call AllClose()<CR>
 
+" Close Toggle {{{2
+" Toggle between ++close and ++noclose when running term <leader>rr
+nnoremap <leader>ct :CloseToggle<CR>
+
 " Commands {{{2
 
 " Rerun last command
@@ -1453,7 +1464,7 @@ au BufEnter,BufCreate,BufWrite * call StartArgInitialize()
 
 " Run Script Asynchronously
 " For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
-nnoremap <leader>rr :wa<CR>:silent exe trim("terminal ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
+nnoremap <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
 
 " Tabs {{{2
 
