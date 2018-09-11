@@ -1,0 +1,1542 @@
+"    ____      ____  ____      ______  _______
+"   |    |    |    ||    |    |      \/       \
+"   |    |    |    ||    |   /          /\     \
+"   |    |    |    ||    |  /     /\   / /\     |
+"   |    |    |    ||    | /     /\ \_/ / /    /|
+"   |    |    |    ||    ||     |  \|_|/ /    / |
+"   |\    \  /    /||    ||     |       |    |  |
+"   | \ ___\/___ / ||____||\____\       |____|  /
+"    \ |   ||   | / |    || |    |      |    | /
+"     \|___||___|/  |____| \|____|      |____|/
+"       \(    )/      \(      \(          )/
+"        '    '        '       '          '
+"
+
+" TODOs {{{1
+" TODO-MB [180210] - Write command to use ag to find code samples in all my
+" git repos quickly. Use file type option and -i (case-insensitive). fa = find
+" all code. fn = find notes. See --vimgrep docs: github.com/ggreer/the_silver_searcher/blob/master/doc/ag.1.md
+
+" TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
+" TODO-MB [180608] - Convert my old snippets into UtilSnips
+" TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
+" TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
+" TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue. Perhaps it would be better to look into syntax based folding - it would be less hacky. My status bar/search should still work though.
+" TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
+" TODO-MB [180117] - Create macro (or python script) to add/remove fold text (functions/classes/etc)
+" TODO-MB [171119] - Function snippets should insert themselves in the proper locaiton
+
+" Constants {{{1
+
+" Max Number of Records to show in QF/Location Lists
+let g:maxQFlistRecords = 8
+let g:qfListHeight = 5
+
+" Data entry prompts
+let g:promptCommentText = 'Comment Text: '
+
+" Fold marker string used through vimrc file without messing up folding
+let g:fold_marker_string = '{'. '{'. '{'
+
+" By default, don't close term after <leader>rr
+" This can be toggled
+let g:term_close = ''
+
+" Vim home directory
+if has("unix")
+    let vimHomeDir = $HOME . '/.vim'
+else
+    let vimHomeDir = $HOME . '/vimfiles'
+endif
+
+" Functions {{{1
+function! AllClose() " {{{2
+    " Close all loc lists, qf, preview and terminal windows
+    Windofast lclose
+    cclose
+    pclose
+endf
+
+function! BufDo(command) " {{{2
+    " Just like bufdo, but restore the current buffer when done.
+    let currBuff=bufnr("%")
+    execute 'bufdo ' . a:command
+    execute 'buffer ' . currBuff
+endfunction
+
+function! BuildYCM(info) " {{{2
+    " Build YouCompleteMe after vim-plug clones the repo
+    " info is a dictionary with 3 fields
+    " - name:   name of the plugin
+    " - status: 'installed', 'updated', or 'unchanged'
+    " - force:  set on PlugInstall! or PlugUpdate!
+    if a:info.status == 'installed' || a:info.force
+        if has("unix")
+            !./install.py --all
+            " !./install.py --cs-completer --js-completer
+        else
+            !.\install.py --all
+        endif
+    endif
+endfunction
+
+function! CloseQuickFixWindow() " {{{2
+    " If the window is quickfix, proceed
+    if &buftype=="quickfix"
+        " If this window is last on screen quit without warning
+        if winbufnr(2) == -1
+            quit!
+        endif
+    endif
+endfunction
+
+function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
+    " Add inline comment and align with other inline comments
+
+    " Prompt user for comment text
+    let prompt = UserInput(a:prompt_text)
+
+    " Abort the rest of the function if the user hit escape
+    if (prompt == '') | return | endif
+
+    " Temporarily disable auto-pairs wrapping so the comment delimiter doesn't repeat
+    let b:autopairs_enabled = 0
+
+    " Either inline comment or comment above current line
+    let insert_command = (a:inline_comment) ? 'A ' : 'O'
+
+    " Prepare execution script for adding commented line
+    let exe_string = 'normal ' . insert_command . b:NERDCommenterDelims['left'] . ' ' . a:comment_prefix . prompt
+
+    " Add inline comment (add right delimiter if it exists)
+    if (b:NERDCommenterDelims['right'] != '')
+        let exe_string .= ' ' . b:NERDCommenterDelims['right']
+    endif
+
+    " Add commented line to document
+    exe exe_string
+
+    " Re-enable auto-pairs
+    let b:autopairs_enabled = 1
+
+    " TODO-MB [180123] - The alignment needs to be fixed so it doesn't align the first row if it's a comment
+    " " Prepare string with escaped special characters for Tab plugin
+    " let escapedCommaDelimiter = escape(b:NERDCommenterDelims['left'], '/')
+    " Align comments in paragraph
+    " exe "Tab /" . escapedCommaDelimiter
+
+endfunction
+
+function! CodeCleanUP() " {{{2
+    " Macros to clean up code
+
+    " Put a space after comment delimiter if it doesn't exist already
+    let escapedCommaDelimiter = escape(b:NERDCommenterDelims['left'], '/')
+    exe '%s/' . escapedCommaDelimiter . '\(\s\)\@!/' . escapedCommaDelimiter .' /g'
+
+endfunction
+
+function! ConvertWSLpath(path, ...) " {{{2
+    " I tested this on path in quickfix list
+    " nnoremap <leader>rp :execute 's@^[^\|]*\|@\=Con(submatch(0))@'<CR>
+
+    " Aligns with wslpath.exe flags
+    " -a    force result to absolute path format
+    " -u    translate from a Windows path to a WSL path (default)
+    " -w    translate from a WSL path to a Windows path
+    " -m    translate from a WSL path to a Windows path, with ‘/’ instead of ‘\\’
+    if a:0 > 0
+        let flag = a:1
+    else
+        let flag = ""
+    end
+
+    " This is only necessary for location list parsing/converting
+    let path = substitute(a:path, "|$", "", "")
+
+    " Use wslpath utility to convert path
+    let formattedPath = system('wslpath ' . flag . ' "' . path . '"')
+    return substitute(formattedPath, "\n", "", "")
+
+endfunction
+
+function! EditCommonFile(filename) " {{{2
+    " Open file in new teb
+    let current_filename = expand('%:t')
+    let openfilestring = 'tabedit ' . a:filename
+    silent exec openfilestring
+endfunction
+
+function! Figlet(...) " {{{2
+    " Print ascii art comment
+
+    " Read figlet output into list
+    let lines = systemlist('figlet ' . a:1)
+
+    " Add comments to each lines
+    call map(lines, {index, val -> trim(b:NERDCommenterDelims["left"] . " " . val . " " . b:NERDCommenterDelims["right"])})
+    " call writefile(lines, expand("~/figlet.txt"))
+
+    " Dump list on screen
+    put=lines
+
+endfunction
+
+function! FindFunc(...) " {{{2
+
+    " Move cursor to next pattern match
+    if (a:2 == 'next')
+        call search(a:1)
+        FoldOpen
+    endif
+
+    " Save search string into window local var
+    let w:searchStr=a:1
+
+    " Record initial line number into "z
+    let @z = '|' . line('.') . '|'
+
+    " Clear quickfix list
+    lexpr []
+
+    " Put Results into QuickFix Window
+    silent execute 'g/'.a:1.'/laddexpr expand("%") . ":" . line(".") . ":" . GetLastFoldString() . "$}{$" . getline(".") '
+
+    " Prepare location list height - minimum or record count and max allowable limit
+    let w:locListHeight = min([ g:maxQFlistRecords, len(getloclist(0)) ])
+
+    " If there are no matched records, return
+    if !w:locListHeight
+        lclose
+        return
+    endif
+
+    " Open Loc List and limit the record number
+    execute 'bot ' . w:locListHeight . 'lopen'
+
+    " Update search register
+    let @/=a:1
+
+    " Find initial line in QuickFix list
+    call search(@z)
+
+    " Jump to that record
+    exe "normal \<CR>"
+
+    " Go to proper column number (rather than the beginning of the line)
+    GoToMatchedColumn
+endfunction
+
+" FoldText{{{2
+function! GetFoldStrings() " {{{3
+    " Make the status string a list of all the folds
+    " Iterate through each fold level and add fold string to list
+    let foldStringList = []
+    let i = 1
+    while i <= foldlevel(".")
+        " Append string to list
+        call add(foldStringList, FormatFoldString(GetLastFoldLineNum(i)))
+        let i += 1
+    endwhile
+
+    " Add each fold line to status string
+    let statusString = ""
+    for i in foldStringList
+        let statusString = statusString."|".i
+    endfor
+
+    return statusString."|"
+endfunction
+
+function! GetLastFoldString() " {{{3
+    " Get the text of the last fold
+    return FormatFoldString(GetLastFoldLineNum(foldlevel(".")))."|"
+endfunction
+
+function! GetLastFoldLineNum(foldLvl) " {{{3
+    " Get the line number of last Fold
+    " Only search current line for fold marker
+    let line = search(g:fold_marker_string.a:foldLvl,"n",line("."))
+    " Search backwards for fold marker
+    if (line==0)
+        let line = search(g:fold_marker_string.a:foldLvl,"bn")
+    endif
+    return line
+endfunction
+
+function! FormatFoldString(lineNum) " {{{3
+    " Format fold string so it looks neat
+    " Get the line string of the current fold and remove special chars
+    let line = getline(a:lineNum)
+    " Remove programming language specific words
+    let line = RemoveFiletypeSpecific(line)
+    " Remove special (comment related) characters and extra spaces
+    let line = RemoveSpecialCharacters(line)
+    return line
+endfunction
+
+function! RemoveSpecialCharacters(line) " {{{3
+    " Remove special (comment related) characters and extra spaces
+    " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
+    " Remove fold marker string and comment characters
+    let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.b:NERDCommenterDelims['left'].'\|'.b:NERDCommenterDelims['right'], '', 'g')
+    " Replace 2 or more spaces with a single space
+    let text = substitute(text, ' \{2,}', ' ', 'g')
+    " Remove leading and trailing spaces
+    let text = substitute(text, '^\s*\|\s*$', '', 'g')
+    " Remove text between () in functions
+    let text = substitute(text, '(\(.*\)', '()', 'g')
+    " Add nice padding
+    return " ".text." "
+endfunction
+
+function! RemoveFiletypeSpecific(line) " {{{3
+    " Remove programming language specific words
+    let text = a:line
+    if (&ft=='python')
+        let text = substitute(a:line, '\<def\>\|\<class\>', '', 'g')
+    elseif  (&ft=='cs')
+        let text = substitute(a:line, '\<static\>\|\<int\>\|\<float\>\|\<void\>\|\<string\>\|\<bool\>\|\<private\>\|\<public\>\s', '', 'g')
+    elseif  (&ft=='vim')
+        let text = substitute(a:line, '\<function\>!\s', '', 'g')
+    elseif  (&ft=='markdown')
+        let text = substitute(a:line, '#', '', 'g')
+    elseif  (&ft=='javascript')
+        let text = substitute(a:line, '=\|{\s', '', 'g')
+    endif
+    return text
+endfunction
+" FontSize() {{{2
+if has("unix")
+    function! FontSizePlus ()
+        let l:gf_size_whole = matchstr(&guifont, '\( \)\@<=\d\+$')
+        let l:gf_size_whole = l:gf_size_whole + 1
+        let l:new_font_size = ' '.l:gf_size_whole
+        let &guifont = substitute(&guifont, ' \d\+$', l:new_font_size, '')
+    endfunction
+
+    function! FontSizeMinus ()
+        let l:gf_size_whole = matchstr(&guifont, '\( \)\@<=\d\+$')
+        let l:gf_size_whole = l:gf_size_whole - 1
+        let l:new_font_size = ' '.l:gf_size_whole
+        let &guifont = substitute(&guifont, ' \d\+$', l:new_font_size, '')
+    endfunction
+else
+    function! FontSizePlus ()
+        let l:gf_size_whole = matchstr(&guifont, '\(:h\)\@<=\d\+$')
+        let l:gf_size_whole = l:gf_size_whole + 1
+        let l:new_font_size = ':h'.l:gf_size_whole
+        let &guifont = substitute(&guifont, ':h\d\+$', l:new_font_size, '')
+    endfunction
+
+    function! FontSizeMinus ()
+        let l:gf_size_whole = matchstr(&guifont, '\(:h\)\@<=\d\+$')
+        let l:gf_size_whole = l:gf_size_whole - 1
+        let l:new_font_size = ':h'.l:gf_size_whole
+        let &guifont = substitute(&guifont, ':h\d\+$', l:new_font_size, '')
+    endfunction
+endif
+
+function! GetBufferList() " {{{2
+    " load all current buffers into a list
+    redir =>buflist
+    silent! ls!
+    redir END
+    return buflist
+endfunction
+
+function! GetTODOs() " {{{2
+    " TODO [171103] - Add current file ONLY option
+    " Binary files that can be ignored
+    set wildignore+=*.jpg,*.docx,*.xlsm,*.mp4
+    " Seacrch the CWD to find all of your current TODOs
+    vimgrep /TODO-MB \[\d\{6}]/ **/* **/.* | cw 5
+    " Un-ignore the binary files
+    set wildignore-=*.jpg,*.docx,*.xlsm,*.mp4
+endfunction
+
+function! GitAddCommitPush() " {{{2
+    " Git - add all, commit and push
+
+    if has("unix") " Linux
+        exe 'term ++close bash --login -c "'.$HOME.'/Documents/GitRepos/Linux/git/gap"'
+    else " Windows
+        exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap'
+    endif
+
+    redraw!
+
+endfunction
+
+function! OnSave() " {{{2
+
+endfunction
+
+" Quit {{{2
+
+" Close location list, preview window and quit
+function! Quit()
+    if (&buftype != "quickfix")
+        lclose
+    endif
+    if (!&previewwindow)
+        pclose
+    endif
+    quit
+endf
+
+function! RepoGrep(...) " {{{2
+    " Fugitive Ggrep Wrapper
+    " Load QuickFix window with grep results
+    exe 'silent Ggrep! -i ' . a:1
+    let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ])
+    exe 'top ' . g:qfListHeight . ' copen'
+    redraw!
+endfunction
+
+function! SetCurrentWorkingDirectory() " {{{2
+    " A standalone function to set the working directory to the project's root, or
+    " to the parent directory of the current file if a root can't be found:
+    let cph = expand('%:p:h', 1)
+    if cph =~ '^.\+://' | retu | en
+    for mkr in ['.git/', '.hg/', '.svn/', '.bzr/', '_darcs/', '.vimprojects']
+        let wd = call('find'.(mkr =~ '/$' ? 'dir' : 'file'), [mkr, cph.';'])
+        if wd != '' | let &acd = 0 | brea | en
+    endfo
+    exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
+endfunction
+
+" Snippets{{{2
+function! SnipClass() " {{{3
+    if &filetype == "php"
+        execute "normal! oclass  {\<CR>public function __construct() {\<CR>}\<CR>}\<ESC>kkk^t{" | startinsert
+    endif
+endfunction
+
+function! SnipComment() " {{{3
+    execute "read $CODE/Vim/Snippets/SectionComment.txt"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! jj"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! k"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! $l" | startinsert!
+endfunction
+
+function! SnipFunction() " {{{3
+    if &filetype == "vim"
+        execute "normal! ofunction \<CR>endfunction\<ESC>k" | startinsert!
+
+    elseif &filetype == "sh"
+        execute "normal! ofunction \<CR>{\<CR>}\<ESC>kk" | startinsert!
+    endif
+endfunction
+
+function! SnipHeader() " {{{3
+    execute "read $CODE/Vim/Snippets/Header.txt"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! kddjjjpk"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! k"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! k"
+    execute "cal NERDComment(0,\"toggle\")"
+    execute "normal! $l" | startinsert!
+endfunction
+
+function! SnipIf() " {{{3
+    if &filetype == "php"
+        execute "normal! o// IF\<CR>\<ESC>^Diif () {\<CR>}\<ESC>kf)" | startinsert
+    elseif &filetype == "vim"
+        execute "normal! o\" IF\<CR>\<ESC>^Diif \<CR>endif\<ESC>k" | startinsert!
+    endif
+endfunction
+
+function! SnipLog() " {{{3
+    " Log variable to console for debugging
+    if &filetype == "vue" || &filetype == "javascript"
+        let log_string = "console.clear()\<c-o>console.log()"
+    elseif &filetype == "python"
+        let log_string = "print()"
+    else
+        let log_string = "echo  "
+    endif
+    execute "normal o" . log_string | startinsert
+endfunction
+
+function! StartArgInitialize() " {{{2
+    " Read lines the first 10 lines of file and set vars required for executing script
+    " This is the execution command:
+    " 'terminal ' . b:startapp . @% . ' 'b:startargs<CR>
+    " b:startapp: the program to execute the script with
+    " b:startfile: the program to execute the script with
+    " b:startargs: arguments/options at the end of cmd string
+
+    " The custom string used to identify these let modelines
+    let customModelineStr = 'dev:'
+
+    try
+        " Read the first x lines of this text file into list
+        let initialLines = getline(1, 20)
+        for line in initialLines
+            " Only run custom modelines if 'dev:' is present
+            if line =~ customModelineStr
+                " Remove 'dev;' and comments and trim
+                let varInitString = substitute(StripComments(line), customModelineStr, '', 'g')
+                " TODO-MB [180603] - Make this more secure by only allowing one let statement to be executed
+                execute varInitString
+            endif
+        endfor
+    catch
+    endtry
+
+    " Set default args if I didn't temporarily set them already
+    if !exists('b:startapp') | let b:startapp = './' | endif
+
+    " Set default b:startfile if I haven't defined it temporarily already
+    if !exists('b:startfile') | let b:startfile = @% | endif
+
+    " Set default b:startargs if I haven't defined it temporarily already
+    if !exists('b:startargs') | let b:startargs = '' | endif
+
+endfunction
+
+function! StripComments(input) " {{{2
+    " Strip comments and trim
+
+    " Remove comments
+    let substitution = substitute(a:input, b:NERDCommenterDelims['left'].'\|'.b:NERDCommenterDelims['right'], '', 'g')
+
+    " Remove leading and trailing spaces
+    let substitution = substitute(substitution, '^\s*\|\s*$', '', 'g')
+
+    return substitution
+
+endfunction
+
+function! ToggleList(bufname, pfx) " {{{2
+    " Toggle QuickFix/Location List, don't change focus
+    let buflist = GetBufferList()
+    for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
+        if bufwinnr(bufnum) != -1
+            exec(a:pfx.'close')
+            return
+        endif
+    endfor
+
+    " Set orignal window
+    let winnr = winnr()
+
+    " Location List
+    if a:pfx == 'l'
+        " Nicer error message than original
+        if len(getloclist(0)) == 0
+            echohl ErrorMsg
+            echo "Location List is Empty."
+            return
+        endif
+        " Open window with minimum height
+        exec 'bot '. w:locListHeight .a:pfx.'open'
+        " QuickFix List
+    elseif a:pfx == 'c'
+        " Open window with minimum height
+        exec 'top '. g:qfListHeight .a:pfx.'open'
+    endif
+
+    " Change focus back to the orignal window
+    if winnr() != winnr
+        wincmd p
+    endif
+
+endfunction
+
+function! UserInput(prompt) " {{{2
+    " Get a string input from the user
+    " Get input from user
+    call inputsave()
+    let reply=input(a:prompt)
+    call inputrestore()
+    " Return the user's reply
+    return l:reply
+endfunction
+
+function! WinDo(command) " {{{2
+    " Just like windo, but restore the current window when done.
+    let currwin=winnr()
+    execute 'windo ' . a:command
+    execute currwin . 'wincmd w'
+endfunction
+
+function! WrapFold(foldlevel) range " {{{2
+    " Create a fold on the current line(s)
+    let foldlevel = a:foldlevel
+    if l:foldlevel == 0
+        let foldlevel = foldlevel(line('.'))
+        if l:foldlevel == 0
+            let foldlevel = 1
+        endif
+    endif
+
+    " User entered fold name
+    let prompt = UserInput('Fold Text: ')
+
+    " Abort the rest of the function if the user hit escape
+    if (prompt == '') | return | endif
+
+    " Prevent folding on seperate levels
+    let foldLevelFirst = foldlevel(a:firstline)
+    let foldLevelLast = foldlevel(a:lastline)
+    if len(getline(a:firstline, a:lastline)) == 0 || l:foldLevelFirst != l:foldLevelLast
+        return '' " No lines selected
+    endif
+
+    " Wrap selection with fold
+    execute 'normal! mm'
+    execute 'normal! ' . a:firstline . 'GO' . prompt . ' ' . g:fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
+    execute 'normal! `m'
+endfunction
+" Commands {{{1
+" Figlet {{{2
+" Draw ascii art comments
+command! -nargs=+ -complete=command Figlet
+            \| silent call Figlet(<q-args>)
+
+" Bufdo {{{2
+
+" Just like bufdo, but restore the current buffer when done.
+com! -nargs=+ -complete=command Bufdo call BufDo(<q-args>)
+
+" Windo {{{2
+
+" Just like windo, but restore the current window when done.
+com! -nargs=+ -complete=command Windo call WinDo(<q-args>)
+
+" Just like Windo, but disable all autocommands for super fast processing.
+com! -nargs=+ -complete=command Windofast noautocmd call WinDo(<q-args>)
+
+" CloseToggle {{{2
+command! CloseToggle if (g:term_close == '') | let g:term_close = '++close' | echo 'Term will close' | else | let g:term_close = '' | echo 'Term will not close' | endif
+
+" CtrlpToggle {{{2
+
+" Toggle between CtrlP MRU/Project Files
+command! ToggleCtrlP if (g:ctrlp_cmd == 'CtrlPMRU') | let g:ctrlp_cmd = 'CtrlP' | echo 'CtrlP in Project Files Mode' | else | let g:ctrlp_cmd = 'CtrlPMRU' | echo 'CtrlP in MRU Files Mode' | endif
+
+" FindLocal {{{2
+" Search for string in current file and put results in Location window
+command! -nargs=+ -complete=command FindLocal
+            \| silent call FindFunc(<q-args>, 'next') | set hls
+" \| try | silent call FindFunc(<q-args>, 'next') | catch | endtry | set hls
+
+" FoldOpen {{{2
+
+" Suppress errors when no fold exists
+" The catch part of the command prevents an error that would move the cursor when there are no folds in the file
+command! FoldOpen let save_cursor = getcurpos() | try | silent foldopen! | catch | call setpos('.', save_cursor) | endtry
+
+" QuickFix/Location List Next {{{2
+" Wrap around after hitting first/last record
+command! Cnext try | cnext | catch | cfirst | catch | endtry
+command! Cprev try | cprev | catch | clast | catch | endtry
+command! Lnext try | lnext | catch | lfirst | catch | endtry
+command! Lprev try | lprev | catch | llast | catch | endtry
+
+" GoToMatchedColumn {{{2
+" Since the QF list isn't populated with col numbers, this function allows you to jump to the proper column.
+command! GoToMatchedColumn exe "normal b" | let @/=w:searchStr | call search(@/) | set hls
+
+" FindGlobal {{{2
+" Search for string in current repo and put results in QuickFix window
+command! -nargs=+ -complete=command FindGlobal
+            \| try | call RepoGrep(<q-args>) | catch | endtry
+
+" Replace ^M Line endings {{{2
+
+" Useful when converting from DOS to Unix line endings
+command! ReplaceMwithBlank try | %s/\r$// | catch | endtry
+
+" Useful when converting from DOS to Unix line endings
+command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
+
+" Repo {{{2
+" My repo tool commands
+
+command! -nargs=+ -complete=command Repo try |
+            \ exe "terminal bash -c \"~/Documents/GitRepos/Linux/git/repo -f _runParallelCommands -c \\\""
+            \ . <q-args> . "\\\"\""| catch | endtry
+
+" SpellToggle {{{2
+command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
+
+" Editor Settings {{{1
+" Plugins{{{2
+" Custom Languages {{{3
+
+" SEBOL:
+au BufRead,BufNewFile *.sebol setfiletype sebol
+
+" vim-plug {{{3
+
+" Plugin manager
+
+" Initialize plugin system
+let vimPlugDir = vimHomeDir . '/plugged'
+call plug#begin(vimPlugDir)
+
+" Cheat.sh was not letting me perform Gdiff on Ubuntu18
+" Plug 'dbeniamine/cheat.sh-vim'                              " cheat sheet
+
+Plug 'OmniSharp/omnisharp-vim'                                " C# magic
+Plug 'PProvost/vim-ps1'                                       " Powershell file types
+Plug 'SirVer/ultisnips'                                       " Snippet engine
+Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
+Plug 'altercation/vim-colors-solarized'                       " Color-scheme
+Plug 'christoomey/vim-tmux-navigator'                         " Switch beween vim splits & tmux panes seamslessly
+Plug 'ervandew/supertab'                                      " Insert mode completions
+Plug 'godlygeek/tabular'                                      " Align things
+Plug 'honza/vim-snippets'                                     " Snippet library
+Plug 'junegunn/gv.vim'                                        " Access git files easier
+Plug 'kien/ctrlp.vim'                                         " Browse recent/project files
+Plug 'ludovicchabant/vim-gutentags'                           " Manage ctags
+Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
+Plug 'mattboehm/vim-unstack'                                  " Jump to python errors
+Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
+Plug 'nathanaelkane/vim-indent-guides'                        " Visual indent levels
+Plug 'posva/vim-vue'                                          " Vue filetype recognition
+Plug 'scrooloose/nerdcommenter'                               " Commenting
+Plug 'scrooloose/nerdtree'                                    " Tree file browser
+Plug 'tpope/vim-fugitive'                                     " Git wrapper
+Plug 'tpope/vim-repeat'                                       " Repeat surround and commenting with .
+Plug 'tpope/vim-surround'                                     " Surround all the stuff
+Plug 'vim-airline/vim-airline'                                " Nice status bar
+Plug 'w0rp/ale'                                               " Async Linting
+Plug 'yssl/QFEnter'                                           " QuickFix lists - open in tabs/split windows
+
+" End initialization of plugin system
+call plug#end()
+
+" AirLine{{{3
+let g:airline_section_a = '%f'
+let g:airline_section_c = '%{GetFoldStrings()}'
+
+" ALE {{{3
+
+let g:ale_lint_on_text_changed = 'never'
+
+let g:ale_fixers = {
+            \ 'python': ['yapf'],
+            \ 'javascript': ['prettier'],
+            \ 'vue': ['prettier']
+            \ }
+
+let g:ale_linters = {
+            \ 'python': ['flake8']
+            \ }
+
+" This will prevent my searches from getting messed up
+let g:ale_set_quickfix = 0
+let g:ale_set_loclist = 0
+
+" CtrlP {{{3
+" Fuzzy file/buffer/tag open
+
+" Since I'm toggling CtrlP functionality, I remapped my own <c-p> command
+let g:ctrlp_map = ''
+
+" Most recent files is default
+let g:ctrlp_cmd = 'CtrlPMRU'
+
+" Use filename instead of full path for searching
+let g:ctrlp_by_filename = 1
+
+" Remap hotkeys
+let g:ctrlp_prompt_mappings = {
+            \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
+            \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+            \ 'ToggleType(1)':        ['<c-f>'],
+            \ 'ToggleType(-1)':       ['<c-b>'],
+            \ }
+
+" Emmet HTML/JS {{{3
+let g:user_emmet_leader_key = '<c-b>'
+
+" NerdCommenter{{{3
+
+" NerdCommenter add a space after comment
+let g:NERDSpaceDelims=1
+
+" Remove extra spaces when uncommenting
+let g:NERDRemoveExtraSpaces=1
+
+" Custom comment delimiters
+let g:NERDCustomDelimiters = {
+            \ 'python': { 'left': '#', 'right': '' },
+            \ 'dosbatch': { 'left': 'REM', 'right': '' },
+            \ 'sebol': { 'left': '!', 'right': '' }
+            \ }
+
+
+" NERDTree{{{3
+
+" Close NERDTree when opening file
+let NERDTreeQuitOnOpen = 1
+
+" Show hidden files by default
+let NERDTreeShowHidden = 1
+
+" Enable Bookmarks by default
+let NERDTreeShowBookmarks = 1
+
+" Line Numbers
+let NERDTreeShowLineNumbers=1
+
+" vim-tmux-navigator conflict
+let g:NERDTreeMapJumpNextSibling = ''
+let g:NERDTreeMapJumpPrevSibling = ''
+
+" QFEnter {{{3
+
+let g:qfenter_keymap = {}
+let g:qfenter_keymap.vopen = ['<C-v>']
+let g:qfenter_keymap.hopen = ['<C-s>']
+let g:qfenter_keymap.topen = ['<C-t>']
+
+" The Silver Searcher {{{3
+if executable('ag')
+    " Use ag instead of grep (performance increase)
+    set grepprg=ag\ --nogroup\ --nocolor
+
+    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+    " ag is fast enough that CtrlP doesn't need to cache
+    " let g:ctrlp_use_caching = 0
+endif
+
+" UltiSnips {{{3
+
+" YouCompleteMe and UltiSnips compatibility.
+let g:UltiSnipsExpandTrigger = '<Tab>'
+let g:UltiSnipsJumpForwardTrigger = '<Tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" Additional UltiSnips config.
+let g:UltiSnipsSnippetsDir = '~/Documents/GitRepos/Vim/Snippets'
+
+" vim-unstack {{{3
+
+let g:unstack_populate_quickfix=1
+
+" Vim-Indent-Guides {{{3
+" Indent Guides default is on
+let g:indent_guides_enable_on_vim_startup = 1
+
+" Vim-QF {{{3
+" let g:qf_mapping_ack_style = 1
+
+" YouCompleteMe{{{3
+
+" For some reason, there's a bug with jedi <c+space> autocompletion, so I have to disable previews
+set completeopt-=preview
+
+" Additional YouCompleteMe config.
+let g:ycm_complete_in_comments = 1
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_goto_buffer_command = 'horizontal-split'
+
+" This is required for venv and pipenv to work properly
+let g:ycm_python_binary_path = 'python3'
+
+" Since omnisharp is installed as a seperate plugin
+let g:ycm_auto_start_csharp_server = 1
+let g:ycm_csharp_server_port = 2000
+
+" Remaps
+nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" OmniSharp {{{3
+
+" C# completion
+" First download the WINDOWS HTTP 64 bit release and place into directory below:
+" https://github.com/OmniSharp/omnisharp-roslyn/releases
+
+let g:OmniSharp_server_path = '/mnt/c/omnisharp.http-win-x64/OmniSharp.exe'
+let g:OmniSharp_translate_cygwin_wsl = 1
+let g:OmniSharp_selector_ui = 'ctrlp'
+let g:OmniSharp_timeout = 10
+
+" Display{{{2
+
+" 256 color
+set t_Co=256
+
+" Preferred background
+set background=dark
+
+" Preferred color scheme
+silent! colorscheme solarized
+
+" Solarized settings
+" let g:solarized_italic=0
+let g:solarized_bold=0
+
+" Set GVIM Font
+" To select form availbale fonts :set guifont=*
+if has("unix")
+    set guifont=Ubuntu\ Mono\ 13
+else
+    set guifont=Consolas:h12
+endif
+
+" Display line number for current line
+set number
+
+" Display relative line number along the left hand side
+set relativenumber
+
+" Start scrolling <x> lines before window border
+set scrolloff=8
+
+" Visual auto complete for command menu
+set wildmenu
+
+" Show command in bottom bar
+set showcmd
+
+" Don't show Insert/Normal Mode status on last line
+set noshowmode
+
+" Do not redraw during operations such as macro
+set lazyredraw
+
+" Don't wrap/line break in the middle of a word
+set linebreak
+
+" Always display the status line even if only one window is displayed
+set laststatus=2
+
+" Display hidden char
+let g:display_hidden = "hidden"
+
+" Change the text that is displayed while in a fold
+set foldtext=v:folddashes.FormatFoldString(v:foldstart)
+
+" Functionality {{{2
+" Vim Start {{{3
+
+" TODO-MB [180607] - This seemed to give me a lot of problems with YCM and other stuff breaking
+
+" " Save last file when exiting vim
+" autocmd VimLeave * nested if (!isdirectory(vimHomeDir)) |
+            " \ call mkdir(vimHomeDir) |
+            " \ endif |
+            " \ execute "mksession! " . vimHomeDir . "/Session.vim"
+
+" " Go to last file(s) if invoked without arguments.
+" autocmd VimEnter * nested if argc() == 0 &&
+            " \ filereadable(vimHomeDir . "/Session.vim") |
+            " \ try |
+            " \ execute "source " . vimHomeDir . "/Session.vim"
+            " \ | catch | endtry
+
+" Have Vim jump to the last position when reopening a file
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+                \| exe "normal! g'\"" | endif
+endif
+
+" General{{{3
+
+" Optimize GVim
+if has('GUI')
+    " Disable annoying error bell sounds
+    autocmd GUIEnter * set vb t_vb=
+
+    " Open GVim in Maximized mode
+    if has("unix")
+        autocmd GUIEnter * call system('wmctrl -i -b add,maximized_vert,maximized_horz -r '.v:windowid)
+    else
+        autocmd GUIEnter * simalt ~x
+    endif
+
+    " Remove Menubar and Toolbar from GVIM
+    set guioptions -=m
+    set guioptions -=T
+endif
+
+" General settings required for highlighting
+syntax on
+
+" Enable plug-ins for indentation
+filetype plugin indent on
+
+" Eliminate command windows escape delay
+set timeoutlen=500 ttimeoutlen=0
+
+" Backspace over auto indent, line breaks, start of insert
+set backspace=indent,eol,start
+
+" Remove vi compatibility
+set nocompatible
+
+" Update when idle for x ms (default is 4000 msec)
+set updatetime=500
+
+" Virtual editing, position cursor where there is are no characters (all modes)
+set virtualedit=all
+
+" Ignore file patterns globally
+set wildignore+=*.swp
+
+" Standard Encoding
+set encoding=utf8
+
+" No .swp backup files
+set noswapfile
+
+" Use linux shard clipboard in VIM
+if has("unix")
+    set clipboard=unnamedplus
+    " Use windows shard clipboard in VIM
+else
+    set clipboard=unnamed
+endif
+
+" TODO-MB [180213] - Remove after confirming that the new functionality is better
+" Automatically change current directory when new file is opened
+set autochdir
+" Automatically change current directory to project root
+" autocmd BufEnter * call SetCurrentWorkingDirectory()
+
+" Enable Vim to check for modelines throughout your files
+" best practice to keep them at the top or the bottom of the file
+set modeline
+" Number of modelines to be checked, if set to zero then modeline checking
+" will be disabled
+set modelines=5
+
+" Don't add comment automatically on new line
+au FileType * setlocal formatoptions-=cro
+
+" Spelling
+set spellfile=$HOME/OneDrive/Software/Settings/en.utf-8.add
+
+" Change error format for custom FindFunc() usage
+" set efm+=%f:%l:%m
+
+" Auto reload file when changed from another source
+set autoread
+au CursorHold * if &buftype != "nofile" | checktime | endif
+
+" Peform actions right before saving bugger
+au BufWritePre * call OnSave()
+
+" Preview Window
+autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
+
+" Folding{{{3
+set foldenable
+set foldlevelstart=0
+set foldnestmax=10
+set foldmethod=marker
+set foldignore=
+set foldlevel=2
+
+" Indenting/Tabs{{{3
+" Do smart auto indenting when starting a new line
+set autoindent
+" set smartindent
+
+" Set tab width
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+
+" Use spaces instead of tabs
+set expandtab
+" Delete spaces like tabs
+set smarttab
+
+" Searching{{{3
+" Search as characters are entered
+set incsearch
+" Highlight search
+set hlsearch
+" Ignore case of given search term
+set ignorecase
+" Only search for matching capitals when they are used
+set smartcase
+
+" QuickFix/Location {{{3
+
+" Align QuickFix on ver unique string '$}{$'
+au BufReadPost quickfix setlocal modifiable
+            \| silent exe 'Tab /|\$}{\$'
+            \| silent exe 'g/\$}{\$/s/'
+            \| setlocal nowrap
+            \| setlocal norelativenumber
+            \| setlocal cursorline
+            \| setlocal nomodifiable
+
+" \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>
+" \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>:GoToMatchedColumn<CR>
+
+" Close QuickFix/Location lists automatically when it's the last window in current tab
+au BufEnter * call CloseQuickFixWindow()
+
+" Undo Files {{{3
+" Let's save undo info!
+if !isdirectory(vimHomeDir)
+    call mkdir(vimHomeDir, "", 0770)
+endif
+if !isdirectory(vimHomeDir . "/undo-dir")
+    call mkdir(vimHomeDir."/undo-dir", "", 0700)
+endif
+set undodir=~/.vim/undo-dir
+set undofile
+
+" Language/Project Specific{{{1
+" Comma/Pipe/Tab Seperated Values{{{2
+" autocmd BufReadPost *.tsv,*.csv,*.psv execute 'Tabularize /,'
+autocmd BufReadPost *.csv setlocal nowrap
+autocmd BufReadPost *.psv setlocal nowrap
+autocmd BufReadPost *.tsv setlocal nowrap
+" autocmd BufReadPost *.csv 1sp
+" autocmd BufReadPost *.psv 1sp
+" autocmd BufReadPost *.tsv 1sp
+" HTML/js/css/Vue {{{2
+autocmd FileType html,javascript,json,vue,css,scss,yml,yaml setlocal shiftwidth=2 tabstop=2
+
+" Vue {{{2
+
+" Fix the syntax highlighting that randomly stops
+autocmd FileType vue syntax sync fromstart
+
+" Speed up vim when in vue files
+let g:vue_disable_pre_processors=1
+
+" NERDCommenter fix
+" En error occured when putting this code into a seperate vim.vue file
+
+let g:ft = ''
+
+function! NERDCommenter_before()
+    if &ft == 'vue'
+        let g:ft = 'vue'
+        let stack = synstack(line('.'), col('.'))
+        if len(stack) > 0
+            let syn = synIDattr((stack)[0], 'name')
+            if len(syn) > 0
+                exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+            endif
+        endif
+    endif
+endfunction
+
+function! NERDCommenter_after()
+    if g:ft == 'vue'
+        setf vue
+        let g:ft = ''
+    endif
+endfunction
+
+" Mappings{{{1
+" Leader key {{{2
+let mapleader="\<space>"
+
+" Add char to EOL {{{2
+
+" Colon
+inoremap :: <esc>mzA:<esc>`z
+nnoremap <leader>a: mzA:<esc>`z
+
+" Semi-Colon
+inoremap ;; <esc>mzA;<esc>`z
+nnoremap <leader>a; mzA;<esc>`z
+
+" Comma
+inoremap ,, <esc>mzA,<esc>`z
+nnoremap <leader>a, mzA,<esc>`z
+
+" Auto-Indent {{{2
+" Indent entire file and return to current line
+nnoremap <leader>ai mpgg=G'p
+
+" Close all location lists {{{2
+
+nnoremap <leader>ac :call AllClose()<CR>
+
+" Close Toggle {{{2
+" Toggle between ++close and ++noclose when running term <leader>rr
+nnoremap <leader>ct :CloseToggle<CR>
+
+" Commands {{{2
+
+" Rerun last command
+nnoremap ql @:
+
+" Get into command history
+nnoremap q; q:
+
+" Paste
+cmap <c-v> <c-r>+
+
+" Comment {{{2
+
+" Inline Comment
+nnoremap <leader>cii :call PromptAndComment(1, 'Comment Text: ', '')<CR>
+
+" Inline comments with folds
+map <leader>ci1 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>1<ESC>
+map <leader>ci2 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>2<ESC>
+map <leader>ci3 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>3<ESC>
+map <leader>ci4 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>4<ESC>
+
+" Comment, Yank and Paste
+nnoremap <leader>cy "zyy:silent execute "cal NERDComment('n',\"comment\")"<CR>"zp
+vnoremap <leader>cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
+
+" Comment/Uncomment Paragraph
+map <leader>cp vip<plug>NERDCommenterYank
+map <leader>cu vip<plug>NERDCommenterUncomment
+
+" Convert Line Endings {{{2
+
+" Convert to Dos
+nnoremap <leader>ctd mz:e ++ff=dos<CR>`z
+
+" Convert to Mac
+nnoremap <leader>ctm mz:e ++ff=mac<CR>`z
+
+" Convert to Unix
+nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
+
+" CtrlP {{{2
+
+" Either run CtrlP or CtrPMRU
+" This can be toggled with the ToggleCtrlP command
+nmap <c-p> :execute g:ctrlp_cmd<CR>
+nnoremap <leader>. :CtrlPTag<cr>
+
+" Cycle through Auto-Suggestions {{{2
+inoremap <c-j> <c-n>
+inoremap <c-k> <c-p>
+
+" Dump Register {{{2
+nnoremap <leader><space> "z
+nnoremap <leader>p "adiwP
+
+" Edit Common Files {{{2
+nnoremap <leader>ev :call EditCommonFile('$CODE/Vim/.myvimrc')<CR>
+nnoremap <leader>eac :call EditCommonFile('$CODE/Windows/AHK/Common.ahk')<CR>
+
+" End/Beginning of Line {{{2
+nnoremap <silent> H ^
+nnoremap <silent> L $
+vnoremap <silent> H ^
+vnoremap <silent> L $
+omap H ^
+omap L $
+
+" Escape Key {{{2
+
+" Disable Highlighting
+" When I used a single escape, vim started in Replace mode everytime
+nnoremap <esc><esc> :noh<esc>
+
+" Find - Local {{{2
+
+" Find string in current file
+nnoremap <leader>fl :FindLocal<space>
+
+" Find word under cursor
+map <leader>fw "xyiw:call FindFunc("\\<".@x."\\>", '')<CR>
+
+" TODO-MB [171019] - Finish up the find tag function
+" map <leader>ft :exe "FindLocal \\<".tagbar#currenttag("[%s]","")."\\>"
+
+" Find - Global {{{2
+
+" Find in current Git Repo and put reslts in QuickFix window
+nnoremap <leader>fg :FindGlobal<space>
+
+" Ggrep word under cursor
+map <leader>gw "xyiw:exe "FindGlobal ".@x<CR>
+
+" Yank highlighted text into "z and Ggrep
+vnoremap <c-g> "xy:FindGlobal <c-r>x<CR>
+
+" Fix errors {{{2
+nnoremap <space>fi :ALEFix<CR>
+
+" Folding {{{2
+
+" Fold Everything except for the current section
+nnoremap <leader>zf zMzvzz
+
+" Create Folds
+noremap <silent> <leader>zz :call WrapFold(v:count)<CR>
+noremap <silent> <leader>zj :call WrapFold(foldlevel(line(".")) + 1)<CR>
+noremap <silent> <leader>zk :call WrapFold(foldlevel(line(".")) - 1)<CR>
+
+" Font Size Bigger/Smaller {{{2
+
+" Font Hotkeys
+if has("gui_running")
+    nmap <S-F6> :call FontSizeMinus()<CR>
+    nmap <F6> :call FontSizePlus()<CR>
+endif
+
+" Git {{{2
+
+" Fugitive remappings
+nnoremap <leader>gd :Gvdiff<Space>
+nnoremap <leader>gs :Gstatus<CR>
+
+" Display git diff in terminal
+nnoremap <leader>rd :terminal git --no-pager diff<CR>
+
+" Git history
+nnoremap <leader>gh :tabe %<CR>:terminal ++curwin git --no-pager hist<CR>
+
+" Git - add all, commit and push
+nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
+" nnoremap <leader>gap :silent Git add --all<cr>:silent Gcommit<cr>:silent Gpush<cr>:redraw!<cr>
+
+" Help {{{2
+
+" Pull up help for word under cursor in a new tab
+nnoremap <expr> <leader>h ":help " . expand("<cword>") . "\n"
+
+" Insert Mode Escape {{{2
+inoremap <silent> <enter> <esc>
+
+" Marks {{{2
+" Jump to proper column when using marks
+nnoremap ' `
+
+" Navigation {{{2
+" Do not automatically adjust for line wrapping
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+
+" NERDTree {{{2
+nnoremap <leader>on :NERDTreeFind<CR>
+
+" New line {{{2
+
+" New line in insert mode
+inoremap <c-o> <CR>
+
+" Add blank line after current line
+nnoremap <leader>aj :<CR>mzo<Esc>`z:<CR>
+
+" Add blank line before current line
+nnoremap <leader>ak :<CR>mzO<Esc>`z:<CR>
+
+" Add blank line before and after current line
+nnoremap <leader>al :<CR>mzO<Esc>jo<Esc>`z:<CR>
+
+" Restore Enter key functionality for command history window
+autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
+
+" Open File/Folder {{{2
+
+" Explorer
+nnoremap <leader>oe :silent !explorer.exe .<CR>:redraw!<CR>
+
+" Chrome
+if $WSL == "true"
+    nnoremap <leader>oc :exe 'term ++close "/mnt/c/Program Files ' .
+                \ '(x86)/Google/Chrome/Application/chrome.exe"' .
+                \ ' "' . ConvertWSLpath(expand("%:p"), '-m') . '"'<CR>
+else
+    nnoremap <leader>oc :silent !"firefox" ".\<c-r>%"<CR>:redraw!<CR>
+endif
+
+" Double Commander
+nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\doublecmd.exe" %:p:h<CR>:redraw!<CR>
+
+" Go to Definition{{{2
+
+" Preview definition in split window and focus on fold
+map gp :sp<CR>gdzMzvzz
+
+" Go to definition and focus on fold
+map gd gdzMzvzz
+
+" Rename Tag {{{2
+
+" Copy word under cursor into "a and paste into new buffer
+nnoremap <leader>rt mz"ayiw:1sp wordRenamingBuffer<CR>"aP
+
+" After edits, press enter, the original word is renamed globally
+" The search is case sensitive because of I in .../gI
+" Press escape to cancel
+au BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
+            \| nnoremap <buffer> <Esc> :q!<CR>
+            \| nnoremap <buffer> <c-s> <nop>
+            \| nnoremap <buffer> qw <nop>
+            \| nnoremap <buffer> <Enter>
+            \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/gI<CR>`z
+
+" Quit {{{2
+
+" Close extra windows then quit
+nnoremap <c-w> :call Quit()<CR>
+nnoremap qq :call Quit()<CR>
+
+" Close all windows in tab
+nnoremap qt :tabclose<CR>
+
+" Close without saving
+nnoremap Q :q!<CR>
+
+" A hack to close the Fugitive Plugin window with <c-w>
+nmap gf gf
+
+" Exit command history window q: or q/ with <c-w>
+au CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR> |
+            \ nnoremap <buffer> qq :q!<CR>
+
+" Save Buffer {{{2
+
+nnoremap qw :w<CR>
+nnoremap <c-s> :w<CR>
+inoremap <c-s> <esc>:w<CR>
+
+" Scrolling{{{2
+
+" Scroll Up
+nnoremap K 5k
+" Scroll Down
+nnoremap J 5j
+
+" Snippets {{{2
+" nnoremap <leader>snc :call SnipClass()<CR>
+nnoremap <leader>snc :call SnipComment()<CR>
+nnoremap <leader>snf :call SnipFunction()<CR>
+nnoremap <leader>snh :call SnipHeader()<CR>
+nnoremap <leader>sni :call SnipIf()<CR>
+nnoremap <leader>snl :call SnipLog()<CR>
+
+" Show and Trim Spaces {{{2
+
+" nnoremap <leader>ts mm:TrimSpaces<CR>
+nnoremap <leader>ts :ALEFix trim_whitespace<CR>
+
+" Sorting {{{2
+nnoremap <leader>so vip:sort<CR>
+
+" Source {{{2
+nnoremap <leader>sv :w<CR>:so $HOME/.vimrc<CR>
+
+" Suspend {{{2
+
+" Don't suspend!
+noremap <c-z> <nop>
+" noremap <c-z>c :Start! ~/clipboard.sh --write<CR>
+" noremap <c-z>v :Start! ~/clipboard.sh --read<CR>
+
+" Spell Toggle {{{2
+" Toggle the spelling on/off
+nnoremap <leader>st :SpellToggle<CR>
+
+" TagBar {{{2
+nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
+
+" Repo {{{2
+
+" My repo tool commands
+nnoremap <leader>rs :Repo st -s<cr>
+
+" Run Scripts {{{2
+
+" Initialize arguments required to run script
+au BufEnter,BufCreate,BufWrite * call StartArgInitialize()
+
+" Run Script Asynchronously
+" For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
+nnoremap <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
+
+" Tabs {{{2
+
+" Open current file in new tab
+nnoremap <c-t> mm:tabe <c-r>%<CR>`m
+
+" Toggle tabs
+nnoremap qj gt
+nnoremap qk gT
+
+" TODOs {{{2
+
+" Add new TODO above current line
+let todoPrefix = 'TODO-MB [' . strftime('%y%m%d') . '] - '
+nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', todoPrefix)<CR>
+
+" Find all TODOs
+nnoremap <silent> <leader>tf :call GetTODOs()<CR>
+
+" Windows {{{2
+
+" Move between windows/panes
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
+tnoremap <C-j> <C-W>j
+tnoremap <C-k> <C-W>k
+tnoremap <C-h> <C-W>h
+tnoremap <C-l> <C-W>l
+
+" Resize
+nnoremap <leader>wgv :<C-U>exec "vertical resize +".v:count1<CR>
+nnoremap <leader>wgh :<C-U>exec "resize +".v:count1<CR>
+
+" Windows Style Commands {{{2
+
+" Redo
+nnoremap <c-y> <c-r>
+inoremap <c-y> <Esc><C-r>
+
+" Paste from clipboard
+nnoremap <c-v> o<esc>P==
+inoremap <c-v> <c-r>+
+
+" Yank {{{2
+" Yank till the end of the line
+nnoremap Y y$
+
+" Yank all
+nnoremap <leader>ya mzggyG`z
+
+" QuickFix/Location Lists {{{2
+
+" I put this at the end of the mapping section because of some conflicts with <c-r>
+
+" Go to next/previous search result
+" nnoremap <leader>zf zMzvzz
+nnoremap <C-f> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <C-d> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <C-r> :Cnext<CR>:FoldOpen<CR>
+nnoremap <C-e> :Cprev<CR>:FoldOpen<CR>
+
+nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
+nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
+
+" Templates {{{1
+" Load template based on current file extension (:help template)
+
+" augroup templates
+    " " Remove ALL auto commands for the current group
+    " autocmd!
+    " " Expand file extension and search templates placing content at top of file
+    " autocmd BufNewFile *.* silent! execute '0r $CODE/Vim/templates/skeleton.'.expand("<afile>:e")
+    " " Substitute equations between the VIM_EVAL and END_EVAL equations
+    " autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
+" augroup END
