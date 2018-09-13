@@ -1278,6 +1278,9 @@ nnoremap <space>fi :ALEFix<CR>
 
 " Folding {{{2
 
+" Fold Everything except for the current section
+nnoremap zx zMzvzz
+
 " Create Folds
 noremap <silent> <leader>zz :call WrapFold(v:count)<CR>
 noremap <silent> <leader>zj :call WrapFold(foldlevel(line(".")) + 1)<CR>
