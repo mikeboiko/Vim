@@ -683,7 +683,7 @@ au BufRead,BufNewFile *.sebol setfiletype sebol
 let vimPlugDir = vimHomeDir . '/plugged'
 call plug#begin(vimPlugDir)
 
-" Cheat.sh was not letting me perform Gdiff on Ubuntu18
+" Cheat.sh was not letting me perform Gdiff on .py files in Ubuntu18
 " Plug 'dbeniamine/cheat.sh-vim'                              " cheat sheet
 
 Plug 'OmniSharp/omnisharp-vim'                                " C# magic
@@ -692,11 +692,11 @@ Plug 'SirVer/ultisnips'                                       " Snippet engine
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
 Plug 'altercation/vim-colors-solarized'                       " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                         " Switch beween vim splits & tmux panes seamslessly
+Plug 'ctrlpvim/ctrlp.vim'                                     " Browse recent/project files
 Plug 'ervandew/supertab'                                      " Insert mode completions
 Plug 'godlygeek/tabular'                                      " Align things
 Plug 'honza/vim-snippets'                                     " Snippet library
 Plug 'junegunn/gv.vim'                                        " Access git files easier
-Plug 'kien/ctrlp.vim'                                         " Browse recent/project files
 Plug 'ludovicchabant/vim-gutentags'                           " Manage ctags
 Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
 Plug 'mattboehm/vim-unstack'                                  " Jump to python errors
