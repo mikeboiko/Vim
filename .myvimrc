@@ -1477,7 +1477,7 @@ let todoPrefix = 'TODO-MB [' . strftime('%y%m%d') . '] - '
 nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', todoPrefix)<CR>
 
 " Add new TODO - TEST above current line
-nnoremap <silent> <leader>tt :exe 'normal O' . b:NERDCommenterDelims['left'] . ' TODO TEST' . b:NERDCommenterDelims['right']<CR>
+nnoremap <silent> <leader>tt :exe 'normal O' . b:NERDCommenterDelims['left'] . ' '. todoPrefix . 'TEST' . b:NERDCommenterDelims['right']<CR>
 
 " Find all TODOs
 nnoremap <silent> <leader>tf :call GetTODOs()<CR>
