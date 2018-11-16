@@ -1,9 +1,11 @@
 !_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
 !_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
-!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
-!_TAG_PROGRAM_NAME	Exuberant Ctags	//
-!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/45968eff/
+$CODE	.vimrc	/^let $CODE='$HOME\/Documents\/GitRepos'$/;"	v
 <c-s>	ftplugin/markdown.vim	/^nnoremap <buffer> <c-s> :silent call FormatMDFunc()<CR>:noh<CR>:w<CR>$/;"	m
 <leader>d	ftplugin/python.vim	/^nnoremap <buffer> <leader>d  :YcmCompleter GoToDefinition<CR>$/;"	m
 <leader>h	ftplugin/python.vim	/^nnoremap <buffer> <leader>h  :YcmCompleter GetDoc<CR>$/;"	m
@@ -11,26 +13,17 @@
 <leader>rr	ftplugin/ps1.vim	/^nnoremap <buffer> <leader>rr :wa<CR>:Start powershell ".\\<c-r>%"<CR>$/;"	m
 CompileCsharp	ftplugin/cs.vim	/^function! CompileCsharp()$/;"	f
 FormatMDFunc	ftplugin/markdown.vim	/^function! FormatMDFunc()$/;"	f
-action	templates/skeleton.py	/^        action='store',$/;"	v
-action	templates/skeleton.py	/^        action='store_true',$/;"	v
 args	templates/skeleton.py	/^args = parser.parse_args()$/;"	v
 b:autohotkey_syntax_sync_minlines	ftplugin/autohotkey.vim	/^  let b:autohotkey_syntax_sync_minlines = 50$/;"	v
 b:autohotkey_syntax_sync_minlines	ftplugin/autohotkey.vim	/^  let b:autohotkey_syntax_sync_minlines = g:autohotkey_syntax_sync_minlines$/;"	v
 b:current_syntax	ftplugin/autohotkey.vim	/^let b:current_syntax = "autohotkey"$/;"	v
 b:current_syntax	syntax/sebol.vim	/^let b:current_syntax = "sebol"$/;"	v
-default	templates/skeleton.py	/^        default='output.txt',$/;"	v
-dest	templates/skeleton.py	/^        dest='dictFile',$/;"	v
-dest	templates/skeleton.py	/^        dest='dos_line_ending',$/;"	v
-dest	templates/skeleton.py	/^        dest='inputFile',$/;"	v
-dest	templates/skeleton.py	/^        dest='outputFile',$/;"	v
+g:qfListHeight	ftplugin/cs.vim	/^    let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ])$/;"	v
 g:syntastic_python_checkers	ftplugin/python.vim	/^let g:syntastic_python_checkers = ['pylint']$/;"	v
 gd	ftplugin/cs.vim	/^nnoremap <buffer> gd  :YcmCompleter GoToDefinitionElseDeclaration<CR>$/;"	m
 gd	ftplugin/python.vim	/^nnoremap <buffer> gd  :YcmCompleter GoToDeclaration<CR>$/;"	m
-help	templates/skeleton.py	/^        help='Name of dictionary csv list'$/;"	v
-help	templates/skeleton.py	/^        help='Name of original text file, where replacements are to occur'$/;"	v
-help	templates/skeleton.py	/^        help='Name of output file (default is output.txt)'$/;"	v
-help	templates/skeleton.py	/^        help='Specify if this is a dos line ending (default is Unix)'$/;"	v
 main	templates/skeleton.py	/^def main(): # {{{2$/;"	f
 parser	templates/skeleton.py	/^parser = argparse.ArgumentParser(__doc__)$/;"	v
 python_highlight_all	ftplugin/python.vim	/^let python_highlight_all=1$/;"	v
 s:cpo_save	ftplugin/autohotkey.vim	/^let s:cpo_save = &cpo$/;"	v
+vim	README.md	/^# vim$/;"	c
