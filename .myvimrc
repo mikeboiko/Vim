@@ -755,8 +755,8 @@ let g:ctrlp_by_filename = 1
 
 " Remap hotkeys
 let g:ctrlp_prompt_mappings = {
-            \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
-            \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+            \ 'PrtSelectMove("j")':   ['J', '<down>'],
+            \ 'PrtSelectMove("k")':   ['K', '<up>'],
             \ 'ToggleType(1)':        ['<c-f>'],
             \ 'ToggleType(-1)':       ['<c-b>'],
             \ }
