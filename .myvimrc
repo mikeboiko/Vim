@@ -1161,13 +1161,16 @@ let mapleader="\<space>"
 inoremap :: <esc>mzA:<esc>`z
 nnoremap <leader>a: mzA:<esc>`z
 
-" Semi-Colon
-inoremap ;; <esc>mzA;<esc>`z
-nnoremap <leader>a; mzA;<esc>`z
-
 " Comma
 inoremap ,, <esc>mzA,<esc>`z
 nnoremap <leader>a, mzA,<esc>`z
+
+" Period
+nnoremap <leader>a. mzA.<esc>`z
+
+" Semi-Colon
+inoremap ;; <esc>mzA;<esc>`z
+nnoremap <leader>a; mzA;<esc>`z
 
 " Auto-Indent {{{2
 " Indent entire file and return to current line
