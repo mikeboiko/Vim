@@ -13,10 +13,6 @@
 "
 
 " TODOs {{{1
-" TODO-MB [180210] - Write command to use ag to find code samples in all my
-" git repos quickly. Use file type option and -i (case-insensitive). fa = find
-" all code. fn = find notes. See --vimgrep docs: github.com/ggreer/the_silver_searcher/blob/master/doc/ag.1.md
-
 " TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
 " TODO-MB [180608] - Convert my old snippets into UtilSnips
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
@@ -178,6 +174,21 @@ function! Figlet(...) " {{{2
 
     " Dump list on screen
     put=lines
+
+endfunction
+
+function! FindAG(dir_search) " {{{2
+    " Find code snippet in target directory
+
+    " Prompt user for comment text
+    let prompt = UserInput('Args: ')
+
+    " Abort the rest of the function if the user hit escape
+    if (prompt == '') | return | endif
+
+    exe 'silent grep ' . prompt . ' ' . a:dir_search
+    top 10 copen
+    redraw!
 
 endfunction
 
@@ -808,7 +819,9 @@ let g:qfenter_keymap.topen = ['<C-t>']
 " The Silver Searcher {{{3
 if executable('ag')
     " Use ag instead of grep (performance increase)
-    set grepprg=ag\ --nogroup\ --nocolor
+    " set grepprg=ag\ --nogroup\ --nocolor
+    set grepprg=ag\ --vimgrep\ $*
+    set grepformat=%f:%l:%c:%m
 
     " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
@@ -1258,7 +1271,15 @@ omap L $
 " When I used a single escape, vim started in Replace mode everytime
 nnoremap <esc><esc> :noh<esc>
 
-" Find - Local {{{2
+" Find ag {{{2
+
+" Search code
+nnoremap <leader>fc :call FindAG('~/Documents/GitRepos')<CR>
+
+" Search notes
+nnoremap <leader>fn :call FindAG('~/Dropbox/Notes')<CR>
+
+" Find Local {{{2
 
 " Find string in current file
 nnoremap <leader>fl :FindLocal<space>
@@ -1266,7 +1287,7 @@ nnoremap <leader>fl :FindLocal<space>
 " Find word under cursor
 map <leader>fw "xyiw:call FindFunc("\\<".@x."\\>", '')<CR>
 
-" Find - Global {{{2
+" Find Global {{{2
 
 " Find in current Git Repo and put reslts in QuickFix window
 nnoremap <leader>fg :FindGlobal<space>
