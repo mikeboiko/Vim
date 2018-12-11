@@ -1026,6 +1026,9 @@ else
     set clipboard=unnamed
 endif
 
+" Vertical splits open on the right instead of the default of left
+set splitright
+
 " TODO-MB [180213] - Remove after confirming that the new functionality is better
 " Automatically change current directory when new file is opened
 set autochdir
