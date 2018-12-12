@@ -177,11 +177,11 @@ function! Figlet(...) " {{{2
 
 endfunction
 
-function! FindAG(dir_search) " {{{2
+function! FindAG(dir_search, prompt_text) " {{{2
     " Find code snippet in target directory
 
     " Prompt user for comment text
-    let prompt = UserInput('Args: ')
+    let prompt = UserInput(a:prompt_text . ': ')
 
     " Abort the rest of the function if the user hit escape
     if (prompt == '') | return | endif
@@ -1277,10 +1277,10 @@ nnoremap <esc><esc> :noh<esc>
 " Find ag {{{2
 
 " Search code
-nnoremap <leader>fc :call FindAG('~/Documents/GitRepos')<CR>
+nnoremap <leader>fc :call FindAG('~/Documents/GitRepos', 'Search Code')<CR>
 
 " Search notes
-nnoremap <leader>fn :call FindAG('~/Dropbox/Notes')<CR>
+nnoremap <leader>fn :call FindAG('~/Dropbox/Notes', 'Search Notes')<CR>
 
 " Find Local {{{2
 
