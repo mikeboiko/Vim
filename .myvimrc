@@ -730,6 +730,7 @@ let g:ale_fixers = {
             \ 'python': ['yapf'],
             \ 'javascript': ['prettier'],
             \ 'json': ['prettier'],
+            \ 'markdown': ['prettier'],
             \ 'vue': ['prettier'],
             \ 'yaml': ['prettier']
             \ }
