@@ -177,21 +177,6 @@ function! Figlet(...) " {{{2
 
 endfunction
 
-function! FindAG(dir_search, prompt_text) " {{{2
-    " Find code snippet in target directory
-
-    " Prompt user for comment text
-    let prompt = UserInput(a:prompt_text . ': ')
-
-    " Abort the rest of the function if the user hit escape
-    if (prompt == '') | return | endif
-
-    exe 'silent grep ' . prompt . ' ' . a:dir_search
-    top 10 copen
-    redraw!
-
-endfunction
-
 function! FindFunc(...) " {{{2
 
     " Move cursor to next pattern match
@@ -642,6 +627,9 @@ command! -nargs=+ -complete=command FindLocal
 " Suppress errors when no fold exists
 " The catch part of the command prevents an error that would move the cursor when there are no folds in the file
 command! FoldOpen let save_cursor = getcurpos() | try | silent foldopen! | catch | call setpos('.', save_cursor) | endtry
+
+" Grep {{{2
+command! -nargs=+ Grep execute 'silent grep! <args>' | top 10 copen | redraw!
 
 " QuickFix/Location List Next {{{2
 " Wrap around after hitting first/last record
@@ -1277,10 +1265,10 @@ nnoremap <esc><esc> :noh<esc>
 " Find ag {{{2
 
 " Search code
-nnoremap <leader>fc :call FindAG('~/Documents/GitRepos', 'Search Code')<CR>
+nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/Documents/GitRepos<s-left><space><left>
 
 " Search notes
-nnoremap <leader>fn :call FindAG('~/Dropbox/Notes', 'Search Notes')<CR>
+nnoremap <leader>fn :Grep ~/Dropbox/Notes<s-left><space><left>
 
 " Find Local {{{2
 
