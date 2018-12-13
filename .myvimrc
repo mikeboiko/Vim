@@ -1346,6 +1346,9 @@ nnoremap ' `
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
 
+" Go back to the last file
+nnoremap <BS> <C-^>
+
 " NERDTree {{{2
 nnoremap <leader>on :NERDTreeFind<CR>
 
