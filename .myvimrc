@@ -298,6 +298,8 @@ function! RemoveFiletypeSpecific(line) " {{{3
         let text = substitute(a:line, '#', '', 'g')
     elseif  (&ft=='javascript')
         let text = substitute(a:line, '=\|{\s', '', 'g')
+    elseif  (&ft=='yaml')
+        let text = substitute(a:line, ':', '', 'g')
     endif
     return text
 endfunction
