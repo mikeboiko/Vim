@@ -704,6 +704,7 @@ Plug 'nathanaelkane/vim-indent-guides'                        " Visual indent le
 Plug 'posva/vim-vue'                                          " Vue filetype recognition
 Plug 'scrooloose/nerdcommenter'                               " Commenting
 Plug 'scrooloose/nerdtree'                                    " Tree file browser
+Plug 'sheerun/vim-polyglot'                                   " Language Pack (syntax/indent)
 Plug 'tpope/vim-fugitive'                                     " Git wrapper
 Plug 'tpope/vim-repeat'                                       " Repeat surround and commenting with .
 Plug 'tpope/vim-surround'                                     " Surround all the stuff
