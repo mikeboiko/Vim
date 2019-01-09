@@ -839,6 +839,11 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 " Additional UltiSnips config.
 let g:UltiSnipsSnippetsDir = '~/Documents/GitRepos/Vim/Snippets'
 
+" vim-polyglot {{{3
+
+" I was getting some weird indentation happening with - lists
+let g:polyglot_disabled = ['markdown']
+
 " vim-unstack {{{3
 
 let g:unstack_populate_quickfix=1
