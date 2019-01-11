@@ -667,14 +667,13 @@ command! -nargs=+ -complete=command Repo try |
 " SpellToggle {{{2
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
 
-" Editor Settings {{{1
-" Plugins{{{2
-" Custom Languages {{{3
+" Plugins{{{1
+" Custom Languages {{{2
 
 " SEBOL:
 au BufRead,BufNewFile *.sebol setfiletype sebol
 
-" vim-plug {{{3
+" vim-plug {{{2
 
 " Plugin manager
 
@@ -715,7 +714,7 @@ Plug 'yssl/QFEnter'                                           " QuickFix lists -
 " End initialization of plugin system
 call plug#end()
 
-" AirLine{{{3
+" AirLine{{{2
 
 " Fix font inconsistencies
 let g:airline_powerline_fonts=1
@@ -725,7 +724,7 @@ let g:airline_powerline_fonts=1
 let g:airline_section_a = '%f'
 let g:airline_section_c = '%{GetFoldStrings()}'
 
-" ALE {{{3
+" ALE {{{2
 
 let g:ale_lint_on_text_changed = 'never'
 
@@ -746,7 +745,7 @@ let g:ale_linters = {
 let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 0
 
-" CtrlP {{{3
+" CtrlP {{{2
 " Fuzzy file/buffer/tag open
 
 " Since I'm toggling CtrlP functionality, I remapped my own <c-p> command
@@ -766,10 +765,10 @@ let g:ctrlp_prompt_mappings = {
             \ 'ToggleType(-1)':       ['<c-b>'],
             \ }
 
-" Emmet HTML/JS {{{3
+" Emmet HTML/JS {{{2
 let g:user_emmet_leader_key = '<c-b>'
 
-" NerdCommenter{{{3
+" NerdCommenter{{{2
 
 " NerdCommenter add a space after comment
 let g:NERDSpaceDelims=1
@@ -785,7 +784,7 @@ let g:NERDCustomDelimiters = {
             \ }
 
 
-" NERDTree{{{3
+" NERDTree{{{2
 
 " Close NERDTree when opening file
 let NERDTreeQuitOnOpen = 1
@@ -803,14 +802,14 @@ let NERDTreeShowLineNumbers=1
 let g:NERDTreeMapJumpNextSibling = ''
 let g:NERDTreeMapJumpPrevSibling = ''
 
-" QFEnter {{{3
+" QFEnter {{{2
 
 let g:qfenter_keymap = {}
 let g:qfenter_keymap.vopen = ['<C-v>']
 let g:qfenter_keymap.hopen = ['<C-s>']
 let g:qfenter_keymap.topen = ['<C-t>']
 
-" The Silver Searcher {{{3
+" The Silver Searcher {{{2
 if executable('ag')
     " Use ag instead of grep (performance increase)
     " set grepprg=ag\ --nogroup\ --nocolor
@@ -824,7 +823,7 @@ if executable('ag')
     " let g:ctrlp_use_caching = 0
 endif
 
-" UltiSnips {{{3
+" UltiSnips {{{2
 
 " YouCompleteMe and UltiSnips compatibility.
 let g:UltiSnipsExpandTrigger = '<Tab>'
@@ -839,23 +838,23 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 " Additional UltiSnips config.
 let g:UltiSnipsSnippetsDir = '~/Documents/GitRepos/Vim/Snippets'
 
-" vim-polyglot {{{3
+" vim-polyglot {{{2
 
 " I was getting some weird indentation happening with - lists
 let g:polyglot_disabled = ['markdown']
 
-" vim-unstack {{{3
+" vim-unstack {{{2
 
 let g:unstack_populate_quickfix=1
 
-" Vim-Indent-Guides {{{3
+" Vim-Indent-Guides {{{2
 " Indent Guides default is on
 let g:indent_guides_enable_on_vim_startup = 1
 
-" Vim-QF {{{3
+" Vim-QF {{{2
 " let g:qf_mapping_ack_style = 1
 
-" YouCompleteMe{{{3
+" YouCompleteMe{{{2
 
 " For some reason, there's a bug with jedi <c+space> autocompletion, so I have to disable previews
 set completeopt-=preview
@@ -877,7 +876,7 @@ let g:ycm_csharp_server_port = 2000
 " Remaps
 nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
-" OmniSharp {{{3
+" OmniSharp {{{2
 
 " C# completion
 " First download the WINDOWS HTTP 64 bit release and place into directory below:
@@ -888,6 +887,7 @@ let g:OmniSharp_translate_cygwin_wsl = 1
 let g:OmniSharp_selector_ui = 'ctrlp'
 let g:OmniSharp_timeout = 10
 
+" Editor Settings {{{1
 " Display{{{2
 
 " 256 color
