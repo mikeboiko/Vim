@@ -1446,8 +1446,11 @@ inoremap <c-s> <esc>:w<CR>
 
 " Scroll Up
 nnoremap K 5k
+vnoremap K 5k
+
 " Scroll Down
 nnoremap J 5j
+vnoremap J 5j
 
 " Snippets {{{2
 " nnoremap <leader>snc :call SnipClass()<CR>
