@@ -802,6 +802,10 @@ let NERDTreeShowLineNumbers=1
 let g:NERDTreeMapJumpNextSibling = ''
 let g:NERDTreeMapJumpPrevSibling = ''
 
+" Match CtrlP
+let g:NERDTreeMapOpenSplit = '<c-s>'
+let g:NERDTreeMapOpenVSplit = '<c-v>'
+
 " QFEnter {{{2
 
 let g:qfenter_keymap = {}
