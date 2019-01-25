@@ -13,6 +13,7 @@
 "
 
 " TODOs {{{1
+" TODO-MB [190125] - Rename tag (rt) doesn't work properly when there is some other buffer above the target buffer.
 " TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
 " TODO-MB [180608] - Convert my old snippets into UtilSnips
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
