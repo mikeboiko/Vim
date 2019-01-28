@@ -700,6 +700,7 @@ Plug 'ludovicchabant/vim-gutentags'                           " Manage ctags
 Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
 Plug 'mattboehm/vim-unstack'                                  " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
+Plug 'n0v1c3/vira'                                            " Vim JIRA interface
 Plug 'nathanaelkane/vim-indent-guides'                        " Visual indent levels
 Plug 'posva/vim-vue'                                          " Vue filetype recognition
 Plug 'scrooloose/nerdcommenter'                               " Commenting
@@ -724,6 +725,8 @@ let g:airline_powerline_fonts=1
 
 let g:airline_section_a = '%f'
 let g:airline_section_c = '%{GetFoldStrings()}'
+
+" let g:airline_section_z = '%{ViraStatusLine()}'
 
 " ALE {{{2
 
@@ -803,9 +806,10 @@ let NERDTreeShowLineNumbers=1
 let g:NERDTreeMapJumpNextSibling = ''
 let g:NERDTreeMapJumpPrevSibling = ''
 
-" Match CtrlP
+" Match CtrlP when opening new files
 let g:NERDTreeMapOpenSplit = '<c-s>'
 let g:NERDTreeMapOpenVSplit = '<c-v>'
+let g:NERDTreeMapOpenInTab = '<c-t>'
 
 " QFEnter {{{2
 
@@ -858,6 +862,12 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 " Vim-QF {{{2
 " let g:qf_mapping_ack_style = 1
+
+" vira {{{2
+
+let g:vira_serv = "https://jira.boiko.online"
+let g:vira_user = "mike"
+let g:vira_pass = ""
 
 " YouCompleteMe{{{2
 
