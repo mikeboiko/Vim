@@ -1075,6 +1075,9 @@ au BufWritePre * call OnSave()
 " Preview Window
 autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
 
+" Enable spelling for these buffers
+au BufWinEnter,BufEnter COMMIT_EDITMSG setlocal spell
+
 " Folding{{{3
 set foldenable
 set foldlevelstart=0
