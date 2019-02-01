@@ -383,15 +383,6 @@ function! Quit()
     quit
 endf
 
-function! RepoGrep(...) " {{{2
-    " Fugitive Ggrep Wrapper
-    " Load QuickFix window with grep results
-    exe 'silent Ggrep! -i ' . a:1
-    let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ])
-    exe 'top ' . g:qfListHeight . ' copen'
-    redraw!
-endfunction
-
 function! SetCurrentWorkingDirectory() " {{{2
     " A standalone function to set the working directory to the project's root, or
     " to the parent directory of the current file if a root can't be found:
@@ -632,7 +623,8 @@ command! -nargs=+ -complete=command FindLocal
 command! FoldOpen let save_cursor = getcurpos() | try | silent foldopen! | catch | call setpos('.', save_cursor) | endtry
 
 " Grep {{{2
-command! -nargs=+ Grep execute 'silent grep! <args>' | top 10 copen | redraw!
+" Use ag to grep and put results quickfix list
+command! -nargs=+ Grep execute 'silent grep! <args>' | let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ]) | exe 'top ' . g:qfListHeight . ' copen' | redraw!
 
 " QuickFix/Location List Next {{{2
 " Wrap around after hitting first/last record
@@ -644,11 +636,6 @@ command! Lprev try | lprev | catch | llast | catch | endtry
 " GoToMatchedColumn {{{2
 " Since the QF list isn't populated with col numbers, this function allows you to jump to the proper column.
 command! GoToMatchedColumn exe "normal b" | let @/=w:searchStr | call search(@/) | set hls
-
-" FindGlobal {{{2
-" Search for string in current repo and put results in QuickFix window
-command! -nargs=+ -complete=command FindGlobal
-            \| try | call RepoGrep(<q-args>) | catch | endtry
 
 " Replace ^M Line endings {{{2
 
@@ -1291,13 +1278,19 @@ omap L $
 " When I used a single escape, vim started in Replace mode everytime
 nnoremap <esc><esc> :noh<esc>
 
-" Find ag {{{2
+" Grep with ag {{{2
 
 " Search code
 nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/Documents/GitRepos<s-left><space><left>
 
 " Search notes
 nnoremap <leader>fn :Grep ~/Dropbox/Notes<s-left><space><left>
+
+" Search git repo
+nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
+
+" Search for word under cursor in git repo
+map <leader>gw "xyiw:let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>x <c-r>q<cr>
 
 " Find Local {{{2
 
@@ -1306,17 +1299,6 @@ nnoremap <leader>fl :FindLocal<space>
 
 " Find word under cursor
 map <leader>fw "xyiw:call FindFunc("\\<".@x."\\>", '')<CR>
-
-" Find Global {{{2
-
-" Find in current Git Repo and put reslts in QuickFix window
-nnoremap <leader>fg :FindGlobal<space>
-
-" Ggrep word under cursor
-map <leader>gw "xyiw:exe "FindGlobal ".@x<CR>
-
-" Yank highlighted text into "z and Ggrep
-vnoremap <c-g> "xy:FindGlobal <c-r>x<CR>
 
 " Fix errors {{{2
 nnoremap <space>fi :ALEFix<CR>
