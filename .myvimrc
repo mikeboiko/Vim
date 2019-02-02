@@ -1530,6 +1530,12 @@ tnoremap <C-k> <C-W>k
 tnoremap <C-h> <C-W>h
 tnoremap <C-l> <C-W>l
 
+" This is useful when using vim inside :terminal
+nnoremap <left> <C-W>h
+nnoremap <right> <C-W>l
+nnoremap <up> <C-W>k
+nnoremap <down> <C-W>j
+
 " Resize
 nnoremap <leader>wgv :<C-U>exec "vertical resize +".v:count1<CR>
 nnoremap <leader>wgh :<C-U>exec "resize +".v:count1<CR>
