@@ -686,6 +686,7 @@ Plug 'ludovicchabant/vim-gutentags'                           " Manage ctags
 Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
 Plug 'mattboehm/vim-unstack'                                  " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
+Plug 'n0v1c3/vira'                                            " Vim in jira
 Plug 'nathanaelkane/vim-indent-guides'                        " Visual indent levels
 Plug 'posva/vim-vue'                                          " Vue filetype recognition
 Plug 'scrooloose/nerdcommenter'                               " Commenting
@@ -848,9 +849,8 @@ let g:indent_guides_enable_on_vim_startup = 1
 " vira {{{2
 
 let g:vira_serv = "https://jira.boiko.online"
-let g:vira_user = "mike"
-" let g:vira_user = system('lpass show --username boiko.online')[:-2]
-let g:vira_pass = ""
+let g:vira_user = system('lpass show --username boiko.online')[:-2]
+let g:vira_pass = system('lpass show --password boiko.online')[:-2]
 
 " YouCompleteMe{{{2
 
