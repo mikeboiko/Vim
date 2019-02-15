@@ -851,6 +851,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 let g:vira_serv = "https://jira.boiko.online"
 let g:vira_user = system('lpass show --username boiko.online')[:-2]
 let g:vira_pass = system('lpass show --password boiko.online')[:-2]
+let g:vira_browser = 'chromium'
 
 " YouCompleteMe{{{2
 
@@ -1131,8 +1132,8 @@ autocmd BufReadPost *.tsv setlocal nowrap
 " autocmd BufReadPost *.csv 1sp
 " autocmd BufReadPost *.psv 1sp
 " autocmd BufReadPost *.tsv 1sp
-" HTML/js/css/Vue {{{2
-autocmd FileType html,javascript,json,vue,css,scss,yml,yaml,markdown setlocal shiftwidth=2 tabstop=2
+" HTML/js/css/etc {{{2
+autocmd FileType html,javascript,json,vue,css,scss,yml,yaml,markdown,vim setlocal shiftwidth=2 tabstop=2
 
 " Vue {{{2
 
