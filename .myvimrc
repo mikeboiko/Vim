@@ -840,8 +840,8 @@ let g:UltiSnipsSnippetsDir = '~/Documents/GitRepos/Vim/Snippets'
 
 " vim-polyglot {{{2
 
-" I was getting some weird indentation happening with - lists
-let g:polyglot_disabled = ['markdown']
+" markdown: I was getting some weird indentation happening with - lists
+let g:polyglot_disabled = ['markdown', 'csv']
 
 " vim-unstack {{{2
 
@@ -876,8 +876,8 @@ let g:ycm_goto_buffer_command = 'horizontal-split'
 let g:ycm_python_binary_path = 'python3'
 
 " Since omnisharp is installed as a seperate plugin
-" let g:ycm_auto_start_csharp_server = 0
-" let g:ycm_auto_stop_csharp_server = 0
+let g:ycm_auto_start_csharp_server = 0
+let g:ycm_auto_stop_csharp_server = 0
 let g:ycm_csharp_server_port = 2000
 
 " Remaps
