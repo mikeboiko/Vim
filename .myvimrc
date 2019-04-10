@@ -726,6 +726,7 @@ let g:ale_fixers = {
             \ }
 
 let g:ale_linters = {
+            \ 'cs': ['OmniSharp'],
             \ 'python': ['flake8']
             \ }
 
@@ -877,12 +878,21 @@ nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 " OmniSharp {{{2
 
 " C# completion
+
+" For WSL:
 " First download the WINDOWS HTTP 64 bit release and place into directory below:
 " https://github.com/OmniSharp/omnisharp-roslyn/releases
 
-let g:OmniSharp_server_path = '/mnt/c/omnisharp.http-win-x64/OmniSharp.exe'
-let g:OmniSharp_translate_cygwin_wsl = 1
+" For Arch Linux:
+" Install omnisharp-roslyn server
+" yay msbuild
+" Run vim command :OmniSharpInstall
+
+" let g:OmniSharp_server_path = '/mnt/c/omnisharp.http-win-x64/OmniSharp.exe'
+" let g:OmniSharp_translate_cygwin_wsl = 1
+let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'
 let g:OmniSharp_selector_ui = 'ctrlp'
+let g:OmniSharp_server_use_mono = 1
 let g:OmniSharp_timeout = 10
 
 " Editor Settings {{{1
