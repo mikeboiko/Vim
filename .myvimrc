@@ -13,6 +13,7 @@
 "
 
 " TODOs {{{1
+" TODO-MB [190409] - Try https://github.com/Shougo/echodoc.vim
 " TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
 " TODO-MB [180608] - Convert my old snippets into UtilSnips
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
@@ -717,6 +718,7 @@ let g:airline_section_c = '%{GetFoldStrings()}'
 let g:ale_lint_on_text_changed = 'never'
 
 let g:ale_fixers = {
+            \ '*': ['remove_trailing_lines', 'trim_whitespace'],
             \ 'python': ['yapf'],
             \ 'javascript': ['prettier'],
             \ 'json': ['prettier'],
@@ -725,8 +727,13 @@ let g:ale_fixers = {
             \ 'yaml': ['prettier']
             \ }
 
+" Note: in order to use omnisharp with ALE you have to use python 3.6.0:
+" pyenv install 3.6.0
+" cd ~/.vim/plugged/omnisharp-vim/python
+" pyenv local 3.6.0
+
 let g:ale_linters = {
-            \ 'cs': ['OmniSharp'],
+            \ 'cs': ['omnisharp'],
             \ 'python': ['flake8']
             \ }
 
@@ -869,7 +876,8 @@ let g:ycm_goto_buffer_command = 'horizontal-split'
 let g:ycm_python_binary_path = 'python3'
 
 " Since omnisharp is installed as a seperate plugin
-let g:ycm_auto_start_csharp_server = 1
+" let g:ycm_auto_start_csharp_server = 0
+" let g:ycm_auto_stop_csharp_server = 0
 let g:ycm_csharp_server_port = 2000
 
 " Remaps
@@ -885,15 +893,20 @@ nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " For Arch Linux:
 " Install omnisharp-roslyn server
-" yay msbuild
+" yay msbuild-stable
+" s pacman -S libuv
 " Run vim command :OmniSharpInstall
 
-" let g:OmniSharp_server_path = '/mnt/c/omnisharp.http-win-x64/OmniSharp.exe'
 " let g:OmniSharp_translate_cygwin_wsl = 1
+" let g:OmniSharp_server_path = '/mnt/c/omnisharp.http-win-x64/OmniSharp.exe'
+" let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/run'
 let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'
 let g:OmniSharp_selector_ui = 'ctrlp'
-let g:OmniSharp_server_use_mono = 1
-let g:OmniSharp_timeout = 10
+let g:OmniSharp_timeout = 2
+let g:OmniSharp_port = 2000
+let g:OmniSharp_highlight_types = 1
+
+" TODO-MB [190409] - In order to run omnisharp and integrate YCM on multiple projects, set: g:OmniSharp_server_ports
 
 " Editor Settings {{{1
 " Display{{{2
