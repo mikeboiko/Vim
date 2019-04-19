@@ -31,7 +31,7 @@ function! CompileCsharp()
 
     if (len(filter(getqflist(), 'v:val.text =~ "error"')) == 0)
         " Run Asynchronously - keep focus on vim
-        silent exe trim("terminal ++close ++rows=15 ".b:startapp.b:startfile." ".b:startargs)
+        silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)
         cclose
     else
         " Open QF window
