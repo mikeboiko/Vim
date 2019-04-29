@@ -927,6 +927,8 @@ silent! colorscheme solarized
 " Solarized settings
 " let g:solarized_italic=0
 let g:solarized_bold=0
+" This gets rid of the grey background
+let g:solarized_termtrans = 1
 
 " Set GVIM Font
 " To select form availbale fonts :set guifont=*
