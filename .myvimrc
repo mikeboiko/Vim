@@ -1218,10 +1218,6 @@ nnoremap <leader>a. mzA.<esc>`z
 inoremap ;; <esc>mzA;<esc>`z
 nnoremap <leader>a; mzA;<esc>`z
 
-" Auto-Indent {{{2
-" Indent entire file and return to current line
-nnoremap <leader>ai mpgg=G'p
-
 " Close all location lists {{{2
 
 nnoremap <leader>ac :call AllClose()<CR>
@@ -1237,9 +1233,6 @@ nnoremap ql @:
 
 " Get into command history
 nnoremap q; q:
-
-" Paste
-cmap <c-v> <c-r>+
 
 " Comment {{{2
 
@@ -1304,6 +1297,14 @@ omap L $
 " When I used a single escape, vim started in Replace mode everytime
 nnoremap <esc><esc> :noh<esc>
 
+" Go to Definition{{{2
+
+" Preview definition in split window and focus on fold
+map gp :sp<CR>gdzMzvzz
+
+" Go to definition and focus on fold
+map gd gdzMzvzz
+
 " Grep with ag {{{2
 
 " Search code
@@ -1363,6 +1364,9 @@ nnoremap <leader>gh :tabe %<CR>:terminal ++curwin git --no-pager hist<CR>
 nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
 " nnoremap <leader>gap :silent Git add --all<cr>:silent Gcommit<cr>:silent Gpush<cr>:redraw!<cr>
 
+" My repo tool commands
+nnoremap <leader>rs :Repo st -s<cr>
+
 " Help {{{2
 
 " Pull up help for word under cursor in a new tab
@@ -1419,14 +1423,6 @@ endif
 
 " Double Commander
 nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\doublecmd.exe" %:p:h<CR>:redraw!<CR>
-
-" Go to Definition{{{2
-
-" Preview definition in split window and focus on fold
-map gp :sp<CR>gdzMzvzz
-
-" Go to definition and focus on fold
-map gd gdzMzvzz
 
 " Rename Tag {{{2
 
@@ -1488,10 +1484,10 @@ nnoremap <leader>snl :call SnipLog()<CR>
 
 " Show and Trim Spaces {{{2
 
-" nnoremap <leader>ts mm:TrimSpaces<CR>
 nnoremap <leader>ts :ALEFix trim_whitespace<CR>
 
 " Sorting {{{2
+" Sort paragraph
 nnoremap <leader>so vip:sort<CR>
 
 " Source {{{2
@@ -1510,11 +1506,6 @@ nnoremap <leader>st :SpellToggle<CR>
 
 " TagBar {{{2
 nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
-
-" Repo {{{2
-
-" My repo tool commands
-nnoremap <leader>rs :Repo st -s<cr>
 
 " Run Scripts {{{2
 
@@ -1562,10 +1553,6 @@ nnoremap <right> <C-W>l
 nnoremap <up> <C-W>k
 nnoremap <down> <C-W>j
 
-" Resize
-nnoremap <leader>wgv :<C-U>exec "vertical resize +".v:count1<CR>
-nnoremap <leader>wgh :<C-U>exec "resize +".v:count1<CR>
-
 " Windows Style Commands {{{2
 
 " Redo
@@ -1575,6 +1562,7 @@ inoremap <c-y> <Esc><C-r>
 " Paste from clipboard
 nnoremap <c-v> o<esc>P==
 inoremap <c-v> <c-r>+
+cmap <c-v> <c-r>+
 
 " Yank {{{2
 " Yank till the end of the line
