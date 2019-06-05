@@ -851,6 +851,7 @@ let g:polyglot_disabled = ['markdown', 'csv']
 " vim-unstack {{{2
 
 let g:unstack_populate_quickfix=1
+let g:unstack_layout = "portrait"
 
 " Vim-Indent-Guides {{{2
 " Indent Guides default is on
