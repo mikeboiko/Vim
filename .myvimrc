@@ -1039,6 +1039,7 @@ set virtualedit=all
 
 " Ignore file patterns globally
 set wildignore+=*.swp
+set wildignore+=package.json,package-lock.json,node_modules
 
 " Standard Encoding
 set encoding=utf8
