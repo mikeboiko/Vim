@@ -767,9 +767,6 @@ let g:ctrlp_prompt_mappings = {
             \ 'ToggleType(-1)':       ['<c-b>'],
             \ }
 
-" Emmet HTML/JS {{{2
-let g:user_emmet_leader_key = '<c-b>'
-
 " NerdCommenter{{{2
 
 " NerdCommenter add a space after comment
@@ -1343,6 +1340,10 @@ nnoremap zx zMzvzz
 noremap <silent> <leader>zz :call WrapFold(v:count)<CR>
 noremap <silent> <leader>zj :call WrapFold(foldlevel(line(".")) + 1)<CR>
 noremap <silent> <leader>zk :call WrapFold(foldlevel(line(".")) - 1)<CR>
+
+" Visual fold text objects
+xnoremap iz :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zv[z<cr>
+xnoremap az :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zV[z<cr>
 
 " Font Size Bigger/Smaller {{{2
 
