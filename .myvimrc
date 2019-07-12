@@ -1280,10 +1280,6 @@ inoremap <c-k> <c-p>
 nnoremap <leader><space> "z
 nnoremap <leader>p "adiwP
 
-" Edit Common Files {{{2
-nnoremap <leader>ev :call EditCommonFile('$CODE/Vim/.myvimrc')<CR>
-nnoremap <leader>eac :call EditCommonFile('$CODE/Windows/AHK/Common.ahk')<CR>
-
 " End/Beginning of Line {{{2
 nnoremap <silent> H ^
 nnoremap <silent> L $
