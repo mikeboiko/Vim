@@ -1525,6 +1525,8 @@ nnoremap <c-t> mm:tabe <c-r>%<CR>`m
 " Toggle tabs
 nnoremap qj gt
 nnoremap qk gT
+nnoremap <C-g> :tabp<CR>
+tnoremap <C-g> <C-W>:tabp<CR>
 
 " TODOs {{{2
 
