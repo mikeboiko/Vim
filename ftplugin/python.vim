@@ -6,7 +6,7 @@
 " Editor Config {{{1
 " Indentation {{{2
 setlocal nosmartindent
-" setlocal foldmethod=manual
+setlocal foldmethod=manual
 
 " Mappings {{{1
 
