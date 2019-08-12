@@ -1441,6 +1441,10 @@ au BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
             \| nnoremap <buffer> <Enter>
             \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/gI<CR>`z
 
+" Reports {{{2
+
+nnoremap <leader>tp :terminal python /home/mike/Documents/GitRepos/WebApps/Tables/python/tables_client.py -f printbalance<CR>
+
 " Quit {{{2
 
 " Close extra windows then quit
