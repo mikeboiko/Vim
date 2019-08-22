@@ -13,15 +13,14 @@
 "
 
 " TODOs {{{1
+
 " TODO-MB [190125] - Rename tag (rt) doesn't work properly when there is some other buffer above the target buffer.
 " TODO-MB [190409] - Try https://github.com/Shougo/echodoc.vim
 " TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
 " TODO-MB [180608] - Convert my old snippets into UtilSnips
 " TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
 " TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
-" TODO-MB [180407] - Consider changing fold marker to $$$ so it doesn't mess with bracket interpretting/closing. I tested the problem with vue. Perhaps it would be better to look into syntax based folding - it would be less hacky. My status bar/search should still work though.
 " TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
-" TODO-MB [180117] - Create macro (or python script) to add/remove fold text (functions/classes/etc)
 
 " Constants {{{1
 
@@ -1221,13 +1220,13 @@ nnoremap <leader>a. mzA.<esc>`z
 inoremap ;; <esc>mzA;<esc>`z
 nnoremap <leader>a; mzA;<esc>`z
 
-" Close all location lists {{{2
-
-nnoremap <leader>ac :call AllClose()<CR>
-
 " Close Toggle {{{2
 " Toggle between ++close and ++noclose when running term <leader>rr
 nnoremap <leader>ct :CloseToggle<CR>
+
+" Close all location lists {{{2
+
+nnoremap <leader>ac :call AllClose()<CR>
 
 " Commands {{{2
 
@@ -1296,28 +1295,6 @@ omap L $
 " When I used a single escape, vim started in Replace mode everytime
 nnoremap <esc><esc> :noh<esc>
 
-" Go to Definition{{{2
-
-" Preview definition in split window and focus on fold
-map gp :sp<CR>gdzMzvzz
-
-" Go to definition and focus on fold
-map gd gdzMzvzz
-
-" Grep with ag {{{2
-
-" Search code
-nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/Documents/GitRepos<s-left><space><left>
-
-" Search notes
-nnoremap <leader>fn :Grep ~/syncthing/Sync/Notes<s-left><space><left>
-
-" Search git repo
-nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
-
-" Search for word under cursor in git repo
-map <leader>gw "xyiw:let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>x <c-r>q<cr>
-
 " Find Local {{{2
 
 " Find string in current file
@@ -1370,6 +1347,28 @@ nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
 " My repo tool commands
 nnoremap <leader>rs :Repo st -s<cr>
 
+" Go to Definition{{{2
+
+" Preview definition in split window and focus on fold
+map gp :sp<CR>gdzMzvzz
+
+" Go to definition and focus on fold
+map gd gdzMzvzz
+
+" Grep with ag {{{2
+
+" Search code
+nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/Documents/GitRepos<s-left><space><left>
+
+" Search notes
+nnoremap <leader>fn :Grep ~/syncthing/Sync/Notes<s-left><space><left>
+
+" Search git repo
+nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
+
+" Search for word under cursor in git repo
+map <leader>gw "xyiw:let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>x <c-r>q<cr>
+
 " Help {{{2
 
 " Pull up help for word under cursor in a new tab
@@ -1382,6 +1381,9 @@ inoremap <silent> <enter> <esc>
 " Jump to proper column when using marks
 nnoremap ' `
 
+" NERDTree {{{2
+nnoremap <leader>on :NERDTreeFind<CR>
+
 " Navigation {{{2
 " Do not automatically adjust for line wrapping
 nnoremap <expr> j v:count ? 'j' : 'gj'
@@ -1389,9 +1391,6 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 
 " Go back to the last file
 nnoremap <BS> <C-^>
-
-" NERDTree {{{2
-nnoremap <leader>on :NERDTreeFind<CR>
 
 " New line {{{2
 
@@ -1427,24 +1426,19 @@ endif
 " Double Commander
 nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\doublecmd.exe" %:p:h<CR>:redraw!<CR>
 
-" Rename Tag {{{2
+" QuickFix/Location Lists {{{2
 
-" Copy word under cursor into "a and paste into new buffer
-nnoremap <leader>rt mz"ayiw:1sp wordRenamingBuffer<CR>"aP
+" I put this at the end of the mapping section because of some conflicts with <c-r>
 
-" After edits, press enter, the original word is renamed globally
-" The search is case sensitive because of I in .../gI
-" Press escape to cancel
-au BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
-            \| nnoremap <buffer> <Esc> :q!<CR>
-            \| nnoremap <buffer> <c-s> <nop>
-            \| nnoremap <buffer> qw <nop>
-            \| nnoremap <buffer> <Enter>
-            \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/gI<CR>`z
+" Go to next/previous search result
+" nnoremap <leader>zf zMzvzz
+nnoremap <C-f> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <C-d> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <C-r> :Cnext<CR>:FoldOpen<CR>
+nnoremap <C-e> :Cprev<CR>:FoldOpen<CR>
 
-" Reports {{{2
-
-nnoremap <leader>tp :terminal python /home/mike/Documents/GitRepos/WebApps/Tables/python/tables_client.py -f printbalance<CR>
+nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
+nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
 " Quit {{{2
 
@@ -1465,6 +1459,34 @@ nmap gf gf
 au CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR> |
             \ nnoremap <buffer> qq :q!<CR>
 
+" Rename Tag {{{2
+
+" Copy word under cursor into "a and paste into new buffer
+nnoremap <leader>rt mz"ayiw:1sp wordRenamingBuffer<CR>"aP
+
+" After edits, press enter, the original word is renamed globally
+" The search is case sensitive because of I in .../gI
+" Press escape to cancel
+au BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
+            \| nnoremap <buffer> <Esc> :q!<CR>
+            \| nnoremap <buffer> <c-s> <nop>
+            \| nnoremap <buffer> qw <nop>
+            \| nnoremap <buffer> <Enter>
+            \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/gI<CR>`z
+
+" Reports {{{2
+
+nnoremap <leader>tp :terminal python /home/mike/Documents/GitRepos/WebApps/Tables/python/tables_client.py -f printbalance<CR>
+
+" Run Scripts {{{2
+
+" Initialize arguments required to run script
+au BufEnter,BufCreate,BufWrite * call StartArgInitialize()
+
+" Run Script Asynchronously
+" For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
+nnoremap <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
+
 " Save Buffer {{{2
 
 nnoremap qw :w<CR>
@@ -1481,6 +1503,10 @@ vnoremap K 5k
 nnoremap J 5j
 vnoremap J 5j
 
+" Show and Trim Spaces {{{2
+
+nnoremap <leader>ts :ALEFix trim_whitespace<CR>
+
 " Snippets {{{2
 " nnoremap <leader>snc :call SnipClass()<CR>
 nnoremap <leader>snc :call SnipComment()<CR>
@@ -1489,10 +1515,6 @@ nnoremap <leader>snh :call SnipHeader()<CR>
 nnoremap <leader>sni :call SnipIf()<CR>
 nnoremap <leader>snl :call SnipLog()<CR>
 
-" Show and Trim Spaces {{{2
-
-nnoremap <leader>ts :ALEFix trim_whitespace<CR>
-
 " Sorting {{{2
 " Sort paragraph
 nnoremap <leader>so vip:sort<CR>
@@ -1500,39 +1522,16 @@ nnoremap <leader>so vip:sort<CR>
 " Source {{{2
 nnoremap <leader>sv :w<CR>:so $HOME/.vimrc<CR>
 
+" Spell Toggle {{{2
+" Toggle the spelling on/off
+nnoremap <leader>st :SpellToggle<CR>
+
 " Suspend {{{2
 
 " Don't suspend!
 noremap <c-z> <nop>
 " noremap <c-z>c :Start! ~/clipboard.sh --write<CR>
 " noremap <c-z>v :Start! ~/clipboard.sh --read<CR>
-
-" Spell Toggle {{{2
-" Toggle the spelling on/off
-nnoremap <leader>st :SpellToggle<CR>
-
-" TagBar {{{2
-nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
-
-" Run Scripts {{{2
-
-" Initialize arguments required to run script
-au BufEnter,BufCreate,BufWrite * call StartArgInitialize()
-
-" Run Script Asynchronously
-" For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
-nnoremap <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
-
-" Tabs {{{2
-
-" Open current file in new tab
-nnoremap <c-t> mm:tabe <c-r>%<CR>`m
-
-" Toggle tabs
-nnoremap qm gt
-nnoremap qn gT
-nnoremap <C-g> :tabp<CR>
-tnoremap <C-g> <C-W>:tabp<CR>
 
 " TODOs {{{2
 
@@ -1545,6 +1544,31 @@ nnoremap <silent> <leader>tt :exe 'normal O' . b:NERDCommenterDelims['left'] . '
 
 " Find all TODOs
 nnoremap <silent> <leader>tf :call GetTODOs()<CR>
+
+" Tabs {{{2
+
+" Open current file in new tab
+nnoremap <c-t> mm:tabe <c-r>%<CR>`m
+
+" Toggle tabs
+nnoremap qm gt
+nnoremap qn gT
+nnoremap <C-g> :tabp<CR>
+tnoremap <C-g> <C-W>:tabp<CR>
+
+" TagBar {{{2
+nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
+
+" Windows Style Commands {{{2
+
+" Redo
+nnoremap <c-y> <c-r>
+inoremap <c-y> <Esc><C-r>
+
+" Paste from clipboard
+nnoremap <c-v> o<esc>P==
+inoremap <c-v> <c-r>+
+cmap <c-v> <c-r>+
 
 " Windows {{{2
 
@@ -1560,37 +1584,12 @@ tnoremap <C-k> <C-W>k
 tnoremap <C-h> <C-W>h
 tnoremap <C-l> <C-W>l
 
-" Windows Style Commands {{{2
-
-" Redo
-nnoremap <c-y> <c-r>
-inoremap <c-y> <Esc><C-r>
-
-" Paste from clipboard
-nnoremap <c-v> o<esc>P==
-inoremap <c-v> <c-r>+
-cmap <c-v> <c-r>+
-
 " Yank {{{2
 " Yank till the end of the line
 nnoremap Y y$
 
 " Yank all
 nnoremap <leader>ya mzggyG`z
-
-" QuickFix/Location Lists {{{2
-
-" I put this at the end of the mapping section because of some conflicts with <c-r>
-
-" Go to next/previous search result
-" nnoremap <leader>zf zMzvzz
-nnoremap <C-f> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
-nnoremap <C-d> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
-nnoremap <C-r> :Cnext<CR>:FoldOpen<CR>
-nnoremap <C-e> :Cprev<CR>:FoldOpen<CR>
-
-nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
-nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
 " Templates {{{1
 " Load template based on current file extension (:help template)
