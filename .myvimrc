@@ -864,7 +864,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 let g:vira_srvs = ['https://jira.boiko.online']
 let g:vira_usrs = ['mike']
-let g:vira_pass = ['lpass show --password boiko.online']
+" let g:vira_pass = ['lpass show --password boiko.online']
 
 " YouCompleteMe{{{2
 
@@ -1485,7 +1485,7 @@ au BufEnter,BufCreate,BufWrite * call StartArgInitialize()
 
 " Run Script Asynchronously
 " For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
-nnoremap <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
+nnoremap <silent> <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
 
 " Save Buffer {{{2
 
