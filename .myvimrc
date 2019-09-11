@@ -672,6 +672,8 @@ call plug#begin(vimPlugDir)
 " Cheat.sh was not letting me perform Gdiff on .py files in Ubuntu18
 " Plug 'dbeniamine/cheat.sh-vim'                              " cheat sheet
 
+" Plug 'file:///home/mike/.vim/plugged/test'
+
 Plug 'Konfekt/FastFold'                                       " Speed up syntax based folding
 Plug 'OmniSharp/omnisharp-vim'                                " C# magic
 Plug 'PProvost/vim-ps1'                                       " Powershell file types
@@ -862,9 +864,9 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 " vira {{{2
 
-let g:vira_srvs = ['https://jira.boiko.online']
-let g:vira_usrs = ['mike']
-" let g:vira_pass = ['lpass show --password boiko.online']
+let g:vira_srvs = ['https://jira.boiko.online', 'https://jira.tgall.ca']
+let g:vira_usrs = ['mike', 'mikeboiko']
+let g:vira_pass = ['lpass show --password boiko.online', 'lpass show --password tgall.ca']
 
 " YouCompleteMe{{{2
 
