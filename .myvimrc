@@ -689,6 +689,7 @@ Plug 'junegunn/gv.vim'                                        " Access git files
 Plug 'kalekundert/vim-coiled-snake'                           " Python syntax folding
 Plug 'ludovicchabant/vim-gutentags'                           " Manage ctags
 Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
+Plug 'masukomi/vim-markdown-folding'                          " Syntax based fording for md
 Plug 'mattboehm/vim-unstack'                                  " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
 Plug 'mikeboiko/vim-sort-folds'                               " Sort vim folds
@@ -705,6 +706,7 @@ Plug 'tpope/vim-surround'                                     " Surround all the
 Plug 'vim-airline/vim-airline'                                " Nice status bar
 Plug 'w0rp/ale'                                               " Async Linting
 Plug 'yssl/QFEnter'                                           " QuickFix lists - open in tabs/split windows
+
 
 " End initialization of plugin system
 call plug#end()
@@ -1167,6 +1169,11 @@ autocmd BufReadPost *.tsv setlocal nowrap
 " autocmd BufReadPost *.tsv 1sp
 " HTML/js/css/etc {{{2
 autocmd FileType html,javascript,json,vue,css,scss,yml,yaml,markdown,vim setlocal shiftwidth=2 tabstop=2
+
+" Markdown {{{2
+
+" Fix the syntax highlighting that randomly stops
+autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
 
 " Vue {{{2
 
