@@ -1113,7 +1113,7 @@ set autoindent
 " Set tab width
 set tabstop=4
 set softtabstop=4
-set shiftwidth=4
+set shiftwidth=0
 
 " Use spaces instead of tabs
 set expandtab
@@ -1168,7 +1168,7 @@ autocmd BufReadPost *.tsv setlocal nowrap
 " autocmd BufReadPost *.psv 1sp
 " autocmd BufReadPost *.tsv 1sp
 " HTML/js/css/etc {{{2
-autocmd FileType html,javascript,json,vue,css,scss,yml,yaml,markdown,vim setlocal shiftwidth=2 tabstop=2
+autocmd FileType html,javascript,json,vue,css,scss,yml,yaml,markdown,vim setlocal tabstop=2
 
 " Markdown {{{2
 
