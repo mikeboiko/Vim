@@ -1346,9 +1346,6 @@ nnoremap <leader>gs :Gstatus<CR>
 " Display git diff in terminal
 nnoremap <leader>rd :terminal git --no-pager diff<CR>
 
-" Git history
-nnoremap <leader>gh :tabe %<CR>:terminal ++curwin git --no-pager hist<CR>
-
 " Git - add all, commit and push
 nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
 " nnoremap <leader>gap :silent Git add --all<cr>:silent Gcommit<cr>:silent Gpush<cr>:redraw!<cr>
@@ -1485,7 +1482,7 @@ au BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
 
 " Reports {{{2
 
-nnoremap <leader>tp :terminal python /home/mike/Documents/GitRepos/WebApps/Tables/python/tables_client.py -f printbalance<CR>
+nnoremap <leader>tp :tabe %<CR>:terminal ++curwin python /home/mike/Documents/GitRepos/WebApps/Tables/python/tables_client.py -f printbalance<CR>
 
 " Run Scripts {{{2
 
