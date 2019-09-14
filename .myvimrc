@@ -701,6 +701,7 @@ Plug 'scrooloose/nerdtree'                                    " Tree file browse
 Plug 'sheerun/vim-polyglot'                                   " Language Pack (syntax/indent)
 Plug 'tpope/vim-fugitive'                                     " Git wrapper
 Plug 'tpope/vim-repeat'                                       " Repeat surround and commenting with .
+Plug 'tpope/vim-rhubarb'                                      " GitHub integration with fugitive
 Plug 'tpope/vim-scriptease'                                   " For debugging and writing plugins
 Plug 'tpope/vim-surround'                                     " Surround all the stuff
 Plug 'vim-airline/vim-airline'                                " Nice status bar
