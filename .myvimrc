@@ -1567,12 +1567,13 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 " Vira {{{2
 
-nnoremap <silent> <leader>vc :ViraComment<cr> - Insert comment to active issue in normal mode.
-nnoremap <silent> <leader>vC :ViraCommentInsert<cr> - Insert comment to active issue in normal mode.
-nnoremap <silent> <leader>vi :ViraSetIssue<cr> - Select active issue in normal mode.
-nnoremap <silent> <leader>vp :ViraSetProject<cr> - Select active project in normal mode.
-nnoremap <silent> <leader>vr :ViraGetReport<cr> - Call report from normal mode
-nnoremap <silent> <leader>vs :ViraSetServer<cr> - Change your active JIRA server
+nnoremap <silent> <leader>vT :ViraTodo<cr>
+nnoremap <silent> <leader>vc :ViraComment<cr>
+nnoremap <silent> <leader>vi :ViraSetIssue<cr>
+nnoremap <silent> <leader>vp :ViraSetProject<cr>
+nnoremap <silent> <leader>vr :ViraGetReport<cr>
+nnoremap <silent> <leader>vs :ViraSetServer<cr>
+nnoremap <silent> <leader>vt :ViraGetTodo<cr>
 
 " Windows Style Commands {{{2
 
