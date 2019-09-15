@@ -686,6 +686,7 @@ Plug 'ervandew/supertab'                                      " Insert mode comp
 Plug 'godlygeek/tabular'                                      " Align things
 Plug 'honza/vim-snippets'                                     " Snippet library
 Plug 'junegunn/gv.vim'                                        " Access git files easier
+Plug 'junegunn/vader.vim'                                     " VimScript testing
 Plug 'kalekundert/vim-coiled-snake'                           " Python syntax folding
 Plug 'ludovicchabant/vim-gutentags'                           " Manage ctags
 Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
@@ -707,7 +708,6 @@ Plug 'tpope/vim-surround'                                     " Surround all the
 Plug 'vim-airline/vim-airline'                                " Nice status bar
 Plug 'w0rp/ale'                                               " Async Linting
 Plug 'yssl/QFEnter'                                           " QuickFix lists - open in tabs/split windows
-
 
 " End initialization of plugin system
 call plug#end()
@@ -738,6 +738,7 @@ let g:ale_fixers = {
             \ 'vue': ['prettier'],
             \ 'yaml': ['prettier']
             \ }
+
 
 " Note: in order to use omnisharp with ALE you have to use python 3.6.0:
 " pyenv install 3.6.0
@@ -785,7 +786,8 @@ let g:NERDRemoveExtraSpaces=1
 let g:NERDCustomDelimiters = {
             \ 'python': { 'left': '#', 'right': '' },
             \ 'dosbatch': { 'left': 'REM', 'right': '' },
-            \ 'sebol': { 'left': '!', 'right': '' }
+            \ 'sebol': { 'left': '!', 'right': '' },
+            \ 'vader': { 'left': '#'}
             \ }
 
 
@@ -870,6 +872,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 let g:vira_srvs = ['https://jira.boiko.online', 'https://jira.tgall.ca']
 let g:vira_usrs = ['mike', 'mikeboiko']
 let g:vira_pass = ['lpass show --password boiko.online', 'lpass show --password tgall.ca']
+let g:vira_skip_cert_verify = 1
 
 " YouCompleteMe{{{2
 
@@ -1241,7 +1244,7 @@ nnoremap <leader>ac :call AllClose()<CR>
 " Commands {{{2
 
 " Rerun last command
-nnoremap ql @:
+nnoremap qr @:
 
 " Get into command history
 nnoremap q; q:
@@ -1314,7 +1317,7 @@ nnoremap <leader>fl :FindLocal<space>
 map <leader>fw "xyiw:call FindFunc("\\<".@x."\\>", '')<CR>
 
 " Fix errors {{{2
-nnoremap <space>fi :ALEFix<CR>
+nnoremap <leader>fi :ALEFix<CR>
 
 " Folding {{{2
 
