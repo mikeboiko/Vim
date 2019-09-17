@@ -1424,13 +1424,13 @@ autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
 " Explorer
 nnoremap <leader>oe :silent !explorer.exe .<CR>:redraw!<CR>
 
-" Chrome
+" Browser
 if $WSL == "true"
-    nnoremap <leader>oc :exe 'term ++close "/mnt/c/Program Files ' .
+    nnoremap <leader>ob :exe 'term ++close "/mnt/c/Program Files ' .
                 \ '(x86)/Google/Chrome/Application/chrome.exe"' .
                 \ ' "' . ConvertWSLpath(expand("%:p"), '-m') . '"'<CR>
 else
-    nnoremap <leader>oc :exe 'term ++close chromium "' . expand("%:p") . '"'<CR>
+    nnoremap <leader>ob :exe 'term ++close firefox "' . expand("%:p") . '"'<CR>
 endif
 
 " Double Commander
