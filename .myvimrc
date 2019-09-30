@@ -1571,13 +1571,13 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 " Vira {{{2
 
-nnoremap <silent> <leader>vT :ViraTodo<cr>
+nnoremap <silent> <leader>vT :ViraTodos<cr>
 nnoremap <silent> <leader>vc :ViraComment<cr>
-nnoremap <silent> <leader>vi :ViraSetIssue<cr>
-nnoremap <silent> <leader>vp :ViraSetProject<cr>
-nnoremap <silent> <leader>vr :ViraGetReport<cr>
-nnoremap <silent> <leader>vs :ViraSetServer<cr>
-nnoremap <silent> <leader>vt :ViraGetTodo<cr>
+nnoremap <silent> <leader>vi :ViraIssues<cr>
+nnoremap <silent> <leader>vp :ViraProjects<cr>
+nnoremap <silent> <leader>vr :ViraReport<cr>
+nnoremap <silent> <leader>vs :ViraServer<cr>
+nnoremap <silent> <leader>vt :ViraTodo<cr>
 
 " Windows Style Commands {{{2
 
