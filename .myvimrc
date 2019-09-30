@@ -14,6 +14,7 @@
 
 " TODOs {{{1
 
+" TODO-MB [190924] - Fix ctrl+r mapping conflict. Use :Scriptnames to look at source order.
 " TODO-MB [190125] - Rename tag (rt) doesn't work properly when there is some other buffer above the target buffer.
 " TODO-MB [190409] - Try https://github.com/Shougo/echodoc.vim
 " TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
