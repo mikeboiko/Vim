@@ -1,3 +1,3 @@
-# vim <!-- {{{1 -->
+# vim
 
 My vim configuration files
