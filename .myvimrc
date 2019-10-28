@@ -1386,9 +1386,6 @@ map <leader>gw "xyiw:let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:G
 " Pull up help for word under cursor in a new tab
 nnoremap <expr> <leader>h ":help " . expand("<cword>") . "\n"
 
-" Insert Mode Escape {{{2
-inoremap <silent> <enter> <esc>
-
 " Marks {{{2
 " Jump to proper column when using marks
 nnoremap ' `
@@ -1405,9 +1402,6 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 nnoremap <BS> <C-^>
 
 " New line {{{2
-
-" New line in insert mode
-inoremap <c-o> <CR>
 
 " Add blank line after current line
 nnoremap <leader>aj :<CR>mzo<Esc>`z:<CR>
