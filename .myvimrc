@@ -871,9 +871,9 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 " vira {{{2
 
-let g:vira_srvs = ['https://jira.boiko.online', 'https://jira.tgall.ca']
+let g:vira_srvs = ['https://jira.boiko.ca', 'https://jira.tgall.ca']
 let g:vira_usrs = ['mike', 'mikeboiko']
-let g:vira_pass = ['lpass show --password boiko.online', 'lpass show --password tgall.ca']
+let g:vira_pass = ['lpass show --password boiko.ca', 'lpass show --password tgall.ca']
 let g:vira_skip_cert_verify = 1
 
 " YouCompleteMe{{{2
