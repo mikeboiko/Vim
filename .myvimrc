@@ -10,20 +10,6 @@
 "     \|___||___|/  |____| \|____|      |____|/
 "       \(    )/      \(      \(          )/
 "        '    '        '       '          '
-"
-
-" TODOs {{{1
-
-" TODO-MB [191002] - Git diff not working for some python files. Look at BufNewFile autocommand
-" TODO-MB [190924] - Fix ctrl+r mapping conflict. Use :Scriptnames to look at source order.
-" TODO-MB [190125] - Rename tag (rt) doesn't work properly when there is some other buffer above the target buffer.
-" TODO-MB [190409] - Try https://github.com/Shougo/echodoc.vim
-" TODO-MB [180608] - Find plugin to create function/class/etc text objects for python and js/vue. checkout vim-pythonsense
-" TODO-MB [180608] - Convert my old snippets into UtilSnips
-" TODO-MB [180505] - Move Folds status line to the right side just before filetype - where tagbar is currently
-" TODO-MB [180416] - Make my <leader>p into an action map so I could apply it to any text object. This way I could get rid of <leader><leader> maybe?
-" TODO-MB [180206] - gd should open folds after going to definition. Try in C# project
-
 " Constants {{{1
 
 " Max Number of Records to show in QF/Location Lists
