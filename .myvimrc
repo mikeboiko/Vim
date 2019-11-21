@@ -48,22 +48,6 @@ function! BufDo(command) " {{{2
     execute 'buffer ' . currBuff
 endfunction
 
-function! BuildYCM(info) " {{{2
-    " Build YouCompleteMe after vim-plug clones the repo
-    " info is a dictionary with 3 fields
-    " - name:   name of the plugin
-    " - status: 'installed', 'updated', or 'unchanged'
-    " - force:  set on PlugInstall! or PlugUpdate!
-    if a:info.status == 'installed' || a:info.force
-        if has("unix")
-            !./install.py --all
-            " !./install.py --cs-completer --js-completer
-        else
-            !.\install.py --all
-        endif
-    endif
-endfunction
-
 function! CloseQuickFixWindow() " {{{2
     " If the window is quickfix, proceed
     if &buftype=="quickfix"
@@ -662,40 +646,43 @@ call plug#begin(vimPlugDir)
 
 " Plug 'file:///home/mike/.vim/plugged/test'
 
-Plug 'Konfekt/FastFold'                                       " Speed up syntax based folding
-Plug 'OmniSharp/omnisharp-vim'                                " C# magic
-Plug 'PProvost/vim-ps1'                                       " Powershell file types
-Plug 'SirVer/ultisnips'                                       " Snippet engine
-Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " Auto-completion
-Plug 'altercation/vim-colors-solarized'                       " Color-scheme
-Plug 'christoomey/vim-tmux-navigator'                         " Switch beween vim splits & tmux panes seamslessly
-Plug 'ctrlpvim/ctrlp.vim'                                     " Browse recent/project files
-Plug 'ervandew/supertab'                                      " Insert mode completions
-Plug 'godlygeek/tabular'                                      " Align things
-Plug 'honza/vim-snippets'                                     " Snippet library
-Plug 'junegunn/gv.vim'                                        " Access git files easier
-Plug 'junegunn/vader.vim'                                     " VimScript testing
-Plug 'kalekundert/vim-coiled-snake'                           " Python syntax folding
-Plug 'ludovicchabant/vim-gutentags'                           " Manage ctags
-Plug 'majutsushi/tagbar'                                      " Use c-tags in real time and display tag bar
-Plug 'masukomi/vim-markdown-folding'                          " Syntax based fording for md
-Plug 'mattboehm/vim-unstack'                                  " Jump to python errors
-Plug 'mikeboiko/auto-pairs'                                   " Auto-close brackets
-Plug 'mikeboiko/vim-sort-folds'                               " Sort vim folds
-Plug 'n0v1c3/vira', { 'do': './install.sh' }                  " Jira integration
-Plug 'nathanaelkane/vim-indent-guides'                        " Visual indent levels
-Plug 'posva/vim-vue'                                          " Vue filetype recognition
-Plug 'scrooloose/nerdcommenter'                               " Commenting
-Plug 'scrooloose/nerdtree'                                    " Tree file browser
-Plug 'sheerun/vim-polyglot'                                   " Language Pack (syntax/indent)
-Plug 'tpope/vim-fugitive'                                     " Git wrapper
-Plug 'tpope/vim-repeat'                                       " Repeat surround and commenting with .
-Plug 'tpope/vim-rhubarb'                                      " GitHub integration with fugitive
-Plug 'tpope/vim-scriptease'                                   " For debugging and writing plugins
-Plug 'tpope/vim-surround'                                     " Surround all the stuff
-Plug 'vim-airline/vim-airline'                                " Nice status bar
-Plug 'w0rp/ale'                                               " Async Linting
-Plug 'yssl/QFEnter'                                           " QuickFix lists - open in tabs/split windows
+Plug 'Konfekt/FastFold'                      " Speed up syntax based folding
+Plug 'OmniSharp/omnisharp-vim'               " C# magic
+Plug 'PProvost/vim-ps1'                      " Powershell file types
+Plug 'Shougo/deoplete.nvim'                  " Auto-completion engine
+Plug 'SirVer/ultisnips'                      " Snippet engine
+Plug 'altercation/vim-colors-solarized'      " Color-scheme
+Plug 'christoomey/vim-tmux-navigator'        " Switch beween vim splits & tmux panes seamslessly
+Plug 'ctrlpvim/ctrlp.vim'                    " Browse recent/project files
+Plug 'deoplete-plugins/deoplete-tag'         " Complete from ctags
+Plug 'ervandew/supertab'                     " Insert mode completions
+Plug 'godlygeek/tabular'                     " Align things
+Plug 'honza/vim-snippets'                    " Snippet library
+Plug 'junegunn/gv.vim'                       " Access git files easier
+Plug 'junegunn/vader.vim'                    " VimScript testing
+Plug 'kalekundert/vim-coiled-snake'          " Python syntax folding
+Plug 'ludovicchabant/vim-gutentags'          " Manage ctags
+Plug 'majutsushi/tagbar'                     " Use c-tags in real time and display tag bar
+Plug 'masukomi/vim-markdown-folding'         " Syntax based fording for md
+Plug 'mattboehm/vim-unstack'                 " Jump to python errors
+Plug 'mikeboiko/auto-pairs'                  " Auto-close brackets
+Plug 'mikeboiko/vim-sort-folds'              " Sort vim folds
+Plug 'n0v1c3/vira', { 'do': './install.sh' } " Jira integration
+Plug 'nathanaelkane/vim-indent-guides'       " Visual indent levels
+Plug 'posva/vim-vue'                         " Vue filetype recognition
+Plug 'roxma/nvim-yarp'                       " Auto-completion engine
+Plug 'roxma/vim-hug-neovim-rpc'              " Auto-completion engine
+Plug 'scrooloose/nerdcommenter'              " Commenting
+Plug 'scrooloose/nerdtree'                   " Tree file browser
+Plug 'sheerun/vim-polyglot'                  " Language Pack (syntax/indent)
+Plug 'tpope/vim-fugitive'                    " Git wrapper
+Plug 'tpope/vim-repeat'                      " Repeat surround and commenting with .
+Plug 'tpope/vim-rhubarb'                     " GitHub integration with fugitive
+Plug 'tpope/vim-scriptease'                  " For debugging and writing plugins
+Plug 'tpope/vim-surround'                    " Surround all the stuff
+Plug 'vim-airline/vim-airline'               " Nice status bar
+Plug 'w0rp/ale'                              " Async Linting
+Plug 'yssl/QFEnter'                          " QuickFix lists - open in tabs/split windows
 
 " End initialization of plugin system
 call plug#end()
@@ -730,7 +717,7 @@ let g:ale_fixers = {
 
 let g:ale_linters = {
             \ 'cs': ['omnisharp'],
-            \ 'python': ['flake8']
+            \ 'python': ['flake8', 'pyls']
             \ }
 
 " This will prevent my searches from getting messed up
@@ -756,6 +743,17 @@ let g:ctrlp_prompt_mappings = {
             \ 'ToggleType(1)':        ['<c-f>'],
             \ 'ToggleType(-1)':       ['<c-b>'],
             \ }
+
+" Deoplete {{{2
+
+let g:deoplete#enable_at_startup = 1
+let deoplete#tag#cache_limit_size = 5000000
+call deoplete#custom#option('smart_case', v:true)
+
+" Use the following plugins for completion of all filetypes
+call deoplete#custom#option('sources', {
+\ '_': ['buffer', 'file', 'ale', 'tag'],
+\})
 
 " NerdCommenter{{{2
 
@@ -825,11 +823,6 @@ let g:UltiSnipsExpandTrigger = '<Tab>'
 let g:UltiSnipsJumpForwardTrigger = '<Tab>'
 let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 
-" make YCM compatible with UltiSnips (using supertab)
-let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType = '<C-n>'
-
 " Additional UltiSnips config.
 let g:UltiSnipsSnippetsDir = '~/Documents/GitRepos/Vim/Snippets'
 
@@ -856,29 +849,6 @@ let g:vira_srvs = ['https://jira.boiko.ca', 'https://jira.tgall.ca']
 let g:vira_usrs = ['mike', 'mikeboiko']
 let g:vira_pass = ['lpass show --password boiko.ca', 'lpass show --password tgall.ca']
 let g:vira_skip_cert_verify = 1
-
-" YouCompleteMe{{{2
-
-" For some reason, there's a bug with jedi <c+space> autocompletion, so I have to disable previews
-set completeopt-=preview
-
-" Additional YouCompleteMe config.
-let g:ycm_complete_in_comments = 1
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_goto_buffer_command = 'horizontal-split'
-
-" This is required for venv and pipenv to work properly
-let g:ycm_python_binary_path = 'python3'
-
-" Since omnisharp is installed as a seperate plugin
-let g:ycm_auto_start_csharp_server = 0
-let g:ycm_auto_stop_csharp_server = 0
-let g:ycm_csharp_server_port = 2000
-
-" Remaps
-nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " OmniSharp {{{2
 
@@ -966,8 +936,6 @@ set foldtext=v:folddashes.FormatFoldString(v:foldstart)
 
 " Functionality {{{2
 " Vim Start {{{3
-
-" TODO-MB [180607] - This seemed to give me a lot of problems with YCM and other stuff breaking
 
 " " Save last file when exiting vim
 " autocmd VimLeave * nested if (!isdirectory(vimHomeDir)) |
@@ -1346,7 +1314,7 @@ nnoremap <leader>rs :Repo st -s<cr>
 map gp :sp<CR>gdzMzvzz
 
 " Go to definition and focus on fold
-map gd gdzMzvzz
+nnoremap gd zR:ALEGoToDefinition<CR>
 
 " Grep with ag {{{2
 

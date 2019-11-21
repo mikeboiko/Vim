@@ -8,11 +8,6 @@
 " Compile Asynchronously :Make
 " Run Program Asynchronously :Start C:\Users\Mike\Documents\GitRepos\AccuTune\AccuTuneMain\AccuTune\bin\Release\AccuTune.exe -wait=never --unlockApp -t python --log
 
-" Mappings {{{1
-
-" Go to definition/declaration
-nnoremap <buffer> gd  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
 " Settings {{{1
 
 " Set properties for MsBuild compilation
