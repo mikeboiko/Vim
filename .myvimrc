@@ -222,13 +222,13 @@ function! GetLastFoldString() " {{{3
 endfunction
 
 function! GetLastFoldLineNum(foldLvl) " {{{3
-    " Get the line number of last Fold
-    " Only search current line for fold marker
-    let line = search(g:fold_marker_string.a:foldLvl,"n",line("."))
     " Search backwards for fold marker
-    if (line==0)
-        let line = search(g:fold_marker_string.a:foldLvl,"bn")
-    endif
+    " Get the line number of last Fold
+    normal zR
+    normal mz
+    normal [z
+    let line = line('.')
+    normal `z
     return line
 endfunction
 
