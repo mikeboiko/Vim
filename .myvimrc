@@ -724,6 +724,17 @@ let g:ale_linters = {
 let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 0
 
+" python language server config
+let g:ale_python_pyls_config = {
+                          \   'pyls': {
+                          \     'plugins': {
+                          \       'pycodestyle': {
+                          \         'enabled': v:false
+                          \       }
+                          \     }
+                          \   },
+                          \ }
+
 " CtrlP {{{2
 " Fuzzy file/buffer/tag open
 
