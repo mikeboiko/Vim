@@ -224,6 +224,9 @@ endfunction
 function! GetLastFoldLineNum(foldLvl) " {{{3
     " Search backwards for fold marker
     " Get the line number of last Fold
+
+    " TODO-MB [191126] - Try with zN or whatever the restore fold command is
+
     normal zR
     normal mz
     normal [z
@@ -858,7 +861,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 let g:vira_srvs = ['https://jira.boiko.ca', 'https://jira.tgall.ca']
 let g:vira_usrs = ['mike', 'mikeboiko']
-let g:vira_pass = ['lpass show --password boiko.ca', 'lpass show --password tgall.ca']
+let g:vira_pass = ['lpass show --password 8054651260032217500', 'lpass show --password tgall.ca']
 let g:vira_skip_cert_verify = 1
 
 " OmniSharp {{{2
