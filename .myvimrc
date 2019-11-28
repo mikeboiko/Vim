@@ -853,7 +853,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 let g:vira_srvs = ['https://jira.boiko.ca', 'https://jira.tgall.ca']
 let g:vira_usrs = ['mike', 'mikeboiko']
-let g:vira_pass = ['lpass show --password 8054651260032217500', 'lpass show --password tgall.ca']
+let g:vira_pass = ['lpass show --password jira.boiko.ca', 'lpass show --password tgall.ca']
 let g:vira_skip_cert_verify = 1
 
 " OmniSharp {{{2
