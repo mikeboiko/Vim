@@ -851,8 +851,8 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 " vira {{{2
 
-let g:vira_config_projects_file = $HOME.'/Documents/GitRepos/Linux/config/vira_projects.yaml'
-let g:vira_config_servers_file = $HOME.'/Documents/GitRepos/Linux/config/vira_servers.yaml'
+let g:vira_config_file_projects = $HOME.'/Documents/GitRepos/Linux/config/vira_projects.yaml'
+let g:vira_config_file_servers = $HOME.'/Documents/GitRepos/Linux/config/vira_servers.yaml'
 
 " OmniSharp {{{2
 
@@ -1520,6 +1520,7 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 " Vira {{{2
 
+" Basics
 nnoremap <silent> <leader>vI :ViraIssue<cr>
 nnoremap <silent> <leader>vT :ViraTodo<cr>
 nnoremap <silent> <leader>vb :ViraBrowse<cr>
@@ -1527,9 +1528,20 @@ nnoremap <silent> <leader>vc :ViraComment<cr>
 nnoremap <silent> <leader>ve :ViraEpics<cr>
 nnoremap <silent> <leader>vi :ViraIssues<cr>
 nnoremap <silent> <leader>vr :ViraReport<cr>
-nnoremap <silent> <leader>vp :ViraFilterProjects<cr>
 nnoremap <silent> <leader>vs :ViraServers<cr>
 nnoremap <silent> <leader>vt :ViraTodos<cr>
+
+" Filter search
+nnoremap <silent> <leader>vfP :ViraFilterPriorities<cr>
+nnoremap <silent> <leader>vfa :ViraFilterAssignees<cr>
+nnoremap <silent> <leader>vfp :ViraFilterProjects<cr>
+nnoremap <silent> <leader>vfs :ViraFilterStatuses<cr>
+nnoremap <silent> <leader>vfr :ViraFilterReporter<cr>
+nnoremap <silent> <leader>vfR :ViraFilterReset<cr>
+nnoremap <silent> <leader>vft :ViraFilterTypes<cr>
+
+" Filter reset
+nnoremap <silent> <leader>vfr :ViraFilterReset<cr>
 
 " Windows Style Commands {{{2
 
