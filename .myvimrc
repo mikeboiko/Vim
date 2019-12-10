@@ -1435,7 +1435,7 @@ au BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
 
 " Reports {{{2
 
-nnoremap <leader>tp :tabe %<CR>:terminal ++curwin python /home/mike/Documents/GitRepos/WebApps/Tables/python/tables_client.py -f printbalance<CR>
+nnoremap <leader>tp :tabe %<CR>:terminal ++curwin python /home/mike/Documents/GitRepos/WebApps/Tables/scripts/tables.py cli -f printbalance<CR>
 
 " Run Scripts {{{2
 
