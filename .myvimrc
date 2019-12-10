@@ -756,10 +756,17 @@ let g:deoplete#enable_at_startup = 1
 let deoplete#tag#cache_limit_size = 5000000
 call deoplete#custom#option('smart_case', v:true)
 
+call deoplete#custom#source('_',
+		\ 'matchers', ['matcher_full_fuzzy'])
+
+
 " Use the following plugins for completion of all filetypes
 call deoplete#custom#option('sources', {
 \ '_': ['buffer', 'file', 'ale', 'tag'],
 \})
+
+" This fixes the problem of tabbing through the menu from top to bottom (reverse order)
+let g:SuperTabDefaultCompletionType = '<c-n>'
 
 " NerdCommenter{{{2
 
