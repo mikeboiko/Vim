@@ -641,7 +641,6 @@ call plug#begin(vimPlugDir)
 
 " Plug 'file:///home/mike/.vim/plugged/test'
 
-Plug 'Konfekt/FastFold'                      " Speed up syntax based folding
 Plug 'OmniSharp/omnisharp-vim'               " C# magic
 Plug 'PProvost/vim-ps1'                      " Powershell file types
 Plug 'Shougo/deoplete.nvim'                  " Auto-completion engine
