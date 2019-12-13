@@ -1406,6 +1406,11 @@ nnoremap <C-e> :Cprev<CR>:FoldOpen<CR>
 nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
 nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
+" Plugins {{{2
+
+" This fixes my map conflict with <C-r>
+map <leader>rrr <plug>(RepeatRedo)<CR>
+
 " Quit {{{2
 
 " Close extra windows then quit
