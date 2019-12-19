@@ -711,7 +711,7 @@ let g:ale_fixers = {
 " pyenv local 3.6.0
 
 let g:ale_linters = {
-            \ 'cs': ['OmniSharp'],
+            \ 'cs': ['omnisharp'],
             \ 'python': ['flake8', 'pyls']
             \ }
 
@@ -762,10 +762,9 @@ call deoplete#custom#option('smart_case', v:true)
 call deoplete#custom#source('_',
 		\ 'matchers', ['matcher_full_fuzzy'])
 
-
 " Use the following plugins for completion of all filetypes
 call deoplete#custom#option('sources', {
-\ '_': ['buffer', 'file', 'ale', 'tag'],
+    \ '_': ['buffer', 'file', 'ale', 'tag'],
 \})
 
 " This fixes the problem of tabbing through the menu from top to bottom (reverse order)
@@ -878,16 +877,14 @@ let g:vira_config_file_servers = $HOME.'/Documents/GitRepos/Linux/config/vira_se
 " Run vim command from .cs file :OmniSharpInstall
 
 " let g:OmniSharp_translate_cygwin_wsl = 1
-" let g:OmniSharp_server_path = '/mnt/c/omnisharp.http-win-x64/OmniSharp.exe'
-" let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/run'
-let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'
+" let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'
+" let g:OmniSharp_port = 2000
+
 let g:OmniSharp_selector_ui = 'ctrlp'
 let g:OmniSharp_timeout = 2
-" let g:OmniSharp_port = 2000
-let g:OmniSharp_highlight_types = 1
+" let g:OmniSharp_highlight_types = 1
+let g:OmniSharp_server_use_mono = 1
 let g:OmniSharp_server_stdio = 1
-
-" TODO-MB [190409] - In order to run omnisharp and integrate YCM on multiple projects, set: g:OmniSharp_server_ports
 
 " Editor Settings {{{1
 " Display{{{2
