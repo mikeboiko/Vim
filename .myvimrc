@@ -694,11 +694,12 @@ let g:ale_lint_on_text_changed = 'never'
 
 let g:ale_fixers = {
             \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-            \ 'python': ['yapf'],
+            \ 'cs': ['uncrustify'],
             \ 'javascript': ['prettier', 'eslint'],
             \ 'javascript.jsx': ['eslint'],
             \ 'json': ['prettier'],
             \ 'markdown': ['prettier'],
+            \ 'python': ['yapf'],
             \ 'vue': ['prettier'],
             \ 'yaml': ['prettier']
             \ }
@@ -710,7 +711,7 @@ let g:ale_fixers = {
 " pyenv local 3.6.0
 
 let g:ale_linters = {
-            \ 'cs': ['omnisharp'],
+            \ 'cs': ['OmniSharp'],
             \ 'python': ['flake8', 'pyls']
             \ }
 
@@ -728,6 +729,9 @@ let g:ale_python_pyls_config = {
                           \     }
                           \   },
                           \ }
+
+" C# fixer
+let g:ale_c_uncrustify_options = '-c /home/mike/Documents/GitRepos/Linux/config/uncrustify.cfg'
 
 " CtrlP {{{2
 " Fuzzy file/buffer/tag open
@@ -869,10 +873,9 @@ let g:vira_config_file_servers = $HOME.'/Documents/GitRepos/Linux/config/vira_se
 " https://github.com/OmniSharp/omnisharp-roslyn/releases
 
 " For Arch Linux:
-" Install omnisharp-roslyn server
 " yay msbuild-stable
 " s pacman -S libuv
-" Run vim command :OmniSharpInstall
+" Run vim command from .cs file :OmniSharpInstall
 
 " let g:OmniSharp_translate_cygwin_wsl = 1
 " let g:OmniSharp_server_path = '/mnt/c/omnisharp.http-win-x64/OmniSharp.exe'
@@ -880,8 +883,9 @@ let g:vira_config_file_servers = $HOME.'/Documents/GitRepos/Linux/config/vira_se
 let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'
 let g:OmniSharp_selector_ui = 'ctrlp'
 let g:OmniSharp_timeout = 2
-let g:OmniSharp_port = 2000
+" let g:OmniSharp_port = 2000
 let g:OmniSharp_highlight_types = 1
+let g:OmniSharp_server_stdio = 1
 
 " TODO-MB [190409] - In order to run omnisharp and integrate YCM on multiple projects, set: g:OmniSharp_server_ports
 
