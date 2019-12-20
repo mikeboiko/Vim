@@ -704,15 +704,10 @@ let g:ale_fixers = {
             \ 'yaml': ['prettier']
             \ }
 
-
-" Note: in order to use omnisharp with ALE you have to use python 3.6.0:
-" pyenv install 3.6.0
-" cd ~/.vim/plugged/omnisharp-vim/python
-" pyenv local 3.6.0
-
 let g:ale_linters = {
             \ 'cs': ['omnisharp'],
-            \ 'python': ['flake8', 'pyls']
+            \ 'python': ['flake8', 'pyls'],
+            \ 'vim': ['vint']
             \ }
 
 " This will prevent my searches from getting messed up
