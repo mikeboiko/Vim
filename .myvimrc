@@ -26,6 +26,27 @@ else
 endif
 
 " Functions {{{1
+function! ALEOpenResults() " {{{2
+  let l:bfnum = bufnr('')
+  let l:items = ale#engine#GetLoclist(l:bfnum)
+  call setqflist([], 'r', {'items': l:items, 'title': 'ALE results'})
+  let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ])
+  exe 'top ' . g:qfListHeight . ' cwindow'
+endfunction"
+
+function! ALERunLint() " {{{2
+  if empty(ale#engine#GetLoclist(bufnr('')))
+    let b:ale_enabled = 1
+    augroup ALEProgress
+      autocmd!
+      autocmd User ALELintPost call ALEOpenResults() | au! ALEProgress
+    augroup end
+    call ale#Queue(0, 'lint_file')
+  else
+    call ALEOpenResults()
+  endif
+endfunction
+
 function! AllClose() " {{{2
     " Close all loc lists, qf, preview and terminal windows
     Windofast lclose
@@ -1190,6 +1211,10 @@ nnoremap <leader>a. mzA.<esc>`z
 inoremap ;; <esc>mzA;<esc>`z
 nnoremap <leader>a; mzA;<esc>`z
 
+" ALE {{{2
+
+nnoremap <leader>se :call ALERunLint()<CR>
+
 " Close Toggle {{{2
 " Toggle between ++close and ++noclose when running term <leader>rr
 nnoremap <leader>ct :CloseToggle<CR>
@@ -1543,8 +1568,6 @@ nnoremap <silent> <leader>vfP :ViraFilterPriorities<cr>
 nnoremap <silent> <leader>vfa :ViraFilterAssignees<cr>
 nnoremap <silent> <leader>vfp :ViraFilterProjects<cr>
 nnoremap <silent> <leader>vfs :ViraFilterStatuses<cr>
-nnoremap <silent> <leader>vfr :ViraFilterReporter<cr>
-nnoremap <silent> <leader>vfR :ViraFilterReset<cr>
 nnoremap <silent> <leader>vft :ViraFilterTypes<cr>
 
 " Filter reset
