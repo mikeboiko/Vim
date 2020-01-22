@@ -696,6 +696,7 @@ Plug 'tpope/vim-rhubarb'                     " GitHub integration with fugitive
 Plug 'tpope/vim-scriptease'                  " For debugging and writing plugins
 Plug 'tpope/vim-surround'                    " Surround all the stuff
 Plug 'vim-airline/vim-airline'               " Nice status bar
+Plug 'vimwiki/vimwiki'                       " Nice wiki format
 Plug 'w0rp/ale'                              " Async Linting
 Plug 'yssl/QFEnter'                          " QuickFix lists - open in tabs/split windows
 
@@ -876,6 +877,11 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 " Vim-QF {{{2
 " let g:qf_mapping_ack_style = 1
+
+" vimwiki {{{2
+
+" let g:vimwiki_list = [{'path': '~/vimwiki/',
+                      " \ 'syntax': 'markdown', 'ext': '.md'}]
 
 " vira {{{2
 
