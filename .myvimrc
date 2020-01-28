@@ -1359,7 +1359,7 @@ nnoremap gd zR:ALEGoToDefinition<CR>
 nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/Documents/GitRepos<s-left><space><left>
 
 " Search notes
-nnoremap <leader>fn :Grep ~/syncthing/Sync/Notes<s-left><space><left>
+nnoremap <leader>fn :Grep ~/Notes<s-left><space><left>
 
 " Search git repo
 nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
@@ -1567,7 +1567,6 @@ nnoremap <silent> <leader>ve :ViraEpics<cr>
 nnoremap <silent> <leader>vi :ViraIssues<cr>
 nnoremap <silent> <leader>vr :ViraReport<cr>
 nnoremap <silent> <leader>vs :ViraServers<cr>
-nnoremap <silent> <leader>vt :ViraTodos<cr>
 
 " Filter search
 nnoremap <silent> <leader>vfP :ViraFilterPriorities<cr>
