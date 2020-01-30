@@ -358,6 +358,40 @@ function! OnSave() " {{{2
 
 endfunction
 
+function! MyTabLine() " {{{2
+  let s = ''
+  for i in range(tabpagenr('$'))
+    " select the highlighting
+    if i + 1 == tabpagenr()
+      let s .= '%#TabLineSel#'
+    else
+      let s .= '%#TabLine#'
+    endif
+
+      " set the tab page number (for mouse clicks)
+      let s .= '%' . (i + 1) . 'T'
+
+      " the label is made by MyTabLabel()
+      let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
+    endfor
+
+    " after the last tab fill with TabLineFill and reset tab page nr
+    let s .= '%#TabLineFill#%T'
+
+    " " right-align the label to close the current tab page
+    " if tabpagenr('$') > 1
+      " let s .= '%=%#TabLine#%999Xclose'
+    " endif
+
+  return s
+endfunction
+
+function! MyTabLabel(n) " {{{2
+  let buflist = tabpagebuflist(a:n)
+  let winnr = tabpagewinnr(a:n)
+  return bufname(buflist[winnr - 1])
+endfunction
+
 " Quit {{{2
 
 " Close location list, preview window and quit
@@ -966,6 +1000,9 @@ let g:display_hidden = "hidden"
 
 " Change the text that is displayed while in a fold
 set foldtext=v:folddashes.FormatFoldString(v:foldstart)
+
+" Get rid of that ugly x in top right corner or tabline
+set tabline=%!MyTabLine()
 
 " Functionality {{{2
 " Vim Start {{{3
