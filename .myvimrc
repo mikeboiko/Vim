@@ -359,31 +359,30 @@ function! OnSave() " {{{2
 endfunction
 
 function! MyTabLine() " {{{2
-  let s = ''
+  let tabstring = ''
+
   for i in range(tabpagenr('$'))
     " select the highlighting
     if i + 1 == tabpagenr()
-      let s .= '%#TabLineSel#'
+      let tabstring .= '%#TabLineSel#'
     else
-      let s .= '%#TabLine#'
+      let tabstring .= '%#TabLine#'
     endif
+    " set the tab page number (for mouse clicks)
+    let tabstring .= '%' . (i + 1) . 'T'
+    " the label is made by MyTabLabel()
+    let tabstring .= ' %{MyTabLabel(' . (i + 1) . ')} '
+  endfor
 
-      " set the tab page number (for mouse clicks)
-      let s .= '%' . (i + 1) . 'T'
+  " after the last tab fill with TabLineFill and reset tab page nr
+  let tabstring .= '%#TabLineFill#%T'
 
-      " the label is made by MyTabLabel()
-      let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
-    endfor
+  " " right-align the label to close the current tab page
+  " if tabpagenr('$') > 1
+    " let tabstring .= '%=%#TabLine#%999Xclose'
+  " endif
 
-    " after the last tab fill with TabLineFill and reset tab page nr
-    let s .= '%#TabLineFill#%T'
-
-    " " right-align the label to close the current tab page
-    " if tabpagenr('$') > 1
-      " let s .= '%=%#TabLine#%999Xclose'
-    " endif
-
-  return s
+  return tabstring
 endfunction
 
 function! MyTabLabel(n) " {{{2
