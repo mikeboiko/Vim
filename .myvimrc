@@ -387,9 +387,11 @@ function! MyTabLine() " {{{2
 endfunction
 
 function! MyTabLabel(n) " {{{2
+  " The tab label looks better as file name only - without entire path
   let buflist = tabpagebuflist(a:n)
   let winnr = tabpagewinnr(a:n)
-  return bufname(buflist[winnr - 1])
+  let buf = bufname(buflist[winnr - 1])
+  return fnamemodify(buf, ':t')
 endfunction
 
 " Quit {{{2
