@@ -4,6 +4,8 @@
 
 " Constants {{{1
 
+let $CODE='$HOME/Documents/GitRepos'
+
 " Max Number of Records to show in QF/Location Lists
 let g:maxQFlistRecords = 8
 let g:qfListHeight = 5
