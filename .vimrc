@@ -788,7 +788,7 @@ let g:ale_python_pyls_config = {
                           \ }
 
 " C# fixer
-let g:ale_c_uncrustify_options = '-c /home/mike/Documents/GitRepos/Linux/config/uncrustify.cfg'
+let g:ale_c_uncrustify_options = '-c ~/Documents/GitRepos/Linux/config/uncrustify.cfg'
 
 " CtrlP {{{2
 " Fuzzy file/buffer/tag open
