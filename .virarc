@@ -1,2 +1,0 @@
-let g:vira_serv = 'https://jira.boiko.online'
-let g:vira_project = 'MAIN'
