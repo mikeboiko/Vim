@@ -1107,7 +1107,7 @@ set modelines=5
 au FileType * setlocal formatoptions-=cro
 
 " Spelling
-set spellfile=$HOME/OneDrive/Software/Settings/en.utf-8.add
+set spellfile=$HOME/Notes/Misc/en.utf-8.add
 
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
