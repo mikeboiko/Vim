@@ -1601,20 +1601,11 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 " Basics
 nnoremap <silent> <leader>vI :ViraIssue<cr>
-nnoremap <silent> <leader>vT :ViraTodo<cr>
-nnoremap <silent> <leader>vb :ViraBrowse<cr>
 nnoremap <silent> <leader>vc :ViraComment<cr>
 nnoremap <silent> <leader>ve :ViraEpics<cr>
 nnoremap <silent> <leader>vi :ViraIssues<cr>
 nnoremap <silent> <leader>vr :ViraReport<cr>
 nnoremap <silent> <leader>vs :ViraServers<cr>
-
-" Filter search
-nnoremap <silent> <leader>vfP :ViraFilterPriorities<cr>
-nnoremap <silent> <leader>vfa :ViraFilterAssignees<cr>
-nnoremap <silent> <leader>vfp :ViraFilterProjects<cr>
-nnoremap <silent> <leader>vfs :ViraFilterStatuses<cr>
-nnoremap <silent> <leader>vft :ViraFilterTypes<cr>
 
 " Filter reset
 nnoremap <silent> <leader>vfr :ViraFilterReset<cr>
