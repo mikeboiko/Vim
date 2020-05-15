@@ -754,6 +754,7 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = {
             \ '*': ['remove_trailing_lines', 'trim_whitespace'],
             \ 'cs': ['uncrustify'],
+            \ 'html': ['prettier'],
             \ 'javascript': ['prettier', 'eslint'],
             \ 'javascript.jsx': ['eslint'],
             \ 'json': ['prettier'],
