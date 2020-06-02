@@ -733,7 +733,7 @@ Plug 'tpope/vim-rhubarb'                                     " GitHub integratio
 Plug 'tpope/vim-scriptease'                                  " For debugging and writing plugins
 Plug 'tpope/vim-surround'                                    " Surround all the stuff
 Plug 'vim-airline/vim-airline'                               " Nice status bar
-Plug 'vimwiki/vimwiki'                                       " Nice wiki format
+" Plug 'vimwiki/vimwiki'                                     " Nice wiki format
 Plug 'w0rp/ale'                                              " Async Linting
 Plug 'yssl/QFEnter'                                          " QuickFix lists - open in tabs/split windows
 
