@@ -963,6 +963,7 @@ silent! colorscheme solarized
 let g:solarized_bold=0
 " This gets rid of the grey background
 let g:solarized_termtrans = 1
+set t_Cs="Fix bad spell issue in solarized theme"
 
 " Set GVIM Font
 " To select form availbale fonts :set guifont=*
