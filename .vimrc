@@ -1604,13 +1604,19 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 " Basics
 nnoremap <silent> <leader>vI :ViraIssue<cr>
 nnoremap <silent> <leader>vc :ViraComment<cr>
-nnoremap <silent> <leader>ve :ViraEpics<cr>
 nnoremap <silent> <leader>vi :ViraIssues<cr>
 nnoremap <silent> <leader>vr :ViraReport<cr>
 nnoremap <silent> <leader>vs :ViraServers<cr>
 
-" Filter reset
+" Filters
+nnoremap <silent> <leader>v/ ViraFilterText<cr>
+nnoremap <silent> <leader>vfP :ViraFilterPriorities<cr>
+nnoremap <silent> <leader>vfa :ViraFilterAssignees<cr>
+nnoremap <silent> <leader>vfp :ViraFilterProjects<cr>
+nnoremap <silent> <leader>vfR :ViraFilterReporter<cr>
 nnoremap <silent> <leader>vfr :ViraFilterReset<cr>
+nnoremap <silent> <leader>vfs :ViraFilterStatuses<cr>
+nnoremap <silent> <leader>vft :ViraFilterTypes<cr>
 
 " Windows Style Commands {{{2
 
