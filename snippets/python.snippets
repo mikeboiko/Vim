@@ -1,0 +1,8 @@
+snippet pickle "pickle all the stuff"
+import pickle
+pickle_file = '/tmp/test.pkl'
+with open(pickle_file, 'wb') as o:
+	pickle.dump(data, o)
+with open(pickle_file, 'rb') as i:
+	data = pickle.load(i)
+endsnippet

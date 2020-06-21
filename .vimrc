@@ -428,7 +428,7 @@ function! SnipClass() " {{{3
 endfunction
 
 function! SnipComment() " {{{3
-    execute "read $CODE/Vim/Snippets/SectionComment.txt"
+    execute "read $CODE/Vim/snippets/SectionComment.txt"
     execute "cal NERDComment(0,\"toggle\")"
     execute "normal! jj"
     execute "cal NERDComment(0,\"toggle\")"
@@ -447,7 +447,7 @@ function! SnipFunction() " {{{3
 endfunction
 
 function! SnipHeader() " {{{3
-    execute "read $CODE/Vim/Snippets/Header.txt"
+    execute "read $CODE/Vim/snippets/Header.txt"
     execute "cal NERDComment(0,\"toggle\")"
     execute "normal! kddjjjpk"
     execute "cal NERDComment(0,\"toggle\")"
@@ -897,7 +897,7 @@ let g:UltiSnipsJumpForwardTrigger = '<Tab>'
 let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 
 " Additional UltiSnips config.
-let g:UltiSnipsSnippetsDir = '~/Documents/GitRepos/Vim/Snippets'
+let g:UltiSnipsSnippetDirectories=[$HOME.'/Documents/GitRepos/Vim/snippets']
 
 " vim-polyglot {{{2
 
@@ -925,6 +925,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 let g:vira_config_file_projects = $HOME.'/Documents/GitRepos/Linux/config/vira_projects.yaml'
 let g:vira_config_file_servers = $HOME.'/Documents/GitRepos/Linux/config/vira_servers.yaml'
+let g:vira_report_width = 100
 
 " OmniSharp {{{2
 
