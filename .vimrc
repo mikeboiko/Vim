@@ -801,7 +801,7 @@ let g:ctrlp_map = ''
 let g:ctrlp_cmd = 'CtrlPMRU'
 
 " Use filename instead of full path for searching
-let g:ctrlp_by_filename = 1
+" let g:ctrlp_by_filename = 1
 
 " Remap hotkeys
 let g:ctrlp_prompt_mappings = {
