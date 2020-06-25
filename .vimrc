@@ -1610,14 +1610,18 @@ nnoremap <silent> <leader>vr :ViraReport<cr>
 nnoremap <silent> <leader>vs :ViraServers<cr>
 
 " Filters
-nnoremap <silent> <leader>v/ ViraFilterText<cr>
 nnoremap <silent> <leader>vfP :ViraFilterPriorities<cr>
+nnoremap <silent> <leader>vfR :ViraFilterReporter<cr>
+nnoremap <silent> <leader>vfT :ViraFilterText<cr>
 nnoremap <silent> <leader>vfa :ViraFilterAssignees<cr>
 nnoremap <silent> <leader>vfp :ViraFilterProjects<cr>
-nnoremap <silent> <leader>vfR :ViraFilterReporter<cr>
 nnoremap <silent> <leader>vfr :ViraFilterReset<cr>
 nnoremap <silent> <leader>vfs :ViraFilterStatuses<cr>
 nnoremap <silent> <leader>vft :ViraFilterTypes<cr>
+nnoremap <silent> <leader>vfv :ViraFilterVersions<cr>
+
+" Boards
+" nnoremap <silent> <leader>vbm :ViraServers<cr>:normal \<cr>
 
 " Windows Style Commands {{{2
 
