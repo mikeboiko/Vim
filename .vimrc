@@ -720,7 +720,6 @@ Plug 'mattboehm/vim-unstack'                                 " Jump to python er
 Plug 'mikeboiko/auto-pairs'                                  " Auto-close brackets
 Plug 'mikeboiko/vim-sort-folds'                              " Sort vim folds
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'} " Jira integration
-Plug 'nathanaelkane/vim-indent-guides'                       " Visual indent levels
 Plug 'posva/vim-vue'                                         " Vue filetype recognition
 Plug 'roxma/nvim-yarp'                                       " Auto-completion engine
 Plug 'roxma/vim-hug-neovim-rpc'                              " Auto-completion engine
@@ -909,10 +908,6 @@ let g:polyglot_disabled = ['markdown', 'csv']
 let g:unstack_populate_quickfix=1
 let g:unstack_layout = "portrait"
 
-" Vim-Indent-Guides {{{2
-" Indent Guides default is on
-let g:indent_guides_enable_on_vim_startup = 1
-
 " Vim-QF {{{2
 " let g:qf_mapping_ack_style = 1
 
@@ -925,7 +920,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 let g:vira_config_file_projects = $HOME.'/Documents/GitRepos/Linux/config/vira_projects.yaml'
 let g:vira_config_file_servers = $HOME.'/Documents/GitRepos/Linux/config/vira_servers.yaml'
-let g:vira_report_width = 100
+" let g:vira_report_width = 100
 
 " OmniSharp {{{2
 
