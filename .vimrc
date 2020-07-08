@@ -698,6 +698,7 @@ call plug#begin(vimPlugDir)
 " Plug 'dbeniamine/cheat.sh-vim'                              " cheat sheet
 
 " Plug 'file:///home/mike/.vim/plugged/test'
+" Plug 'vimwiki/vimwiki'                                     " Nice wiki format
 
 Plug 'OmniSharp/omnisharp-vim'                               " C# magic
 Plug 'PProvost/vim-ps1'                                      " Powershell file types
@@ -726,13 +727,13 @@ Plug 'roxma/vim-hug-neovim-rpc'                              " Auto-completion e
 Plug 'scrooloose/nerdcommenter'                              " Commenting
 Plug 'scrooloose/nerdtree'                                   " Tree file browser
 Plug 'sheerun/vim-polyglot'                                  " Language Pack (syntax/indent)
+Plug 'tommcdo/vim-fubitive'                                  " Extend fugitive.vim to support Bitbucket URLs in :Gbrowse.
 Plug 'tpope/vim-fugitive'                                    " Git wrapper
 Plug 'tpope/vim-repeat'                                      " Repeat surround and commenting with .
 Plug 'tpope/vim-rhubarb'                                     " GitHub integration with fugitive
 Plug 'tpope/vim-scriptease'                                  " For debugging and writing plugins
 Plug 'tpope/vim-surround'                                    " Surround all the stuff
 Plug 'vim-airline/vim-airline'                               " Nice status bar
-" Plug 'vimwiki/vimwiki'                                     " Nice wiki format
 Plug 'w0rp/ale'                                              " Async Linting
 Plug 'yssl/QFEnter'                                          " QuickFix lists - open in tabs/split windows
 
@@ -1437,7 +1438,7 @@ nnoremap <leader>ak :<CR>mzO<Esc>`z:<CR>
 nnoremap <leader>al :<CR>mzO<Esc>jo<Esc>`z:<CR>
 
 " Restore Enter key functionality for command history window
-autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
+" autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
 
 " Open File/Folder {{{2
 
