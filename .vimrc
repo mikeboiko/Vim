@@ -1677,6 +1677,10 @@ nnoremap <silent> <leader>vfv :ViraFilterVersions<cr>
 " Boards
 " nnoremap <silent> <leader>vbm :ViraServers<cr>:normal \<cr>
 
+" Misc
+nnoremap <silent> <leader>vsi :let g:vira_active_issue="
+nnoremap <silent> <leader>vb :ViraBrowse<cr>
+
 " Windows Style Commands {{{2
 
 " Redo
