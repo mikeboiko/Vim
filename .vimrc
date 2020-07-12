@@ -343,16 +343,68 @@ function! GetTODOs() " {{{2
     set wildignore-=*.jpg,*.docx,*.xlsm,*.mp4
 endfunction
 
-function! GitAddCommitPush() " {{{2
+function! GitAddCommitPush() abort " {{{2
     " Git - add all, commit and push
 
-    if has("unix") " Linux
-        exe 'term ++close bash --login -c "'.$HOME.'/Documents/GitRepos/Linux/git/gap"'
-    else " Windows
-        exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap'
+    if g:vira_active_issue ==? 'none'
+      let commit_text=''
+    else
+      let commit_text=g:vira_active_issue . ':'
     endif
 
+    if has('unix') " Linux
+        exe 'term ++close bash --login -c "'.$HOME.'/Documents/GitRepos/Linux/git/gap '.commit_text.'"'
+    else " Windows
+        exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap '.commit_text
+    endif
     redraw!
+
+endfunction
+
+function! GitNewBranch() abort " {{{2
+    " Create new git branch based on active vira issue
+
+    if g:vira_active_issue ==? 'none'
+      echom 'Please select issue first'
+      return
+    endif
+    execute('Git checkout -b ' . g:vira_active_issue)
+    Git push -u
+
+endfunction
+
+function! GitDeleteBranch() abort " {{{2
+    " Delete branch for active vira issue
+
+    if g:vira_active_issue ==? 'none'
+      echom 'Please select issue first'
+      return
+    endif
+    if g:vira_active_issue ==# FugitiveHead()
+      echom 'Change branch first'
+      return
+    endif
+
+    execute('Git branch -d ' . g:vira_active_issue)
+    execute('Git push origin --delete ' . g:vira_active_issue)
+
+endfunction
+
+function! GitMerge() abort " {{{2
+    " Merge current (issue) branch into dev
+
+    if g:vira_active_issue !=# FugitiveHead()
+      echom 'Issue and branch dont match'
+      return
+    endif
+
+    " Hacky method to merge into dev if it exists, otherwise merge into master
+    Git checkout master
+    Git checkout dev
+
+    " Merge message is like: 'VIRA-123: merge"
+    execute('Git merge -m "'. g:vira_active_issue . ': merge" ' . ' --no-ff ' . g:vira_active_issue)
+    Git push
 
 endfunction
 
@@ -827,6 +879,10 @@ call deoplete#custom#option('sources', {
 
 " This fixes the problem of tabbing through the menu from top to bottom (reverse order)
 let g:SuperTabDefaultCompletionType = '<c-n>'
+
+" Fugitive {{{2
+
+autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 " NerdCommenter{{{2
 
@@ -1377,9 +1433,11 @@ nnoremap <leader>gs :Gstatus<CR>
 " Display git diff in terminal
 nnoremap <leader>rd :terminal git --no-pager diff<CR>
 
-" Git - add all, commit and push
+" Fugitive/Vira
 nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
-" nnoremap <leader>gap :silent Git add --all<cr>:silent Gcommit<cr>:silent Gpush<cr>:redraw!<cr>
+nnoremap <leader>gnb :call GitNewBranch()<cr>
+nnoremap <leader>gdb :call GitDeleteBranch()<cr>
+nnoremap <leader>gm :call GitMerge()<cr>
 
 " My repo tool commands
 nnoremap <leader>rs :Repo st -s<cr>
