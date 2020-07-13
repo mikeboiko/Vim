@@ -41,7 +41,7 @@ function! ALERunLint() " {{{2
     let b:ale_enabled = 1
     augroup ALEProgress
       autocmd!
-      autocmd User ALELintPost call ALEOpenResults() | au! ALEProgress
+      autocmd User ALELintPost call ALEOpenResults() | autocmd! ALEProgress
     augroup end
     call ale#Queue(0, 'lint_file')
   else
@@ -736,7 +736,7 @@ command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabl
 " Custom Languages {{{2
 
 " SEBOL:
-au BufRead,BufNewFile *.sebol setfiletype sebol
+autocmd BufRead,BufNewFile *.sebol setfiletype sebol
 
 " vim-plug {{{2
 
@@ -882,7 +882,7 @@ let g:SuperTabDefaultCompletionType = '<c-n>'
 
 " Fugitive {{{2
 
-autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 " NerdCommenter{{{2
 
@@ -1080,7 +1080,7 @@ set tabline=%!MyTabLine()
 
 " Have Vim jump to the last position when reopening a file
 if has("autocmd")
-    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
                 \| exe "normal! g'\"" | endif
 endif
 
@@ -1159,7 +1159,7 @@ set modeline
 set modelines=5
 
 " Don't add comment automatically on new line
-au FileType * setlocal formatoptions-=cro
+autocmd FileType * setlocal formatoptions-=cro
 
 " Spelling
 set spellfile=$HOME/Notes/Misc/en.utf-8.add
@@ -1169,16 +1169,16 @@ set spellfile=$HOME/Notes/Misc/en.utf-8.add
 
 " Auto reload file when changed from another source
 set autoread
-au CursorHold * if &buftype != "nofile" | checktime | endif
+autocmd CursorHold * if &buftype != "nofile" | checktime | endif
 
 " Peform actions right before saving bugger
-au BufWritePre * call OnSave()
+autocmd BufWritePre * call OnSave()
 
 " Preview Window
 autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
 
 " Enable spelling for these buffers
-au BufWinEnter,BufEnter COMMIT_EDITMSG setlocal spell
+autocmd BufWinEnter,BufEnter COMMIT_EDITMSG setlocal spell
 
 " Folding{{{3
 set foldenable
@@ -1216,7 +1216,7 @@ set smartcase
 " QuickFix/Location {{{3
 
 " Align QuickFix on ver unique string '$}{$'
-au BufReadPost quickfix setlocal modifiable
+autocmd BufReadPost quickfix setlocal modifiable
             \| silent exe 'Tab /|\$}{\$'
             \| silent exe 'g/\$}{\$/s/'
             \| setlocal nowrap
@@ -1228,7 +1228,7 @@ au BufReadPost quickfix setlocal modifiable
 " \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>:GoToMatchedColumn<CR>
 
 " Close QuickFix/Location lists automatically when it's the last window in current tab
-au BufEnter * call CloseQuickFixWindow()
+autocmd BufEnter * call CloseQuickFixWindow()
 
 " Undo Files {{{3
 " Let's save undo info!
@@ -1550,7 +1550,7 @@ nnoremap Q :q!<CR>
 nmap gf gf
 
 " Exit command history window q: or q/ with <c-w>
-au CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR> |
+autocmd CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR> |
             \ nnoremap <buffer> qq :q!<CR>
 
 " Rename Tag {{{2
@@ -1561,7 +1561,7 @@ nnoremap <leader>rt mz"ayiw:1sp wordRenamingBuffer<CR>"aP
 " After edits, press enter, the original word is renamed globally
 " The search is case sensitive because of I in .../gI
 " Press escape to cancel
-au BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
+autocmd BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
             \| nnoremap <buffer> <Esc> :q!<CR>
             \| nnoremap <buffer> <c-s> <nop>
             \| nnoremap <buffer> qw <nop>
@@ -1576,7 +1576,7 @@ nnoremap <leader>cw :tabe<CR>:terminal ++curwin curl wttr.in/Calgary<CR>
 " Run Scripts {{{2
 
 " Initialize arguments required to run script
-au BufEnter,BufCreate,BufWrite * call StartArgInitialize()
+autocmd BufEnter,BufCreate,BufWrite * call StartArgInitialize()
 
 " Run Script Asynchronously
 " For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
