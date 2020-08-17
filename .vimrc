@@ -735,8 +735,8 @@ command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabl
 " Plugins{{{1
 " Custom Languages {{{2
 
-" SEBOL:
 autocmd BufRead,BufNewFile *.sebol setfiletype sebol
+autocmd BufRead,BufNewFile *.mmd setfiletype mermaid
 
 " vim-plug {{{2
 
@@ -897,6 +897,7 @@ let g:NERDCustomDelimiters = {
             \ 'python': { 'left': '#', 'right': '' },
             \ 'dosbatch': { 'left': 'REM', 'right': '' },
             \ 'sebol': { 'left': '!', 'right': '' },
+            \ 'mermaid': { 'left': '%%', 'right': '' },
             \ 'vader': { 'left': '#'}
             \ }
 
