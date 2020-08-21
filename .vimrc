@@ -793,7 +793,7 @@ Plug 'yssl/QFEnter'                                                     " QuickF
 " End initialization of plugin system
 call plug#end()
 
-" AirLine{{{2
+" AirLine {{{2
 
 " Fix font inconsistencies
 let g:airline_powerline_fonts=1
@@ -884,6 +884,11 @@ let g:SuperTabDefaultCompletionType = '<c-n>'
 " Fugitive {{{2
 
 autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+" MarkdownPreview {{{2
+
+let g:mkdp_auto_close = 0
+let g:mkdp_refresh_slow = 1
 
 " NerdCommenter{{{2
 
