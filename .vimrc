@@ -353,7 +353,12 @@ function! GitAddCommitPush() abort " {{{2
     endif
 
     if has('unix') " Linux
-        exe 'term ++close bash --login -c "'.$HOME.'/Documents/GitRepos/Linux/git/gap '.commit_text.'"'
+        if has('nvim')
+            exe 'sp term://bash --login -c \"'.$HOME.'/Documents/GitRepos/Linux/git/gap '.commit_text.'\"'
+            " exe 'sp term://bash --login -c \"/home/mike/Documents/GitRepos/Linux/git/gap\"'
+        else
+            exe 'term ++close bash --login -c "'.$HOME.'/Documents/GitRepos/Linux/git/gap '.commit_text.'"'
+        endif
     else " Windows
         exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap '.commit_text
     endif
@@ -731,6 +736,15 @@ command! -nargs=+ -complete=command Repo try |
 
 " SpellToggle {{{2
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
+
+" StartAsyncNeoVim {{{2
+                  
+command! -nargs=1 StartAsyncNeoVim
+         \ call jobstart(<f-args>, {
+         \    'on_exit': { j,d,e ->
+         \       execute('echom "command finished with exit status '.d.'"', '')
+         \    }
+         \ })
 
 " Plugins{{{1
 " Custom Languages {{{2
@@ -1187,6 +1201,12 @@ autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
 " Enable spelling for these buffers
 autocmd BufWinEnter,BufEnter COMMIT_EDITMSG setlocal spell
 
+" Initialize arguments required to run script
+augroup startargs
+    autocmd!
+    autocmd BufEnter,BufCreate,BufWrite * call StartArgInitialize()
+augroup end
+
 " Folding{{{3
 set foldenable
 set foldlevelstart=0
@@ -1571,17 +1591,22 @@ autocmd BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
 
 " Reports {{{2
 
-nnoremap <leader>tp :tabe<CR>:terminal ++curwin python /home/mike/Documents/GitRepos/WebApps/Tables/scripts/tables.py cli -f printbalance<CR>
-nnoremap <leader>cw :tabe<CR>:terminal ++curwin curl wttr.in/Calgary<CR>
+if has('nvim')
+  nnoremap <leader>tp :tabe term://python /home/mike/Documents/GitRepos/WebApps/Tables/scripts/tables.py cli -f printbalance<CR>
+  nnoremap <leader>cw :tabe term://curl wttr.in/Calgary<CR>
+else
+  nnoremap <leader>tp :tabe<CR>:terminal ++curwin python /home/mike/Documents/GitRepos/WebApps/Tables/scripts/tables.py cli -f printbalance<CR>
+  nnoremap <leader>cw :tabe<CR>:terminal ++curwin curl wttr.in/Calgary<CR>
+endif
 
 " Run Scripts {{{2
 
-" Initialize arguments required to run script
-autocmd BufEnter,BufCreate,BufWrite * call StartArgInitialize()
-
-" Run Script Asynchronously
-" For example, to use bash: let b:startapp = '"C:\Program Files\Git\git-bash.exe"'
-nnoremap <silent> <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
+" Run Script in terminal
+if has('nvim')
+    nnoremap <expr> <leader>rr g:term_close == '' ? ':wa<CR>:silent exe trim("sp term://".b:startapp.b:startfile." ".b:startargs)<CR>':':wa<CR>:exe trim("StartAsyncNeoVim ".b:startapp.b:startfile." ".b:startargs)<CR>'
+else
+    nnoremap <silent> <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
+endif
 
 " Save Buffer {{{2
 
