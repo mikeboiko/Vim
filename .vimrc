@@ -1207,6 +1207,13 @@ augroup startargs
     autocmd BufEnter,BufCreate,BufWrite * call StartArgInitialize()
 augroup end
 
+" Fixes bug in nvim terminal. It should be same as vim - ineractive
+augroup nvim_term
+  au!
+  au TermOpen * startinsert
+  au TermClose * stopinsert
+augroup END
+
 " Folding{{{3
 set foldenable
 set foldlevelstart=0
