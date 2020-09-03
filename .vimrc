@@ -738,7 +738,7 @@ command! -nargs=+ -complete=command Repo try |
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
 
 " StartAsyncNeoVim {{{2
-                  
+
 command! -nargs=1 StartAsyncNeoVim
          \ call jobstart(<f-args>, {
          \    'on_exit': { j,d,e ->
@@ -1208,11 +1208,13 @@ augroup startargs
 augroup end
 
 " Fixes bug in nvim terminal. It should be same as vim - ineractive
-augroup nvim_term
-  au!
-  au TermOpen * startinsert
-  au TermClose * stopinsert
-augroup END
+if has('nvim')
+  augroup nvim_term
+    au!
+    au TermOpen * startinsert
+    au TermClose * stopinsert
+  augroup END
+endif
 
 " Folding{{{3
 set foldenable
