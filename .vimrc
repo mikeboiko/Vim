@@ -752,6 +752,12 @@ command! -nargs=1 StartAsyncNeoVim
 autocmd BufRead,BufNewFile *.sebol setfiletype sebol
 autocmd BufRead,BufNewFile *.mmd setfiletype mermaid
 
+" vim-polyglot {{{2
+
+" markdown: I was getting some weird indentation happening with - lists
+" This setting has to be configured before vim-polyglot is loaded by vim-plug
+let g:polyglot_disabled = ['markdown', 'csv']
+
 " vim-plug {{{2
 
 " Plugin manager
@@ -975,11 +981,6 @@ let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 
 " Additional UltiSnips config.
 let g:UltiSnipsSnippetDirectories=[$HOME.'/Documents/GitRepos/Vim/snippets']
-
-" vim-polyglot {{{2
-
-" markdown: I was getting some weird indentation happening with - lists
-let g:polyglot_disabled = ['markdown', 'csv']
 
 " vim-unstack {{{2
 
