@@ -1711,7 +1711,9 @@ nnoremap <silent> <leader>vft :ViraFilterTypes<cr>
 nnoremap <silent> <leader>vfv :ViraFilterVersions<cr>
 
 " Boards
-" nnoremap <silent> <leader>vbm :ViraServers<cr>:normal \<cr>
+nnoremap <silent> <leader>vbm :ViraLoadProject __default__<cr>
+nnoremap <silent> <leader>vbf :ViraLoadProject Model<cr>
+nnoremap <silent> <leader>vbv :ViraLoadProject vira<cr>
 
 " Misc
 nnoremap <silent> <leader>vsi :let g:vira_active_issue="
