@@ -1700,6 +1700,7 @@ nnoremap <silent> <leader>vr :ViraReport<cr>
 nnoremap <silent> <leader>vs :ViraServers<cr>
 
 " Filters
+nnoremap <silent> <leader>vfe :ViraFilterEdit<cr>
 nnoremap <silent> <leader>vfP :ViraFilterPriorities<cr>
 nnoremap <silent> <leader>vfR :ViraFilterReporter<cr>
 nnoremap <silent> <leader>vfT :ViraFilterText<cr>
