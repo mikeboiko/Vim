@@ -28,6 +28,7 @@ else
 endif
 
 " Functions {{{1
+
 function! ALEOpenResults() " {{{2
   let l:bfnum = bufnr('')
   let l:items = ale#engine#GetLoclist(l:bfnum)
@@ -789,7 +790,7 @@ Plug 'junegunn/vader.vim'                                               " VimScr
 Plug 'kalekundert/vim-coiled-snake'                                     " Python syntax folding
 Plug 'ludovicchabant/vim-gutentags'                                     " Manage ctags
 Plug 'majutsushi/tagbar'                                                " Use c-tags in real time and display tag bar
-Plug 'masukomi/vim-markdown-folding'                                    " Syntax based fording for md
+Plug 'mikeboiko/vim-markdown-folding'                                   " Syntax based fording for md
 Plug 'mattboehm/vim-unstack'                                            " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                             " Auto-close brackets
 Plug 'mikeboiko/vim-sort-folds'                                         " Sort vim folds
