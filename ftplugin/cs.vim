@@ -43,8 +43,9 @@ nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
 
 " Mappings {{{1
 
-nnoremap <buffer> gd zR:OmniSharpGotoDefinition<CR>
+nnoremap <buffer> <leader>fi :OmniSharpCodeFormat<CR>
 nnoremap <buffer> <leader>h :OmniSharpDocumentation<CR>
+nnoremap <buffer> gd zR:OmniSharpGotoDefinition<CR>
 
 " Project Specific {{{1
 " AccuTuneMain " {{{2

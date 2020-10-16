@@ -1084,6 +1084,10 @@ set foldtext=v:folddashes.FormatFoldString(v:foldstart)
 " Get rid of that ugly x in top right corner or tabline
 set tabline=%!MyTabLine()
 
+" Cursor changes from block to line in insert mode
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
+
 " Functionality {{{2
 " Vim Start {{{3
 
