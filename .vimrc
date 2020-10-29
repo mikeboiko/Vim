@@ -1701,10 +1701,20 @@ nnoremap <silent> <leader>vI :ViraIssue<cr>
 nnoremap <silent> <leader>vc :ViraComment<cr>
 nnoremap <silent> <leader>vi :ViraIssues<cr>
 nnoremap <silent> <leader>vr :ViraReport<cr>
-nnoremap <silent> <leader>vs :ViraServers<cr>
+
+" Set
+nnoremap <silent> <leader>vsS :silent! ViraServers<cr>
+nnoremap <silent> <leader>vsa :silent! ViraSetAssignee<cr>
+nnoremap <silent> <leader>vsc :silent! ViraSetComponent<cr>
+nnoremap <silent> <leader>vse :silent! ViraSetEpic<cr>
+nnoremap <silent> <leader>vsp :silent! ViraSetPriority<cr>
+nnoremap <silent> <leader>vss :silent! ViraSetStatus<cr>
+nnoremap <silent> <leader>vst :silent! ViraSetType<cr>
+nnoremap <silent> <leader>vsv :silent! ViraSetVersion<cr>
 
 " Filters
 nnoremap <silent> <leader>vfe :ViraFilterEdit<cr>
+nnoremap <silent> <leader>vfE :ViraFilterEpics<cr>
 nnoremap <silent> <leader>vfP :ViraFilterPriorities<cr>
 nnoremap <silent> <leader>vfR :ViraFilterReporter<cr>
 nnoremap <silent> <leader>vfT :ViraFilterText<cr>
