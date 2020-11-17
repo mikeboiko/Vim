@@ -1713,12 +1713,13 @@ nnoremap <silent> <leader>vst :silent! ViraSetType<cr>
 nnoremap <silent> <leader>vsv :silent! ViraSetVersion<cr>
 
 " Filters
-nnoremap <silent> <leader>vfe :ViraFilterEdit<cr>
 nnoremap <silent> <leader>vfE :ViraFilterEpics<cr>
 nnoremap <silent> <leader>vfP :ViraFilterPriorities<cr>
 nnoremap <silent> <leader>vfR :ViraFilterReporter<cr>
 nnoremap <silent> <leader>vfT :ViraFilterText<cr>
 nnoremap <silent> <leader>vfa :ViraFilterAssignees<cr>
+nnoremap <silent> <leader>vfc :ViraFilterComponents<cr>
+nnoremap <silent> <leader>vfe :ViraFilterEdit<cr>
 nnoremap <silent> <leader>vfp :ViraFilterProjects<cr>
 nnoremap <silent> <leader>vfr :ViraFilterReset<cr>
 nnoremap <silent> <leader>vfs :ViraFilterStatuses<cr>
