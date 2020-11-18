@@ -772,6 +772,7 @@ call plug#begin(vimPlugDir)
 
 " Plug 'file:///home/mike/.vim/plugged/test'
 " Plug 'vimwiki/vimwiki'                                     " Nice wiki format
+" Plug 'tommcdo/vim-fubitive'                                             " Extend fugitive.vim to support Bitbucket URLs in :Gbrowse.
 
 Plug 'OmniSharp/omnisharp-vim'                                          " C# magic
 Plug 'PProvost/vim-ps1'                                                 " Powershell file types
@@ -790,9 +791,9 @@ Plug 'junegunn/vader.vim'                                               " VimScr
 Plug 'kalekundert/vim-coiled-snake'                                     " Python syntax folding
 Plug 'ludovicchabant/vim-gutentags'                                     " Manage ctags
 Plug 'majutsushi/tagbar'                                                " Use c-tags in real time and display tag bar
-Plug 'mikeboiko/vim-markdown-folding'                                   " Syntax based fording for md
 Plug 'mattboehm/vim-unstack'                                            " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                             " Auto-close brackets
+Plug 'mikeboiko/vim-markdown-folding'                                   " Syntax based fording for md
 Plug 'mikeboiko/vim-sort-folds'                                         " Sort vim folds
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}            " Jira integration
 Plug 'posva/vim-vue'                                                    " Vue filetype recognition
@@ -801,7 +802,6 @@ Plug 'roxma/vim-hug-neovim-rpc'                                         " Auto-c
 Plug 'scrooloose/nerdcommenter'                                         " Commenting
 Plug 'scrooloose/nerdtree'                                              " Tree file browser
 Plug 'sheerun/vim-polyglot'                                             " Language Pack (syntax/indent)
-Plug 'tommcdo/vim-fubitive'                                             " Extend fugitive.vim to support Bitbucket URLs in :Gbrowse.
 Plug 'tpope/vim-fugitive'                                               " Git wrapper
 Plug 'tpope/vim-repeat'                                                 " Repeat surround and commenting with .
 Plug 'tpope/vim-rhubarb'                                                " GitHub integration with fugitive
@@ -1130,7 +1130,8 @@ if has('GUI')
 endif
 
 " General settings required for highlighting
-syntax on
+" I removed this line because it was giving me an error in vira for =bg
+" syntax on
 
 " Enable plug-ins for indentation
 filetype plugin indent on
@@ -1565,9 +1566,6 @@ nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
 nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
 " Plugins {{{2
-
-" This fixes my map conflict with <C-r>
-map <leader>rrr <plug>(RepeatRedo)<CR>
 
 " Quit {{{2
 
