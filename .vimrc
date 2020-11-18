@@ -1594,12 +1594,15 @@ nnoremap <leader>rt mz"ayiw:1sp wordRenamingBuffer<CR>"aP
 " After edits, press enter, the original word is renamed globally
 " The search is case sensitive because of I in .../gI
 " Press escape to cancel
-autocmd BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
-            \| nnoremap <buffer> <Esc> :q!<CR>
-            \| nnoremap <buffer> <c-s> <nop>
-            \| nnoremap <buffer> qw <nop>
-            \| nnoremap <buffer> <Enter>
-            \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/gI<CR>`z
+augroup RenamingBuffer
+  autocmd!
+  autocmd BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
+        \| nnoremap <buffer> <Esc> :q!<CR>
+        \| nnoremap <buffer> <c-s> <nop>
+        \| nnoremap <buffer> qw <nop>
+        \| nnoremap <buffer> <Enter>
+        \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/gI<CR>`z
+augroup END
 
 " Reports {{{2
 
