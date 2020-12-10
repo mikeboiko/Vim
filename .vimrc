@@ -1728,9 +1728,10 @@ nnoremap <silent> <leader>vft :ViraFilterTypes<cr>
 nnoremap <silent> <leader>vfv :ViraFilterVersions<cr>
 
 " Boards
+nnoremap <silent> <leader>vbh :ViraLoadProject Home<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbm :ViraLoadProject __default__<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbf :ViraLoadProject Model<cr>:ViraIssues<cr>
-nnoremap <silent> <leader>vbv :ViraLoadProject vira<cr>:ViraIssues<cr>
+nnoremap <silent> <leader>vbv :ViraLoadProject Vira<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbw :ViraLoadProject Work<cr>:ViraIssues<cr>
 
 " Misc
