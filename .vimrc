@@ -453,37 +453,18 @@ function! MyTabLabel(n) " {{{2
   return fnamemodify(buf, ':t')
 endfunction
 
-" Quit {{{2
-
-" Close location list, preview window and quit
-function! Quit()
-    if (&buftype != "quickfix")
-        lclose
-    endif
-    if (!&previewwindow)
-        pclose
-    endif
-    quit
-endf
-
-function! SetCurrentWorkingDirectory() " {{{2
-    " A standalone function to set the working directory to the project's root, or
-    " to the parent directory of the current file if a root can't be found:
-    let cph = expand('%:p:h', 1)
-    if cph =~ '^.\+://' | retu | en
-    for mkr in ['.git/', '.hg/', '.svn/', '.bzr/', '_darcs/', '.vimprojects']
-        let wd = call('find'.(mkr =~ '/$' ? 'dir' : 'file'), [mkr, cph.';'])
-        if wd != '' | let &acd = 0 | brea | en
-    endfo
-    exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
-endfunction
-
-function! SaveFile() abort " {{{2
+function! PasteClipboard() abort " {{{2
   " See https://github.com/ferrine/md-img-paste.vim
   let targets = filter(
         \ systemlist('xclip -selection clipboard -t TARGETS -o'),
         \ 'v:val =~# ''image''')
-  if empty(targets) | return | endif
+
+  " Past regular text if not an image
+  if empty(targets)
+    normal! o
+    normal! P==
+    return
+  endif
 
   let outdir = expand('%:p:h') . '/img'
   if !isdirectory(outdir)
@@ -514,7 +495,33 @@ function! SaveFile() abort " {{{2
   endif
 
   let @* = '![](./' . fnamemodify(filename, ':.') . ')'
-  normal! "*p
+  normal! o
+  normal! "*P
+endfunction
+
+" Quit {{{2
+
+" Close location list, preview window and quit
+function! Quit()
+    if (&buftype != "quickfix")
+        lclose
+    endif
+    if (!&previewwindow)
+        pclose
+    endif
+    quit
+endf
+
+function! SetCurrentWorkingDirectory() " {{{2
+    " A standalone function to set the working directory to the project's root, or
+    " to the parent directory of the current file if a root can't be found:
+    let cph = expand('%:p:h', 1)
+    if cph =~ '^.\+://' | retu | en
+    for mkr in ['.git/', '.hg/', '.svn/', '.bzr/', '_darcs/', '.vimprojects']
+        let wd = call('find'.(mkr =~ '/$' ? 'dir' : 'file'), [mkr, cph.';'])
+        if wd != '' | let &acd = 0 | brea | en
+    endfo
+    exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
 endfunction
 
 " Snippets{{{2
@@ -1784,7 +1791,7 @@ nnoremap <c-y> <c-r>
 inoremap <c-y> <Esc><C-r>
 
 " Paste from clipboard
-nnoremap <c-v> o<esc>P==
+nnoremap <c-v> :call PasteClipboard()<cr>
 inoremap <c-v> <c-r>+
 cmap <c-v> <c-r>+
 
