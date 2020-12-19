@@ -478,6 +478,45 @@ function! SetCurrentWorkingDirectory() " {{{2
     exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
 endfunction
 
+function! SaveFile() abort " {{{2
+  " See https://github.com/ferrine/md-img-paste.vim
+  let targets = filter(
+        \ systemlist('xclip -selection clipboard -t TARGETS -o'),
+        \ 'v:val =~# ''image''')
+  if empty(targets) | return | endif
+
+  let outdir = expand('%:p:h') . '/img'
+  if !isdirectory(outdir)
+    call mkdir(outdir)
+  endif
+
+  let mimetype = targets[0]
+  let extension = split(mimetype, '/')[-1]
+  let tmpfile = outdir . '/savefile_tmp.' . extension
+  call system(printf('xclip -selection clipboard -t %s -o > %s',
+        \ mimetype, tmpfile))
+
+  let cnt = 0
+  let filename = outdir . '/image' . cnt . '.' . extension
+  while filereadable(filename)
+    call system('diff ' . tmpfile . ' ' . filename)
+    if !v:shell_error
+      call delete(tmpfile)
+      break
+    endif
+
+    let cnt += 1
+    let filename = outdir . '/image' . cnt . '.' . extension
+  endwhile
+
+  if filereadable(tmpfile)
+    call rename(tmpfile, filename)
+  endif
+
+  let @* = '![](./' . fnamemodify(filename, ':.') . ')'
+  normal! "*p
+endfunction
+
 " Snippets{{{2
 function! SnipClass() " {{{3
     if &filetype == "php"
@@ -1189,7 +1228,7 @@ set modelines=5
 autocmd FileType * setlocal formatoptions-=cro
 
 " Spelling
-set spellfile=$HOME/Notes/Misc/en.utf-8.add
+set spellfile=$HOME/Nextcloud/Notes/Misc/en.utf-8.add
 
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
@@ -1498,7 +1537,7 @@ nnoremap gd zR:ALEGoToDefinition<CR>
 nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/Documents/GitRepos<s-left><space><left>
 
 " Search notes
-nnoremap <leader>fn :Grep ~/Notes<s-left><space><left>
+nnoremap <leader>fn :Grep ~/Nextcloud/Notes<s-left><space><left>
 
 " Search git repo
 nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
