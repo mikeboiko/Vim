@@ -1500,10 +1500,6 @@ noremap <silent> <leader>zz :call WrapFold(v:count)<CR>
 noremap <silent> <leader>zj :call WrapFold(foldlevel(line(".")) + 1)<CR>
 noremap <silent> <leader>zk :call WrapFold(foldlevel(line(".")) - 1)<CR>
 
-" Visual fold text objects
-xnoremap iz :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zv[z<cr>
-xnoremap az :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zV[z<cr>
-
 " Font Size Bigger/Smaller {{{2
 
 " Font Hotkeys
@@ -1654,10 +1650,10 @@ augroup END
 
 if has('nvim')
   nnoremap <leader>tp :tabe term://python /home/mike/Documents/GitRepos/WebApps/Tables/scripts/tables.py cli -f printbalance<CR>
-  nnoremap <leader>cw :tabe term://curl wttr.in/Calgary<CR>
+  nnoremap <leader>cw :tabe term://curl wttr.in/Calgary?m"<CR>
 else
   nnoremap <leader>tp :tabe<CR>:terminal ++curwin python /home/mike/Documents/GitRepos/WebApps/Tables/scripts/tables.py cli -f printbalance<CR>
-  nnoremap <leader>cw :tabe<CR>:terminal ++curwin curl wttr.in/Calgary<CR>
+  nnoremap <leader>cw :tabe<CR>:terminal ++curwin curl wttr.in/Calgary?m"<CR>
 endif
 
 " Run Scripts {{{2
