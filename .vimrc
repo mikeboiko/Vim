@@ -1235,7 +1235,7 @@ set modelines=5
 autocmd FileType * setlocal formatoptions-=cro
 
 " Spelling
-set spellfile=$HOME/Nextcloud/Notes/Misc/en.utf-8.add
+set spellfile=$HOME/Nextcloud/Documents/en.utf-8.add
 
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
