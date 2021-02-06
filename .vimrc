@@ -524,64 +524,6 @@ function! SetCurrentWorkingDirectory() " {{{2
     exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
 endfunction
 
-" Snippets{{{2
-function! SnipClass() " {{{3
-    if &filetype == "php"
-        execute "normal! oclass  {\<CR>public function __construct() {\<CR>}\<CR>}\<ESC>kkk^t{" | startinsert
-    endif
-endfunction
-
-function! SnipComment() " {{{3
-    execute "read $CODE/Vim/snippets/SectionComment.txt"
-    execute "cal NERDComment(0,\"toggle\")"
-    execute "normal! jj"
-    execute "cal NERDComment(0,\"toggle\")"
-    execute "normal! k"
-    execute "cal NERDComment(0,\"toggle\")"
-    execute "normal! $l" | startinsert!
-endfunction
-
-function! SnipFunction() " {{{3
-    if &filetype == "vim"
-        execute "normal! ofunction \<CR>endfunction\<ESC>k" | startinsert!
-
-    elseif &filetype == "sh"
-        execute "normal! ofunction \<CR>{\<CR>}\<ESC>kk" | startinsert!
-    endif
-endfunction
-
-function! SnipHeader() " {{{3
-    execute "read $CODE/Vim/snippets/Header.txt"
-    execute "cal NERDComment(0,\"toggle\")"
-    execute "normal! kddjjjpk"
-    execute "cal NERDComment(0,\"toggle\")"
-    execute "normal! k"
-    execute "cal NERDComment(0,\"toggle\")"
-    execute "normal! k"
-    execute "cal NERDComment(0,\"toggle\")"
-    execute "normal! $l" | startinsert!
-endfunction
-
-function! SnipIf() " {{{3
-    if &filetype == "php"
-        execute "normal! o// IF\<CR>\<ESC>^Diif () {\<CR>}\<ESC>kf)" | startinsert
-    elseif &filetype == "vim"
-        execute "normal! o\" IF\<CR>\<ESC>^Diif \<CR>endif\<ESC>k" | startinsert!
-    endif
-endfunction
-
-function! SnipLog() " {{{3
-    " Log variable to console for debugging
-    if &filetype == "vue" || &filetype == "javascript"
-        let log_string = "console.clear()\<c-o>console.log()"
-    elseif &filetype == "python"
-        let log_string = "print()"
-    else
-        let log_string = "echo  "
-    endif
-    execute "normal o" . log_string | startinsert
-endfunction
-
 function! StartArgInitialize() " {{{2
     " Read lines the first 20 lines of file and set vars required for executing script
     " This is the execution command:
@@ -1684,14 +1626,6 @@ vnoremap J 5j
 " Show and Trim Spaces {{{2
 
 nnoremap <leader>ts :ALEFix trim_whitespace<CR>
-
-" Snippets {{{2
-" nnoremap <leader>snc :call SnipClass()<CR>
-nnoremap <leader>snc :call SnipComment()<CR>
-nnoremap <leader>snf :call SnipFunction()<CR>
-nnoremap <leader>snh :call SnipHeader()<CR>
-nnoremap <leader>sni :call SnipIf()<CR>
-nnoremap <leader>snl :call SnipLog()<CR>
 
 " Sorting {{{2
 " Sort paragraph
