@@ -774,6 +774,7 @@ Plug 'ervandew/supertab'                                                " Insert
 Plug 'godlygeek/tabular'                                                " Align things
 Plug 'honza/vim-snippets'                                               " Snippet library
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  } " Preview md in brwoser
+Plug 'jkramer/vim-checkbox'                                             " Checkbox toggle
 Plug 'junegunn/gv.vim'                                                  " Access git files easier
 Plug 'junegunn/vader.vim'                                               " VimScript testing
 Plug 'kalekundert/vim-coiled-snake'                                     " Python syntax folding
@@ -1652,7 +1653,7 @@ let todoPrefix = 'TODO-MB [' . strftime('%y%m%d') . '] - '
 nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', todoPrefix)<CR>
 
 " Add new TODO - TEST above current line
-nnoremap <silent> <leader>tt :exe 'normal O' . b:NERDCommenterDelims['left'] . ' '. todoPrefix . 'TEST' . b:NERDCommenterDelims['right']<CR>
+" nnoremap <silent> <leader>tt :exe 'normal O' . b:NERDCommenterDelims['left'] . ' '. todoPrefix . 'TEST' . b:NERDCommenterDelims['right']<CR>
 
 " Find all TODOs
 nnoremap <silent> <leader>tf :call GetTODOs()<CR>
