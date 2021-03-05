@@ -1382,6 +1382,11 @@ vnoremap <leader>cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<C
 map <leader>cp vip<plug>NERDCommenterYank
 map <leader>cu vip<plug>NERDCommenterUncomment
 
+" Conflicts {{{2
+
+" This is to fix a <C-r> conflict
+nmap <leader>redo <Plug>(RepeatRedo)
+
 " Convert Line Endings {{{2
 
 " Convert to Dos
