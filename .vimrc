@@ -1560,6 +1560,7 @@ nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 " Quit {{{2
 
 " Close extra windows then quit
+inoremap <c-q> <esc>:up<CR>:call Quit()<CR>
 nnoremap <c-q> :up<CR>:call Quit()<CR>
 nnoremap <c-w> :call Quit()<CR>
 nnoremap qq :call Quit()<CR>
