@@ -988,6 +988,8 @@ let g:unstack_layout = "portrait"
 
 let g:vira_config_file_projects = $HOME.'/Documents/GitRepos/Linux/config/vira_projects.yaml'
 let g:vira_config_file_servers = $HOME.'/Documents/GitRepos/Linux/config/vira_servers.yaml'
+let g:vira_issue_limit = 100
+
 " let g:vira_report_width = 100
 
 " OmniSharp {{{2
