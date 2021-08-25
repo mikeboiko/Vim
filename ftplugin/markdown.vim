@@ -17,4 +17,7 @@ syn match markdownError "\w\@<=\w\@="
 " Turn on spell-check
 setlocal spell
 
+" Use fzf-folds instead of CtrlP
+nnoremap <buffer> <leader>. :Folds<cr>
+
 " vim: foldmethod=manual:foldlevel=3

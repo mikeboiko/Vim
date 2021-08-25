@@ -786,6 +786,7 @@ Plug 'mikeboiko/vim-markdown-folding'                                   " Syntax
 Plug 'mikeboiko/vim-sort-folds'                                         " Sort vim folds
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}            " Jira integration
 Plug 'posva/vim-vue'                                                    " Vue filetype recognition
+Plug 'roosta/fzf-folds.vim'                                             " fzf for folds
 Plug 'roxma/nvim-yarp'                                                  " Auto-completion engine
 Plug 'roxma/vim-hug-neovim-rpc'                                         " Auto-completion engine
 Plug 'scrooloose/nerdcommenter'                                         " Commenting
