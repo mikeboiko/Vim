@@ -891,6 +891,10 @@ call deoplete#custom#option('sources', {
 " This fixes the problem of tabbing through the menu from top to bottom (reverse order)
 let g:SuperTabDefaultCompletionType = '<c-n>'
 
+" fzf-folds {{{2
+
+let g:fzf_folds_open = 1
+
 " Fugitive {{{2
 
 autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
