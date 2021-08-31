@@ -723,7 +723,7 @@ command! -nargs=1 StartAsyncNeoVim
 " Plugins{{{1
 " Custom Languages {{{2
 
-augroup SetFileTypeCustom
+augroup CustomSetFileType
   autocmd!
   autocmd BufRead,BufNewFile *.sebol setfiletype sebol
   autocmd BufRead,BufNewFile *.mmd setfiletype mermaid
@@ -885,7 +885,10 @@ let g:fzf_folds_open = 1
 
 " Fugitive {{{2
 
-autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+augroup CustomFugitive
+  autocmd!
+  autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+augroup end
 
 " MarkdownPreview {{{2
 
@@ -910,7 +913,11 @@ let g:NERDCustomDelimiters = {
             \ }
 
 " This used to happen automatically, but broke at ~v2.5
-autocmd BufEnter * call nerdcommenter#SetUp()
+augroup CustomNERDcommenter
+  autocmd!
+  autocmd!
+  autocmd BufEnter * call nerdcommenter#SetUp()
+augroup end
 
 " NERDTree{{{2
 
@@ -1091,10 +1098,11 @@ let &t_EI = "\e[2 q"
             " \ | catch | endtry
 
 " Have Vim jump to the last position when reopening a file
-if has("autocmd")
-    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-                \| exe "normal! g'\"" | endif
-endif
+augroup CustomLastPosition
+  autocmd!
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+              \| exe "normal! g'\"" | endif
+augroup end
 
 " General{{{3
 
@@ -1158,11 +1166,8 @@ endif
 " Vertical splits open on the right instead of the default of left
 set splitright
 
-" TODO-MB [180213] - Remove after confirming that the new functionality is better
 " Automatically change current directory when new file is opened
 set autochdir
-" Automatically change current directory to project root
-" autocmd BufEnter * call SetCurrentWorkingDirectory()
 
 " Enable Vim to check for modelines throughout your files
 " best practice to keep them at the top or the bottom of the file
@@ -1171,27 +1176,27 @@ set modeline
 " will be disabled
 set modelines=5
 
-" Don't add comment automatically on new line
-autocmd FileType * setlocal formatoptions-=cro
+set autoread
+
+augroup CustomOptions
+  autocmd!
+  " Don't add comment automatically on new line
+  autocmd FileType * setlocal formatoptions-=cro
+  " Auto reload file when changed from another source
+  autocmd CursorHold * if &buftype != "nofile" | checktime | endif
+  " Peform actions right before saving bugger
+  autocmd BufWritePre * call OnSave()
+  " Preview Window
+  autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
+  " Enable spelling for these buffers
+  autocmd BufWinEnter,BufEnter COMMIT_EDITMSG setlocal spell
+augroup end
 
 " Spelling
 set spellfile=$HOME/Nextcloud/Documents/en.utf-8.add
 
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
-
-" Auto reload file when changed from another source
-set autoread
-autocmd CursorHold * if &buftype != "nofile" | checktime | endif
-
-" Peform actions right before saving bugger
-autocmd BufWritePre * call OnSave()
-
-" Preview Window
-autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
-
-" Enable spelling for these buffers
-autocmd BufWinEnter,BufEnter COMMIT_EDITMSG setlocal spell
 
 " Initialize arguments required to run script
 augroup startargs
@@ -1244,19 +1249,21 @@ set smartcase
 " QuickFix/Location {{{3
 
 " Align QuickFix on ver unique string '$}{$'
-autocmd BufReadPost quickfix setlocal modifiable
-            \| silent exe 'Tab /|\$}{\$'
-            \| silent exe 'g/\$}{\$/s/'
-            \| setlocal nowrap
-            \| setlocal norelativenumber
-            \| setlocal cursorline
-            \| setlocal nomodifiable
+augroup CustomQuickFix
+  autocmd!
+  autocmd BufReadPost quickfix setlocal modifiable
+              \| silent exe 'Tab /|\$}{\$'
+              \| silent exe 'g/\$}{\$/s/'
+              \| setlocal nowrap
+              \| setlocal norelativenumber
+              \| setlocal cursorline
+              \| setlocal nomodifiable
+  " Close QuickFix/Location lists automatically when it's the last window in current tab
+  autocmd BufEnter * call CloseQuickFixWindow()
+augroup end
 
 " \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>
 " \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>:GoToMatchedColumn<CR>
-
-" Close QuickFix/Location lists automatically when it's the last window in current tab
-autocmd BufEnter * call CloseQuickFixWindow()
 
 " Undo Files {{{3
 " Let's save undo info!
@@ -1272,24 +1279,21 @@ set undofile
 " Language/Project Specific{{{1
 " Comma/Pipe/Tab Seperated Values{{{2
 " autocmd BufReadPost *.tsv,*.csv,*.psv execute 'Tabularize /,'
-autocmd BufReadPost *.csv setlocal nowrap
-autocmd BufReadPost *.psv setlocal nowrap
-autocmd BufReadPost *.tsv setlocal nowrap
-" autocmd BufReadPost *.csv 1sp
-" autocmd BufReadPost *.psv 1sp
-" autocmd BufReadPost *.tsv 1sp
-" HTML/js/css/etc {{{2
-autocmd FileType html,javascript,json,vue,css,scss,yml,yaml,markdown,vim setlocal tabstop=2
-
-" Markdown {{{2
-
-" Fix the syntax highlighting that randomly stops
-autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
-
-" Vue {{{2
-
-" Fix the syntax highlighting that randomly stops
-autocmd FileType vue syntax sync fromstart
+augroup CustomFileTypes
+  autocmd!
+  autocmd BufReadPost *.csv setlocal nowrap
+  autocmd BufReadPost *.psv setlocal nowrap
+  autocmd BufReadPost *.tsv setlocal nowrap
+  " autocmd BufReadPost *.csv 1sp
+  " autocmd BufReadPost *.psv 1sp
+  " autocmd BufReadPost *.tsv 1sp
+  " HTML/js/css/etc
+  autocmd FileType html,javascript,json,vue,css,scss,yml,yaml,markdown,vim setlocal tabstop=2
+  " Markdown -Fix the syntax highlighting that randomly stops
+  autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
+  " Vue - Fix the syntax highlighting that randomly stops
+  autocmd FileType vue syntax sync fromstart
+augroup end
 
 " Speed up vim when in vue files
 let g:vue_disable_pre_processors=1
@@ -1572,8 +1576,11 @@ nnoremap Q :q!<CR>
 nmap gf gf
 
 " Exit command history window q: or q/ with <c-w>
-autocmd CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR> |
-            \ nnoremap <buffer> qq :q!<CR>
+augroup CustomCommandHistory
+  autocmd!
+  autocmd CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR> |
+              \ nnoremap <buffer> qq :q!<CR>
+augroup end
 
 " Rename Tag {{{2
 
