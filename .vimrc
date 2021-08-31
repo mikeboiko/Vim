@@ -915,7 +915,6 @@ let g:NERDCustomDelimiters = {
 " This used to happen automatically, but broke at ~v2.5
 augroup CustomNERDcommenter
   autocmd!
-  autocmd!
   autocmd BufEnter * call nerdcommenter#SetUp()
 augroup end
 
