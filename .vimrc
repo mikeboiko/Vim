@@ -103,21 +103,6 @@ function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
     " Re-enable auto-pairs
     let b:autopairs_enabled = 1
 
-    " " TODO-MB [180123] - The alignment needs to be fixed so it doesn't align the first row if it's a comment
-    " " Prepare string with escaped special characters for Tab plugin
-    " let escapedCommaDelimiter = escape(b:NERDCommenterDelims['left'], '/')
-    " Align comments in paragraph
-    " exe "Tab /" . escapedCommaDelimiter
-
-endfunction
-
-function! CodeCleanUP() " {{{2
-    " Macros to clean up code
-
-    " Put a space after comment delimiter if it doesn't exist already
-    let escapedCommaDelimiter = escape(b:NERDCommenterDelims['left'], '/')
-    exe '%s/' . escapedCommaDelimiter . '\(\s\)\@!/' . escapedCommaDelimiter .' /g'
-
 endfunction
 
 function! ConvertWSLpath(path, ...) " {{{2
@@ -738,8 +723,11 @@ command! -nargs=1 StartAsyncNeoVim
 " Plugins{{{1
 " Custom Languages {{{2
 
-autocmd BufRead,BufNewFile *.sebol setfiletype sebol
-autocmd BufRead,BufNewFile *.mmd setfiletype mermaid
+augroup SetFileTypeCustom
+  autocmd!
+  autocmd BufRead,BufNewFile *.sebol setfiletype sebol
+  autocmd BufRead,BufNewFile *.mmd setfiletype mermaid
+augroup end
 
 " vim-polyglot {{{2
 
@@ -921,6 +909,8 @@ let g:NERDCustomDelimiters = {
             \ 'vader': { 'left': '#'}
             \ }
 
+" This used to happen automatically, but broke at ~v2.5
+autocmd BufEnter * call nerdcommenter#SetUp()
 
 " NERDTree{{{2
 
@@ -1212,9 +1202,9 @@ augroup end
 " Fixes bug in nvim terminal. It should be same as vim - ineractive
 if has('nvim')
   augroup nvim_term
-    au!
-    au TermOpen * startinsert
-    au TermClose * stopinsert
+    autocmd!
+    autocmd TermOpen * startinsert
+    autocmd TermClose * stopinsert
   augroup END
 endif
 
@@ -1665,9 +1655,6 @@ noremap <c-z> <nop>
 " Add new TODO above current line
 let todoPrefix = 'TODO-MB [' . strftime('%y%m%d') . '] - '
 nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', todoPrefix)<CR>
-
-" Add new TODO - TEST above current line
-" nnoremap <silent> <leader>tt :exe 'normal O' . b:NERDCommenterDelims['left'] . ' '. todoPrefix . 'TEST' . b:NERDCommenterDelims['right']<CR>
 
 " Find all TODOs
 nnoremap <silent> <leader>tf :call GetTODOs()<CR>
