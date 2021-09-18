@@ -1460,7 +1460,7 @@ endif
 
 " Fugitive remappings
 nnoremap <leader>gd :Gvdiff<Space>
-nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gs :Git<CR>
 
 " Display git diff in terminal
 nnoremap <leader>rd :terminal git --no-pager diff<CR>
