@@ -1699,13 +1699,13 @@ nnoremap <silent> <leader>vsv :silent! ViraSetVersion<cr>
 
 " Filters
 nnoremap <silent> <leader>vfE :ViraFilterEpics<cr>
-nnoremap <silent> <leader>vfP :ViraFilterPriorities<cr>
+nnoremap <silent> <leader>vfp :ViraFilterPriorities<cr>
 nnoremap <silent> <leader>vfR :ViraFilterReporter<cr>
 nnoremap <silent> <leader>vfT :ViraFilterText<cr>
 nnoremap <silent> <leader>vfa :ViraFilterAssignees<cr>
 nnoremap <silent> <leader>vfc :ViraFilterComponents<cr>
 nnoremap <silent> <leader>vfe :ViraFilterEdit<cr>
-nnoremap <silent> <leader>vfp :ViraFilterProjects<cr>
+nnoremap <silent> <leader>vfP :ViraFilterProjects<cr>
 nnoremap <silent> <leader>vfr :ViraFilterReset<cr>
 nnoremap <silent> <leader>vfs :ViraFilterStatuses<cr>
 nnoremap <silent> <leader>vft :ViraFilterTypes<cr>
