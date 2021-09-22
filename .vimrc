@@ -915,7 +915,7 @@ let g:NERDCustomDelimiters = {
 " This used to happen automatically, but broke at ~v2.5
 augroup CustomNERDcommenter
   autocmd!
-  autocmd BufEnter * call nerdcommenter#SetUp()
+  autocmd BufEnter * silent! call nerdcommenter#SetUp()
 augroup end
 
 " NERDTree{{{2
@@ -1699,16 +1699,16 @@ nnoremap <silent> <leader>vsv :silent! ViraSetVersion<cr>
 
 " Filters
 nnoremap <silent> <leader>vfE :ViraFilterEpics<cr>
-nnoremap <silent> <leader>vfp :ViraFilterPriorities<cr>
+nnoremap <silent> <leader>vfP :ViraFilterProjects<cr>
 nnoremap <silent> <leader>vfR :ViraFilterReporter<cr>
-nnoremap <silent> <leader>vfT :ViraFilterText<cr>
+nnoremap <silent> <leader>vfT :ViraFilterTypes<cr>
 nnoremap <silent> <leader>vfa :ViraFilterAssignees<cr>
 nnoremap <silent> <leader>vfc :ViraFilterComponents<cr>
 nnoremap <silent> <leader>vfe :ViraFilterEdit<cr>
-nnoremap <silent> <leader>vfP :ViraFilterProjects<cr>
+nnoremap <silent> <leader>vfp :ViraFilterPriorities<cr>
 nnoremap <silent> <leader>vfr :ViraFilterReset<cr>
 nnoremap <silent> <leader>vfs :ViraFilterStatuses<cr>
-nnoremap <silent> <leader>vft :ViraFilterTypes<cr>
+nnoremap <silent> <leader>vft :ViraFilterReset<cr>:python3 Vira.api.userconfig_filter["statusCategory"] = ""<cr>:ViraFilterText<cr>
 nnoremap <silent> <leader>vfv :ViraFilterVersions<cr>
 
 " Boards
