@@ -777,6 +777,7 @@ Plug 'posva/vim-vue'                                                    " Vue fi
 Plug 'roosta/fzf-folds.vim'                                             " fzf for folds
 Plug 'roxma/nvim-yarp'                                                  " Auto-completion engine
 Plug 'roxma/vim-hug-neovim-rpc'                                         " Auto-completion engine
+Plug 'rust-lang/rust.vim'                                               " Rusty stuff
 Plug 'scrooloose/nerdcommenter'                                         " Commenting
 Plug 'scrooloose/nerdtree'                                              " Tree file browser
 Plug 'sheerun/vim-polyglot'                                             " Language Pack (syntax/indent)
