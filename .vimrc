@@ -382,7 +382,7 @@ function! GitDeleteBranch() abort " {{{2
 endfunction
 
 function! GitMerge() abort " {{{2
-    " Merge current (issue) branch into dev
+    " Merge active vira issue branch into dev
 
     if g:vira_active_issue !=# FugitiveHead()
       echom 'Issue and branch dont match'
@@ -1466,14 +1466,20 @@ nnoremap <leader>gs :Git<CR>
 " Display git diff in terminal
 nnoremap <leader>rd :terminal git --no-pager diff<CR>
 
-" Fugitive/Vira
-nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
-nnoremap <leader>gnb :call GitNewBranch()<cr>
-nnoremap <leader>gdb :call GitDeleteBranch()<cr>
-nnoremap <leader>gm :call GitMerge()<cr>
-
 " My repo tool commands
 nnoremap <leader>rs :Repo st -s<cr>
+
+" Add all changes, commit and push
+nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
+
+" Create new git branch based on active vira issue
+nnoremap <leader>gnb :call GitNewBranch()<cr>
+
+" Delete branch for active vira issue
+nnoremap <leader>gdb :call GitDeleteBranch()<cr>
+
+" Merge active vira issue branch into the dev branch
+nnoremap <leader>gm :call GitMerge()<cr>
 
 " Go to Definition{{{2
 
