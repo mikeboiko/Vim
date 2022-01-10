@@ -765,7 +765,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  } " Previe
 Plug 'jkramer/vim-checkbox'                                             " Checkbox toggle
 Plug 'junegunn/gv.vim'                                                  " Access git files easier
 Plug 'junegunn/vader.vim'                                               " VimScript testing
-Plug 'kalekundert/vim-coiled-snake'                                     " Python syntax folding
+Plug 'mikeboiko/vim-coiled-snake'                                       " Python syntax folding
 Plug 'ludovicchabant/vim-gutentags'                                     " Manage ctags
 Plug 'majutsushi/tagbar'                                                " Use c-tags in real time and display tag bar
 Plug 'mattboehm/vim-unstack'                                            " Jump to python errors
