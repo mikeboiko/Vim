@@ -818,7 +818,7 @@ let g:ale_fixers = {
 
 let g:ale_linters = {
             \ 'cs': ['omnisharp'],
-            \ 'python': ['flake8', 'pyls'],
+            \ 'python': ['flake8', 'pylsp'],
             \ 'vim': ['vint']
             \ }
 
@@ -827,8 +827,8 @@ let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 0
 
 " python language server config
-let g:ale_python_pyls_config = {
-                          \   'pyls': {
+let g:ale_python_pylsp_config = {
+                          \   'pylsp': {
                           \     'plugins': {
                           \       'pyflakes': {
                           \         'enabled': v:false
