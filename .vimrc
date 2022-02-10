@@ -1495,7 +1495,7 @@ nnoremap gd zR:ALEGoToDefinition<CR>
 nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/Documents/GitRepos<s-left><space><left>
 
 " Search notes
-nnoremap <leader>fn :Grep ~/Nextcloud/Notes<s-left><space><left>
+nnoremap <leader>fn :Grep --md ~/Nextcloud/Notes ~/Documents/GitRepos<s-left><s-left><space><left>
 
 " Search git repo
 nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
