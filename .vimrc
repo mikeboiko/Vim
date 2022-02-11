@@ -701,12 +701,11 @@ command! ReplaceMwithBlank try | %s/\r$// | catch | endtry
 " Useful when converting from DOS to Unix line endings
 command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
 
-" Repo {{{2
-" My repo tool commands
+" Mani {{{2
 
-command! -nargs=+ -complete=command Repo try |
-            \ exe "terminal bash -c \"~/Documents/GitRepos/Linux/git/repo -f _runParallelCommands -c \\\""
-            \ . <q-args> . "\\\"\""| catch | endtry
+command! -nargs=+ -complete=command Mani try |
+            \ exe "terminal bash -c \"mani -c ~/Documents/GitRepos/Linux/config/mani.yaml "
+            \ . <q-args> . "\""| catch | endtry
 
 " SpellToggle {{{2
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
@@ -1466,8 +1465,9 @@ nnoremap <leader>gs :Git<CR>
 " Display git diff in terminal
 nnoremap <leader>rd :terminal git --no-pager diff<CR>
 
-" My repo tool commands
-nnoremap <leader>rs :Repo st -s<cr>
+" Mani commands
+nnoremap <leader>rs :Mani run git-status --all<cr>
+nnoremap <leader>ru :Mani run git-up --all<cr>
 
 " Add all changes, commit and push
 nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
