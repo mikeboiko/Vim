@@ -1466,8 +1466,8 @@ nnoremap <leader>gs :Git<CR>
 nnoremap <leader>rd :terminal git --no-pager diff<CR>
 
 " Mani commands
-nnoremap <leader>rs :Mani run git-status --all<cr>
-nnoremap <leader>ru :Mani run git-up --all<cr>
+nnoremap <leader>ms :Mani run git-status --tags active<cr>
+nnoremap <leader>mu :Mani run git-up --tags active<cr>
 
 " Add all changes, commit and push
 nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
