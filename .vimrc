@@ -1044,7 +1044,7 @@ endif
 set number
 
 " Display relative line number along the left hand side
-set relativenumber
+" set relativenumber
 
 " Start scrolling <x> lines before window border
 set scrolloff=8
