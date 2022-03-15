@@ -764,11 +764,12 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  } " Previe
 Plug 'jkramer/vim-checkbox'                                             " Checkbox toggle
 Plug 'junegunn/gv.vim'                                                  " Access git files easier
 Plug 'junegunn/vader.vim'                                               " VimScript testing
-Plug 'mikeboiko/vim-coiled-snake'                                       " Python syntax folding
 Plug 'ludovicchabant/vim-gutentags'                                     " Manage ctags
 Plug 'majutsushi/tagbar'                                                " Use c-tags in real time and display tag bar
 Plug 'mattboehm/vim-unstack'                                            " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                             " Auto-close brackets
+Plug 'mikeboiko/vim-coiled-snake'                                       " Python syntax folding
+Plug 'mikeboiko/vim-flow'                                               " For a neat developing workflow
 Plug 'mikeboiko/vim-markdown-folding'                                   " Syntax based fording for md
 Plug 'mikeboiko/vim-sort-folds'                                         " Sort vim folds
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}            " Jira integration
@@ -1619,11 +1620,14 @@ endif
 " Run Scripts {{{2
 
 " Run Script in terminal
-if has('nvim')
-    nnoremap <expr> <leader>rr g:term_close == '' ? ':wa<CR>:silent exe trim("sp term://".b:startapp.b:startfile." ".b:startargs)<CR>':':wa<CR>:exe trim("StartAsyncNeoVim ".b:startapp.b:startfile." ".b:startargs)<CR>'
-else
-    nnoremap <silent> <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
-endif
+nnoremap <silent> <leader>rr :wa<CR>:FlowRun<CR>
+
+" TODO-MB [220315] - Clean up old code after testing vim-flow
+" if has('nvim')
+    " nnoremap <expr> <leader>rr g:term_close == '' ? ':wa<CR>:silent exe trim("sp term://".b:startapp.b:startfile." ".b:startargs)<CR>':':wa<CR>:exe trim("StartAsyncNeoVim ".b:startapp.b:startfile." ".b:startargs)<CR>'
+" else
+    " nnoremap <silent> <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
+" endif
 
 " Save Buffer {{{2
 
