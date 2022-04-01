@@ -332,7 +332,10 @@ endfunction
 function! GitAddCommitPush() abort " {{{2
     " Git - add all, commit and push
 
-    if g:vira_active_issue ==? 'none'
+    " TODO-MB [220331] - Temporarily disable commit_text unles this var is set:
+    " let g:vira_commit_text_enable = 'true'
+
+    if g:vira_active_issue ==? 'none' || get(g:, 'vira_commit_text_enable', '') ==? ''
       let commit_text=''
     else
       let commit_text=g:vira_active_issue . ':'
