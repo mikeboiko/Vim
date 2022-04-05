@@ -20,6 +20,9 @@ let g:fold_marker_string = '{'. '{'. '{'
 " This can be toggled
 let g:term_close = ''
 
+" Enable/disable prepending jira issue in git commit message
+let g:vira_commit_text_enable = ''
+
 " Vim home directory
 if has("unix")
     let vimHomeDir = $HOME . '/.vim'
@@ -331,9 +334,6 @@ endfunction
 
 function! GitAddCommitPush() abort " {{{2
     " Git - add all, commit and push
-
-    " TODO-MB [220331] - Temporarily disable commit_text unles this var is set:
-    " let g:vira_commit_text_enable = 'true'
 
     if g:vira_active_issue ==? 'none' || get(g:, 'vira_commit_text_enable', '') ==? ''
       let commit_text=''
@@ -801,7 +801,8 @@ call plug#end()
 " Fix font inconsistencies
 let g:airline_powerline_fonts=1
 
-let g:airline_section_a = '%{ViraStatusLine()}'
+" let g:airline_section_a = '%{ViraStatusLine()}'
+let g:airline_section_a = '%{g:vira_commit_text_enable}%{ViraStatusLine()}'
 
 " ALE {{{2
 
@@ -1736,6 +1737,7 @@ nnoremap <silent> <leader>vbw :ViraLoadProject Work<cr>:ViraIssues<cr>
 " Misc
 nnoremap <silent> <leader>vsi :let g:vira_active_issue="
 nnoremap <silent> <leader>vb :ViraBrowse<cr>
+nnoremap <silent> <leader>ve :let g:vira_commit_text_enable="+"<cr>
 
 " Windows Style Commands {{{2
 
