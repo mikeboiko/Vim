@@ -801,7 +801,6 @@ call plug#end()
 " Fix font inconsistencies
 let g:airline_powerline_fonts=1
 
-" let g:airline_section_a = '%{ViraStatusLine()}'
 let g:airline_section_a = '%{g:vira_commit_text_enable}%{ViraStatusLine()}'
 
 " ALE {{{2
@@ -1625,13 +1624,6 @@ endif
 
 " Run Script in terminal
 nnoremap <silent> <leader>rr :wa<CR>:FlowRun<CR>
-
-" TODO-MB [220315] - Clean up old code after testing vim-flow
-" if has('nvim')
-    " nnoremap <expr> <leader>rr g:term_close == '' ? ':wa<CR>:silent exe trim("sp term://".b:startapp.b:startfile." ".b:startargs)<CR>':':wa<CR>:exe trim("StartAsyncNeoVim ".b:startapp.b:startfile." ".b:startargs)<CR>'
-" else
-    " nnoremap <silent> <leader>rr :wa<CR>:silent exe trim("terminal ".g:term_close." ++rows=15 ".b:startapp.b:startfile." ".b:startargs)<CR>
-" endif
 
 " Save Buffer {{{2
 
