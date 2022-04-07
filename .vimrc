@@ -722,6 +722,9 @@ command! -nargs=1 StartAsyncNeoVim
          \    }
          \ })
 
+" ViraEnable {{{2
+command! ViraEnable if (g:vira_commit_text_enable == '') | let g:vira_commit_text_enable = '+' | echo 'Jira issue git message prepending enabled' | else | let g:vira_commit_text_enable = '' | echo 'Jira issue git message prepending disabled' | endif
+
 " Plugins{{{1
 " Custom Languages {{{2
 
@@ -1729,7 +1732,7 @@ nnoremap <silent> <leader>vbw :ViraLoadProject Work<cr>:ViraIssues<cr>
 " Misc
 nnoremap <silent> <leader>vsi :let g:vira_active_issue="
 nnoremap <silent> <leader>vb :ViraBrowse<cr>
-nnoremap <silent> <leader>ve :let g:vira_commit_text_enable="+"<cr>
+nnoremap <silent> <leader>ve :ViraEnable<cr>
 
 " Windows Style Commands {{{2
 
