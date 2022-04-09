@@ -1,7 +1,3 @@
-" dev: let b:startapp = 'vim "+Vader! ~/test.vader"'
-" dev: let b:startfile = ''
-" dev: let b:startargs = ''
-
 " Constants {{{1
 
 let $CODE='$HOME/Documents/GitRepos'
@@ -510,42 +506,6 @@ function! SetCurrentWorkingDirectory() " {{{2
         if wd != '' | let &acd = 0 | brea | en
     endfo
     exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
-endfunction
-
-function! StartArgInitialize() " {{{2
-    " Read lines the first 20 lines of file and set vars required for executing script
-    " This is the execution command:
-    " 'terminal ' . b:startapp . @% . ' 'b:startargs<CR>
-    " b:startapp: the program to execute the script with
-    " b:startfile: the program to execute the script with
-    " b:startargs: arguments/options at the end of cmd string
-
-    " The custom string used to identify these let modelines
-    let customModelineStr = 'dev:'
-
-    try
-        " Read the first x lines of this text file into list
-        let initialLines = getline(1, 20)
-        for line in initialLines
-            " Only run custom modelines if 'dev:' is present
-            if line =~ customModelineStr
-                " Remove 'dev;' and comments and trim
-                let varInitString = substitute(StripComments(line), customModelineStr, '', 'g')
-                execute varInitString
-            endif
-        endfor
-    catch
-    endtry
-
-    " Set default args if I didn't temporarily set them already
-    if !exists('b:startapp') | let b:startapp = './' | endif
-
-    " Set default b:startfile if I haven't defined it temporarily already
-    if !exists('b:startfile') | let b:startfile = expand('%:t') | endif
-
-    " Set default b:startargs if I haven't defined it temporarily already
-    if !exists('b:startargs') | let b:startargs = '' | endif
-
 endfunction
 
 function! StripComments(input) " {{{2
@@ -1203,12 +1163,6 @@ set spellfile=$HOME/Nextcloud/Documents/en.utf-8.add
 
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
-
-" Initialize arguments required to run script
-augroup startargs
-    autocmd!
-    autocmd BufEnter,BufCreate,BufWrite * call StartArgInitialize()
-augroup end
 
 " Fixes bug in nvim terminal. It should be same as vim - ineractive
 if has('nvim')
