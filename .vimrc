@@ -715,56 +715,50 @@ call plug#begin(vimPlugDir)
 " Plug 'vimwiki/vimwiki'                                     " Nice wiki format
 " Plug 'tommcdo/vim-fubitive'                                             " Extend fugitive.vim to support Bitbucket URLs in :Gbrowse.
 
-Plug 'OmniSharp/omnisharp-vim'                                          " C# magic
-Plug 'PProvost/vim-ps1'                                                 " Powershell file types
-Plug 'Shougo/deoplete.nvim'                                             " Auto-completion engine
-Plug 'SirVer/ultisnips'                                                 " Snippet engine
-Plug 'altercation/vim-colors-solarized'                                 " Color-scheme
-Plug 'christoomey/vim-tmux-navigator'                                   " Switch beween vim splits & tmux panes seamslessly
-Plug 'ctrlpvim/ctrlp.vim'                                               " Browse recent/project files
-Plug 'deoplete-plugins/deoplete-tag'                                    " Complete from ctags
-Plug 'ervandew/supertab'                                                " Insert mode completions
-Plug 'godlygeek/tabular'                                                " Align things
-Plug 'honza/vim-snippets'                                               " Snippet library
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  } " Preview md in brwoser
-Plug 'jkramer/vim-checkbox'                                             " Checkbox toggle
-Plug 'junegunn/gv.vim'                                                  " Access git files easier
-Plug 'junegunn/vader.vim'                                               " VimScript testing
-Plug 'ludovicchabant/vim-gutentags'                                     " Manage ctags
-Plug 'majutsushi/tagbar'                                                " Use c-tags in real time and display tag bar
-Plug 'mattboehm/vim-unstack'                                            " Jump to python errors
-Plug 'mikeboiko/auto-pairs'                                             " Auto-close brackets
-Plug 'mikeboiko/vim-coiled-snake'                                       " Python syntax folding
-Plug 'mikeboiko/vim-flow'                                               " For a neat developing workflow
-Plug 'mikeboiko/vim-markdown-folding'                                   " Syntax based fording for md
-Plug 'mikeboiko/vim-sort-folds'                                         " Sort vim folds
-Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}            " Jira integration
-Plug 'posva/vim-vue'                                                    " Vue filetype recognition
-Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                         " fzf for folds
-Plug 'roxma/nvim-yarp'                                                  " Auto-completion engine
-Plug 'roxma/vim-hug-neovim-rpc'                                         " Auto-completion engine
-Plug 'rust-lang/rust.vim'                                               " Rusty stuff
-Plug 'scrooloose/nerdcommenter'                                         " Commenting
-Plug 'scrooloose/nerdtree'                                              " Tree file browser
-Plug 'sheerun/vim-polyglot'                                             " Language Pack (syntax/indent)
-Plug 'tpope/vim-fugitive'                                               " Git wrapper
-Plug 'tpope/vim-repeat'                                                 " Repeat surround and commenting with .
-Plug 'tpope/vim-rhubarb'                                                " GitHub integration with fugitive
-Plug 'tpope/vim-scriptease'                                             " For debugging and writing plugins
-Plug 'tpope/vim-surround'                                               " Surround all the stuff
-Plug 'vim-airline/vim-airline'                                          " Nice status bar
-Plug 'w0rp/ale'                                                         " Async Linting
-Plug 'yssl/QFEnter'                                                     " QuickFix lists - open in tabs/split windows
+Plug 'OmniSharp/omnisharp-vim'                                                " C# magic
+Plug 'PProvost/vim-ps1'                                                       " Powershell file types
+Plug 'Shougo/deoplete.nvim'                                                   " Auto-completion engine
+Plug 'SirVer/ultisnips'                                                       " Snippet engine
+Plug 'altercation/vim-colors-solarized'                                       " Color-scheme
+Plug 'christoomey/vim-tmux-navigator'                                         " Switch beween vim splits & tmux panes seamslessly
+Plug 'ctrlpvim/ctrlp.vim'                                                     " Browse recent/project files
+Plug 'deoplete-plugins/deoplete-tag'                                          " Complete from ctags
+Plug 'ervandew/supertab'                                                      " Insert mode completions
+Plug 'godlygeek/tabular'                                                      " Align things
+Plug 'honza/vim-snippets'                                                     " Snippet library
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }       " Preview md in brwoser
+Plug 'jkramer/vim-checkbox'                                                   " Checkbox toggle
+Plug 'junegunn/gv.vim'                                                        " Access git files easier
+Plug 'junegunn/vader.vim'                                                     " VimScript testing
+Plug 'ludovicchabant/vim-gutentags'                                           " Manage ctags
+Plug 'majutsushi/tagbar'                                                      " Use c-tags in real time and display tag bar
+Plug 'mattboehm/vim-unstack'                                                  " Jump to python errors
+Plug 'mikeboiko/auto-pairs'                                                   " Auto-close brackets
+Plug 'mikeboiko/vim-coiled-snake'                                             " Python syntax folding
+Plug 'mikeboiko/vim-flow'                                                     " For a neat developing workflow
+Plug 'mikeboiko/vim-markdown-folding'                                         " Syntax based fording for md
+Plug 'mikeboiko/vim-sort-folds'                                               " Sort vim folds
+Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                  " Jira integration
+Plug 'posva/vim-vue'                                                          " Vue filetype recognition
+Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-python'} " Vim degbugger
+Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                               " fzf for folds
+Plug 'roxma/nvim-yarp'                                                        " Auto-completion engine
+Plug 'roxma/vim-hug-neovim-rpc'                                               " Auto-completion engine
+Plug 'rust-lang/rust.vim'                                                     " Rusty stuff
+Plug 'scrooloose/nerdcommenter'                                               " Commenting
+Plug 'scrooloose/nerdtree'                                                    " Tree file browser
+Plug 'sheerun/vim-polyglot'                                                   " Language Pack (syntax/indent)
+Plug 'tpope/vim-fugitive'                                                     " Git wrapper
+Plug 'tpope/vim-repeat'                                                       " Repeat surround and commenting with .
+Plug 'tpope/vim-rhubarb'                                                      " GitHub integration with fugitive
+Plug 'tpope/vim-scriptease'                                                   " For debugging and writing plugins
+Plug 'tpope/vim-surround'                                                     " Surround all the stuff
+Plug 'vim-airline/vim-airline'                                                " Nice status bar
+Plug 'w0rp/ale'                                                               " Async Linting
+Plug 'yssl/QFEnter'                                                           " QuickFix lists - open in tabs/split windows
 
 " End initialization of plugin system
 call plug#end()
-
-" AirLine {{{2
-
-" Fix font inconsistencies
-let g:airline_powerline_fonts=1
-
-let g:airline_section_a = '%{g:vira_commit_text_enable}%{ViraStatusLine()}'
 
 " ALE {{{2
 
@@ -846,10 +840,6 @@ call deoplete#custom#option('sources', {
 " This fixes the problem of tabbing through the menu from top to bottom (reverse order)
 let g:SuperTabDefaultCompletionType = '<c-n>'
 
-" fzf-folds {{{2
-
-let g:fzf_folds_open = 1
-
 " Fugitive {{{2
 
 augroup CustomFugitive
@@ -861,29 +851,6 @@ augroup end
 
 let g:mkdp_auto_close = 0
 let g:mkdp_refresh_slow = 1
-
-" NerdCommenter{{{2
-
-" NerdCommenter add a space after comment
-let g:NERDSpaceDelims=1
-
-" Remove extra spaces when uncommenting
-let g:NERDRemoveExtraSpaces=1
-
-" Custom comment delimiters
-let g:NERDCustomDelimiters = {
-            \ 'python': { 'left': '#', 'right': '' },
-            \ 'dosbatch': { 'left': 'REM', 'right': '' },
-            \ 'sebol': { 'left': '!', 'right': '' },
-            \ 'mermaid': { 'left': '%%', 'right': '' },
-            \ 'vader': { 'left': '#'}
-            \ }
-
-" This used to happen automatically, but broke at ~v2.5
-augroup CustomNERDcommenter
-  autocmd!
-  autocmd BufEnter * silent! call nerdcommenter#SetUp()
-augroup end
 
 " NERDTree{{{2
 
@@ -908,6 +875,29 @@ let g:NERDTreeMapOpenSplit = '<c-s>'
 let g:NERDTreeMapOpenVSplit = '<c-v>'
 let g:NERDTreeMapOpenInTab = '<c-t>'
 
+" NerdCommenter{{{2
+
+" NerdCommenter add a space after comment
+let g:NERDSpaceDelims=1
+
+" Remove extra spaces when uncommenting
+let g:NERDRemoveExtraSpaces=1
+
+" Custom comment delimiters
+let g:NERDCustomDelimiters = {
+            \ 'python': { 'left': '#', 'right': '' },
+            \ 'dosbatch': { 'left': 'REM', 'right': '' },
+            \ 'sebol': { 'left': '!', 'right': '' },
+            \ 'mermaid': { 'left': '%%', 'right': '' },
+            \ 'vader': { 'left': '#'}
+            \ }
+
+" This used to happen automatically, but broke at ~v2.5
+augroup CustomNERDcommenter
+  autocmd!
+  autocmd BufEnter * silent! call nerdcommenter#SetUp()
+augroup end
+
 " QFEnter {{{2
 
 let g:qfenter_keymap = {}
@@ -915,7 +905,20 @@ let g:qfenter_keymap.vopen = ['<C-v>']
 let g:qfenter_keymap.hopen = ['<C-s>']
 let g:qfenter_keymap.topen = ['<C-t>']
 
-" The Silver Searcher {{{2
+" UltiSnips {{{2
+
+" YouCompleteMe and UltiSnips compatibility.
+let g:UltiSnipsExpandTrigger = '<Tab>'
+let g:UltiSnipsJumpForwardTrigger = '<Tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+
+" Additional UltiSnips config.
+let g:UltiSnipsSnippetDirectories=[$HOME.'/Documents/GitRepos/Vim/snippets']
+
+" Vim-QF {{{2
+" let g:qf_mapping_ack_style = 1
+
+" ag {{{2
 if executable('ag')
     " Use ag instead of grep (performance increase)
     " set grepprg=ag\ --nogroup\ --nocolor
@@ -929,23 +932,54 @@ if executable('ag')
     " let g:ctrlp_use_caching = 0
 endif
 
-" UltiSnips {{{2
+" airline {{{2
 
-" YouCompleteMe and UltiSnips compatibility.
-let g:UltiSnipsExpandTrigger = '<Tab>'
-let g:UltiSnipsJumpForwardTrigger = '<Tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+" Fix font inconsistencies
+let g:airline_powerline_fonts=1
 
-" Additional UltiSnips config.
-let g:UltiSnipsSnippetDirectories=[$HOME.'/Documents/GitRepos/Vim/snippets']
+let g:airline_section_a = '%{g:vira_commit_text_enable}%{ViraStatusLine()}'
+
+" fzf-folds {{{2
+
+let g:fzf_folds_open = 1
 
 " vim-unstack {{{2
 
 let g:unstack_populate_quickfix=1
 let g:unstack_layout = "portrait"
 
-" Vim-QF {{{2
-" let g:qf_mapping_ack_style = 1
+" vimspector {{{2
+
+let g:vimspector_enable_mappings = 'HUMAN'
+
+" F3        | <Plug>VimspectorStop             | Stop debugging.
+" F5        | <Plug>VimspectorContinue         | When debugging, continue. Otherwise start debugging.
+" F9        | <Plug>VimspectorToggleBreakpoint | Toggle line breakpoint on the current line.
+" F10       | <Plug>VimspectorStepOver         | Step Over
+" F11       | <Plug>VimspectorStepInto         | Step Into
+" Shift F11 | <Plug>VimspectorStepOut          | Step out of current function scope
+
+let g:vimspector_configurations = {
+      \ 'test_debugpy_config': {
+      \   'adapter': 'debugpy',
+      \   'filetypes': [ 'python' ],
+      \   'configuration': {
+      \     'request': 'launch',
+      \     'type': 'python',
+      \     'cwd': '${fileDirname}',
+      \     'args': [],
+      \     'program': '${file}',
+      \     'stopOnEntry': v:false,
+      \     'console': 'integratedTerminal'
+      \   },
+      \   'breakpoints': {
+      \     'exception': {
+      \       'raised': 'N',
+      \       'uncaught': '',
+      \       'userUnhandled': ''
+      \     }
+      \   }
+      \ } }
 
 " vimwiki {{{2
 
