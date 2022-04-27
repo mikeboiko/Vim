@@ -1156,7 +1156,7 @@ set encoding=utf8
 set noswapfile
 
 " Use linux shard clipboard in VIM
-if has('mac') || has('windows')
+if has('mac') || has('win32')
     " set clipboard=unnamed,unnamedplus
     set clipboard=unnamed
 elseif has('unix')
