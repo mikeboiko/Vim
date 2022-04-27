@@ -729,7 +729,7 @@ Plug 'honza/vim-snippets'                                                     " 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }       " Preview md in brwoser
 Plug 'jkramer/vim-checkbox'                                                   " Checkbox toggle
 Plug 'junegunn/gv.vim'                                                        " Access git files easier
-Plug 'junegunn/vader.vim'                                                     " VimScript testing
+Plug 'junegunn/vader.vim',  { 'on': 'Vader', 'for': 'vader'  }                " VimScript testing
 Plug 'ludovicchabant/vim-gutentags'                                           " Manage ctags
 Plug 'majutsushi/tagbar'                                                      " Use c-tags in real time and display tag bar
 Plug 'mattboehm/vim-unstack'                                                  " Jump to python errors
@@ -1156,11 +1156,11 @@ set encoding=utf8
 set noswapfile
 
 " Use linux shard clipboard in VIM
-if has("unix")
-    set clipboard=unnamedplus
-    " Use windows shard clipboard in VIM
-else
+if has('mac') || has('windows')
+    " set clipboard=unnamed,unnamedplus
     set clipboard=unnamed
+elseif has('unix')
+    set clipboard=unnamedplus
 endif
 
 " Vertical splits open on the right instead of the default of left
