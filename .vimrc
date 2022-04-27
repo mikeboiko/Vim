@@ -967,16 +967,16 @@ let g:vimspector_configurations = {
       \     'request': 'launch',
       \     'type': 'python',
       \     'cwd': '${fileDirname}',
-      \     'args': [],
+      \     'args': ["*${ARGS}"],
       \     'program': '${file}',
       \     'stopOnEntry': v:false,
       \     'console': 'integratedTerminal'
       \   },
       \   'breakpoints': {
       \     'exception': {
-      \       'raised': 'N',
-      \       'uncaught': '',
-      \       'userUnhandled': ''
+      \       'raised': 'Y',
+      \       'uncaught': 'Y',
+      \       'userUnhandled': 'Y'
       \     }
       \   }
       \ } }
