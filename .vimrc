@@ -1207,6 +1207,11 @@ if has('nvim')
   augroup END
 endif
 
+" Required for fzf-folds
+if has('mac')
+  set rtp+=/usr/local/opt/fzf
+endif
+
 " Folding{{{3
 set foldenable
 set foldlevelstart=0
