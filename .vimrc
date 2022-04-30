@@ -1607,8 +1607,8 @@ if has('nvim')
   nnoremap <leader>tp :tabe term://python /home/mike/Documents/GitRepos/Tables/scripts/tables.py cli -f printbalance<CR>
   nnoremap <leader>cw :tabe term://curl wttr.in/Calgary?m"<CR>
 else
-  nnoremap <leader>tp :tabe<CR>:terminal ++curwin python /home/mike/Documents/GitRepos/Tables/scripts/tables.py cli -f printbalance<CR>
-  nnoremap <leader>cw :tabe<CR>:terminal ++curwin curl wttr.in/Calgary?m"<CR>
+  nnoremap <leader>tp :tabe<CR>:terminal ++curwin bash -c "python ~/Documents/GitRepos/Tables/scripts/tables.py cli -f printbalance"<CR>
+  nnoremap <leader>cw :tabe<CR>:terminal ++curwin bash -c "curl wttr.in/Calgary"<CR>
 endif
 
 " Run Scripts {{{2
