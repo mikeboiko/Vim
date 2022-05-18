@@ -763,10 +763,19 @@ call plug#end()
 " ALE {{{2
 
 let g:ale_lint_on_text_changed = 'never'
+" let g:ale_floating_preview = 1
+
+let g:ale_linters = {
+            \ 'cs': ['omnisharp'],
+            \ 'go': ['gopls'],
+            \ 'python': ['flake8', 'pylsp'],
+            \ 'vim': ['vint']
+            \ }
 
 let g:ale_fixers = {
             \ '*': ['remove_trailing_lines', 'trim_whitespace'],
             \ 'html': ['prettier'],
+            \ 'go': ['gofmt'],
             \ 'javascript': ['prettier', 'eslint'],
             \ 'javascript.jsx': ['eslint'],
             \ 'json': ['prettier'],
@@ -774,12 +783,6 @@ let g:ale_fixers = {
             \ 'python': ['yapf'],
             \ 'vue': ['prettier'],
             \ 'yaml': ['prettier']
-            \ }
-
-let g:ale_linters = {
-            \ 'cs': ['omnisharp'],
-            \ 'python': ['flake8', 'pylsp'],
-            \ 'vim': ['vint']
             \ }
 
 " This will prevent my searches from getting messed up
@@ -802,6 +805,12 @@ let g:ale_python_pylsp_config = {
 
 " C# fixer
 let g:ale_c_uncrustify_options = '-c ~/Documents/GitRepos/Linux/config/uncrustify.cfg'
+
+" Configure repo-specific linters/fixers
+let g:ale_pattern_options = {
+            \ 'GitRepos/SRS/*': {'ale_linters': ['pylint'], 'ale_fixers': ['yapf']},
+\}
+let g:ale_pattern_options_enabled = 1
 
 " CtrlP {{{2
 " Fuzzy file/buffer/tag open
