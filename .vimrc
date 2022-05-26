@@ -1202,7 +1202,7 @@ augroup CustomOptions
 augroup end
 
 " Spelling
-set spellfile=$HOME/Nextcloud/Documents/en.utf-8.add
+set spellfile=$HOME/syncthing/Sync/Documents/en.utf-8.add
 
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
@@ -1504,7 +1504,7 @@ nnoremap gd zR:ALEGoToDefinition<CR>
 nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/Documents/GitRepos<s-left><space><left>
 
 " Search notes
-nnoremap <leader>fn :Grep --md ~/Nextcloud/Notes ~/Documents/GitRepos<s-left><s-left><space><left>
+nnoremap <leader>fn :Grep --md ~/syncthing/Notes ~/Documents/GitRepos<s-left><s-left><space><left>
 
 " Search git repo
 nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
