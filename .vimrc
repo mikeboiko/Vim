@@ -808,7 +808,7 @@ let g:ale_c_uncrustify_options = '-c ~/Documents/GitRepos/Linux/config/uncrustif
 
 " Configure repo-specific linters/fixers
 let g:ale_pattern_options = {
-            \ 'GitRepos/SRS/*': {'ale_linters': ['pylint'], 'ale_fixers': ['yapf']},
+            \ 'GitRepos/SRS/*': {'ale_linters': ['pylint', 'pylsp'], 'ale_fixers': ['yapf']},
 \}
 let g:ale_pattern_options_enabled = 1
 
@@ -963,6 +963,7 @@ let g:vimspector_enable_mappings = 'HUMAN'
 
 " F3        | <Plug>VimspectorStop             | Stop debugging.
 " F5        | <Plug>VimspectorContinue         | When debugging, continue. Otherwise start debugging.
+" F6        | <Plug>VimspectorPause            | Pause debuggee.
 " F9        | <Plug>VimspectorToggleBreakpoint | Toggle line breakpoint on the current line.
 " F10       | <Plug>VimspectorStepOver         | Step Over
 " F11       | <Plug>VimspectorStepInto         | Step Into
