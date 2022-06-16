@@ -808,7 +808,7 @@ let g:ale_c_uncrustify_options = '-c ~/Documents/GitRepos/Linux/config/uncrustif
 
 " Configure repo-specific linters/fixers
 let g:ale_pattern_options = {
-            \ 'GitRepos/SRS/*': {'ale_linters': ['pylint', 'pylsp'], 'ale_fixers': ['yapf']},
+            \ 'GitRepos/SRS/*': {'ale_linters': ['pylint', 'pylsp']},
 \}
 let g:ale_pattern_options_enabled = 1
 
