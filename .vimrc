@@ -719,6 +719,7 @@ Plug 'OmniSharp/omnisharp-vim'                                                " 
 Plug 'PProvost/vim-ps1'                                                       " Powershell file types
 Plug 'Shougo/deoplete.nvim'                                                   " Auto-completion engine
 Plug 'SirVer/ultisnips'                                                       " Snippet engine
+Plug 'Yggdroot/indentLine'                                                    " Indent lines
 Plug 'altercation/vim-colors-solarized'                                       " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                                         " Switch beween vim splits & tmux panes seamslessly
 Plug 'ctrlpvim/ctrlp.vim'                                                     " Browse recent/project files
@@ -855,6 +856,10 @@ augroup CustomFugitive
   autocmd!
   autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 augroup end
+
+" indentLine {{{2
+
+let g:indentLine_char = '│'
 
 " MarkdownPreview {{{2
 
