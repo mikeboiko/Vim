@@ -1361,6 +1361,7 @@ nnoremap <leader>a; mzA;<esc>`z
 " ALE {{{2
 
 nnoremap <leader>se :call ALERunLint()<CR>
+nnoremap <leader>aw :ALEFindReferences -quickfix<CR>:top 5 copen<CR>
 
 " Close Toggle {{{2
 " Toggle between ++close and ++noclose when running term <leader>rr
