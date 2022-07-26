@@ -1189,7 +1189,9 @@ set autochdir
 set modeline
 " Number of modelines to be checked, if set to zero then modeline checking
 " will be disabled
-set modelines=5
+" set modelines=5
+" I was getting some modeline related errors, so I disabled them for the time being
+set modelines=0
 
 set autoread
 
