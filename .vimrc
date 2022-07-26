@@ -714,6 +714,7 @@ call plug#begin(vimPlugDir)
 " Plug 'file:///home/mike/.vim/plugged/test'
 " Plug 'vimwiki/vimwiki'                                     " Nice wiki format
 " Plug 'tommcdo/vim-fubitive'                                             " Extend fugitive.vim to support Bitbucket URLs in :Gbrowse.
+" Plug 'junegunn/fzf.vim'
 
 Plug 'OmniSharp/omnisharp-vim'                                                " C# magic
 Plug 'PProvost/vim-ps1'                                                       " Powershell file types
