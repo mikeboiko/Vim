@@ -1740,6 +1740,7 @@ nnoremap <silent> <leader>vbj :ViraLoadProject Jesse<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbm :ViraLoadProject __default__<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbv :ViraLoadProject vira<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbw :ViraLoadProject Work<cr>:ViraIssues<cr>
+nnoremap <silent> <leader>vbs :ViraLoadProject SRS<cr>:ViraIssues<cr>
 
 " Misc
 nnoremap <silent> <leader>vsi :let g:vira_active_issue="
