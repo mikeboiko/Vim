@@ -643,7 +643,7 @@ command! FoldOpen let save_cursor = getcurpos() | try | silent foldopen! | catch
 
 " Grep {{{2
 " Use ag to grep and put results quickfix list
-command! -nargs=+ Grep execute 'silent grep! <args>' | let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ]) | exe 'top ' . g:qfListHeight . ' copen' | redraw!
+command! -nargs=+ Grep execute 'silent grep! --hidden <args>' | let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ]) | exe 'top ' . g:qfListHeight . ' copen' | redraw!
 
 " QuickFix/Location List Next {{{2
 " Wrap around after hitting first/last record
@@ -714,7 +714,6 @@ call plug#begin(vimPlugDir)
 " Plug 'file:///home/mike/.vim/plugged/test'
 " Plug 'vimwiki/vimwiki'                                     " Nice wiki format
 " Plug 'tommcdo/vim-fubitive'                                             " Extend fugitive.vim to support Bitbucket URLs in :Gbrowse.
-" Plug 'junegunn/fzf.vim'
 
 Plug 'OmniSharp/omnisharp-vim'                                                " C# magic
 Plug 'PProvost/vim-ps1'                                                       " Powershell file types
@@ -730,6 +729,7 @@ Plug 'godlygeek/tabular'                                                      " 
 Plug 'honza/vim-snippets'                                                     " Snippet library
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }       " Preview md in brwoser
 Plug 'jkramer/vim-checkbox'                                                   " Checkbox toggle
+Plug 'junegunn/fzf.vim'                                                       " fzf plugin
 Plug 'junegunn/gv.vim'                                                        " Access git files easier
 Plug 'junegunn/vader.vim',  { 'on': 'Vader', 'for': 'vader'  }                " VimScript testing
 Plug 'ludovicchabant/vim-gutentags'                                           " Manage ctags
