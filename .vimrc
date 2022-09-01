@@ -975,10 +975,11 @@ let g:vimspector_enable_mappings = 'HUMAN'
 " F11       | <Plug>VimspectorStepInto         | Step Into
 " Shift F11 | <Plug>VimspectorStepOut          | Step out of current function scope
 
+" See https://code.visualstudio.com/docs/python/debugging
 let g:vimspector_configurations = {
       \ 'test_debugpy_config': {
       \   'adapter': 'debugpy',
-      \   'filetypes': [ 'python' ],
+      \   'filetypes': ['python'],
       \   'configuration': {
       \     'request': 'launch',
       \     'type': 'python',
