@@ -975,7 +975,10 @@ let g:vimspector_enable_mappings = 'HUMAN'
 " F11       | <Plug>VimspectorStepInto         | Step Into
 " Shift F11 | <Plug>VimspectorStepOut          | Step out of current function scope
 
+" In order to see Traceback, add __traceback__ to Watch Window
+
 " See https://code.visualstudio.com/docs/python/debugging
+" https://puremourning.github.io/vimspector/schema/vimspector.schema.json
 let g:vimspector_configurations = {
       \ 'test_debugpy_config': {
       \   'adapter': 'debugpy',
@@ -997,6 +1000,8 @@ let g:vimspector_configurations = {
       \     }
       \   }
       \ } }
+
+let g:vimspector_sidebar_width = 60
 
 " vimwiki {{{2
 
