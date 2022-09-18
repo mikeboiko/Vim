@@ -1707,6 +1707,10 @@ tnoremap <C-g> <C-W>:tabp<CR>
 " TagBar {{{2
 nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
+" Vimspector {{{2
+
+nnoremap <silent> <leader>sb :call vimspector#BreakpointsAsQuickFix()<cr>
+
 " Vira {{{2
 
 " Basics
