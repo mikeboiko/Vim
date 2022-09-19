@@ -54,6 +54,7 @@ function! AllClose() " {{{2
     Windofast lclose
     cclose
     pclose
+    silent! exe 'bd '. join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~# "^fugitive"'), ' ')
 endf
 
 function! BufDo(command) " {{{2
