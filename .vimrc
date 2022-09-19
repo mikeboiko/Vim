@@ -1484,7 +1484,7 @@ endif
 " Git {{{2
 
 " Fugitive remappings
-nnoremap <leader>gd :Gvdiff<Space>
+nnoremap <leader>gd :Gvdiffsplit!<Space>
 nnoremap <leader>gs :Git<CR>
 
 " Display git diff in terminal
