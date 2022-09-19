@@ -740,7 +740,7 @@ Plug 'ludovicchabant/vim-gutentags'                                           " 
 Plug 'majutsushi/tagbar'                                                      " Use c-tags in real time and display tag bar
 Plug 'mattboehm/vim-unstack'                                                  " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                                   " Auto-close brackets
-Plug 'mikeboiko/vim-coiled-snake'                                             " Python syntax folding
+Plug 'mikeboiko/vim-coiled-snake', trim(system('hostname -s')) ==# 'RO-MBOIKO-M-CW' ? { 'on': [] } : {}
 Plug 'mikeboiko/vim-flow'                                                     " For a neat developing workflow
 Plug 'mikeboiko/vim-markdown-folding'                                         " Syntax based fording for md
 Plug 'mikeboiko/vim-sort-folds'                                               " Sort vim folds
