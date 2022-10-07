@@ -744,7 +744,7 @@ Plug 'mattboehm/vim-unstack'                                                  " 
 Plug 'mikeboiko/auto-pairs'                                                   " Auto-close brackets
 Plug 'mikeboiko/vim-coiled-snake', trim(system('hostname -s')) ==# 'RO-MBOIKO-M-CW' ? { 'on': [] } : {}
 Plug 'mikeboiko/vim-flow'                                                     " For a neat developing workflow
-Plug 'mikeboiko/vim-markdown-folding'                                         " Syntax based fording for md
+Plug 'mikeboiko/vim-markdown-folding'                                         " Syntax based folding for md
 Plug 'mikeboiko/vim-sort-folds'                                               " Sort vim folds
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                  " Jira integration
 Plug 'posva/vim-vue'                                                          " Vue filetype recognition
