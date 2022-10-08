@@ -762,6 +762,7 @@ Plug 'tpope/vim-rhubarb'                                                      " 
 Plug 'tpope/vim-scriptease'                                                   " For debugging and writing plugins
 Plug 'tpope/vim-surround'                                                     " Surround all the stuff
 Plug 'vim-airline/vim-airline'                                                " Nice status bar
+Plug 'vim-scripts/ReplaceWithRegister'                                        " Replace without copying to buffer
 Plug 'w0rp/ale'                                                               " Async Linting
 Plug 'yssl/QFEnter'                                                           " QuickFix lists - open in tabs/split windows
 
@@ -1442,7 +1443,6 @@ inoremap <c-k> <c-p>
 
 " Dump Register {{{2
 nnoremap <leader><space> "z
-nnoremap <leader>p "adiwP
 
 " End/Beginning of Line {{{2
 nnoremap <silent> H ^
