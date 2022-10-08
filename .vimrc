@@ -798,6 +798,8 @@ let g:ale_fixers = {
 let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 0
 
+let g:ale_python_pylint_options = '--rcfile ~/Documents/GitRepos/Work/SRS/.standard.rc'
+
 " python language server config
 let g:ale_python_pylsp_config = {
                           \   'pylsp': {
@@ -817,7 +819,7 @@ let g:ale_c_uncrustify_options = '-c ~/Documents/GitRepos/Linux/config/uncrustif
 
 " Configure repo-specific linters/fixers
 let g:ale_pattern_options = {
-            \ 'GitRepos/SRS/*': {'ale_linters': ['pylint', 'pylsp']},
+            \ 'Sync/SRS/*': {'ale_linters': ['pylint', 'pylsp']},
 \}
 let g:ale_pattern_options_enabled = 1
 
