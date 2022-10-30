@@ -1752,6 +1752,7 @@ nnoremap <silent> <leader>vfv :ViraFilterVersions<cr>
 " Boards
 nnoremap <silent> <leader>vbf :ViraLoadProject Model<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbh :ViraLoadProject Home<cr>:ViraIssues<cr>
+nnoremap <silent> <leader>vbi :ViraLoadProject Inbox<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbj :ViraLoadProject Jesse<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbm :ViraLoadProject __default__<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbv :ViraLoadProject vira<cr>:ViraIssues<cr>
