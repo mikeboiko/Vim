@@ -1715,7 +1715,8 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 " Vimspector {{{2
 
-nnoremap <silent> <leader>sb :call vimspector#BreakpointsAsQuickFix()<cr>
+nmap <silent> <leader>db :call vimspector#BreakpointsAsQuickFix()<cr>
+nmap <silent> <leader>di <Plug>VimspectorBalloonEval
 
 " Vira {{{2
 
