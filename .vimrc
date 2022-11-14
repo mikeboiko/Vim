@@ -1514,11 +1514,13 @@ nnoremap <leader>gm :call GitMerge()<cr>
 
 " Go to Definition{{{2
 
-" Preview definition in split window and focus on fold
-map gp :sp<CR>gdzMzvzz
-
 " Go to definition and focus on fold
 nnoremap gd zR:ALEGoToDefinition<CR>
+
+" Preview definition and focus on fold
+map gt mm:tabe %<CR>`mgdzMzvzz
+map gs mm:sp %<CR>`mgdzMzvzz
+map gv mm:vs %<CR>`mgdzMzvzz
 
 " Grep with ag {{{2
 
