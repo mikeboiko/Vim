@@ -1200,6 +1200,9 @@ set splitright
 " Automatically change current directory when new file is opened
 set autochdir
 
+" This diables tmux mouse features while inside vim
+set mouse=a
+
 " Enable Vim to check for modelines throughout your files
 " best practice to keep them at the top or the bottom of the file
 set modeline
