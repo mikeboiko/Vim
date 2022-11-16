@@ -608,6 +608,7 @@ function! WrapFold(foldlevel) range " {{{2
     execute 'normal! ' . a:firstline . 'GO' . prompt . ' ' . g:fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
     execute 'normal! `m'
 endfunction
+
 " Commands {{{1
 " Figlet {{{2
 " Draw ascii art comments
@@ -1550,6 +1551,13 @@ nnoremap ' `
 
 " NERDTree {{{2
 nnoremap <leader>on :NERDTreeFind<CR>
+
+" Mouse {{{2
+
+" Enable mouse scrolling but not clicking
+nmap <LeftMouse> <nop>
+imap <LeftMouse> <nop>
+vmap <LeftMouse> <nop>
 
 " Navigation {{{2
 " Do not automatically adjust for line wrapping
