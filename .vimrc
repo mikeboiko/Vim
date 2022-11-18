@@ -943,11 +943,11 @@ let g:UltiSnipsSnippetDirectories=[$HOME.'/Documents/GitRepos/Vim/snippets']
 " Vim-QF {{{2
 " let g:qf_mapping_ack_style = 1
 
-" ag {{{2
+" ag - silver searcher {{{2
 if executable('ag')
     " Use ag instead of grep (performance increase)
     " set grepprg=ag\ --nogroup\ --nocolor
-    set grepprg=ag\ --vimgrep\ $*
+    set grepprg=ag\ --silent\ --vimgrep\ $*
     set grepformat=%f:%l:%c:%m
 
     " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
