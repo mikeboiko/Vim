@@ -977,16 +977,6 @@ let g:unstack_layout = "portrait"
 
 let g:vimspector_enable_mappings = 'HUMAN'
 
-" F3        | <Plug>VimspectorStop             | Stop debugging.
-" F5        | <Plug>VimspectorContinue         | When debugging, continue. Otherwise start debugging.
-" F6        | <Plug>VimspectorPause            | Pause debuggee.
-" F9        | <Plug>VimspectorToggleBreakpoint | Toggle line breakpoint on the current line.
-" F10       | <Plug>VimspectorStepOver         | Step Over
-" F11       | <Plug>VimspectorStepInto         | Step Into
-" Shift F11 | <Plug>VimspectorStepOut          | Step out of current function scope
-
-" In order to see Traceback, add __traceback__ to Watch Window
-
 " See https://code.visualstudio.com/docs/python/debugging
 " https://puremourning.github.io/vimspector/schema/vimspector.schema.json
 let g:vimspector_configurations = {
@@ -1730,6 +1720,21 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 nmap <silent> <leader>db :call vimspector#BreakpointsAsQuickFix()<cr>
 nmap <silent> <leader>di <Plug>VimspectorBalloonEval
+nmap <silent> <leader>dsi <Plug>VimspectorStepInto
+nmap <silent> <leader>dso <Plug>VimspectorStepOut
+
+" Default mappings:
+
+" <leader+CR> |                                  | Edit variable value
+" F3          | <Plug>VimspectorStop             | Stop debugging.
+" F5          | <Plug>VimspectorContinue         | When debugging, continue. Otherwise start debugging.
+" F6          | <Plug>VimspectorPause            | Pause debuggee.
+" F9          | <Plug>VimspectorToggleBreakpoint | Toggle line breakpoint on the current line.
+" F10         | <Plug>VimspectorStepOver         | Step Over
+" F11         | <Plug>VimspectorStepInto         | Step Into
+" Shift F11   | <Plug>VimspectorStepOut          | Step out of current function scope
+
+" In order to see Traceback, add __traceback__ to Watch Window
 
 " Vira {{{2
 
