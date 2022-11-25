@@ -1675,6 +1675,14 @@ vnoremap J 5j
 
 nnoremap <leader>ts :ALEFix trim_whitespace<CR>
 
+" Search {{{2
+" Search for multiple terms
+nnoremap <leader>/ /\v<c-r>/\|
+
+" Search forward and backwards consistently
+nnoremap <expr> n 'Nn'[v:searchforward]
+nnoremap <expr> N 'nN'[v:searchforward]
+
 " Sorting {{{2
 " Sort paragraph
 nnoremap <leader>so vip:sort<CR>
