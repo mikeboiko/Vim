@@ -1728,6 +1728,10 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 nmap <silent> <leader>db :call vimspector#BreakpointsAsQuickFix()<cr>
 nmap <silent> <leader>di <Plug>VimspectorBalloonEval
+nmap <silent> <leader>dc <Plug>VimspectorContinue
+nmap <silent> <leader>dr <Plug>VimspectorRestart
+nmap <silent> <leader>dp <Plug>VimspectorPause
+nmap <silent> <leader>ds <Plug>VimspectorStop
 nmap <silent> <leader>dsi <Plug>VimspectorStepInto
 nmap <silent> <leader>dso <Plug>VimspectorStepOut
 
@@ -1735,6 +1739,7 @@ nmap <silent> <leader>dso <Plug>VimspectorStepOut
 
 " <leader+CR> |                                  | Edit variable value
 " F3          | <Plug>VimspectorStop             | Stop debugging.
+" F4          | <Plug>VimspectorRestart          | Restart debugging.
 " F5          | <Plug>VimspectorContinue         | When debugging, continue. Otherwise start debugging.
 " F6          | <Plug>VimspectorPause            | Pause debuggee.
 " F9          | <Plug>VimspectorToggleBreakpoint | Toggle line breakpoint on the current line.
