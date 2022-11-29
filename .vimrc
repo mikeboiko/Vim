@@ -1728,8 +1728,8 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 nmap <silent> <leader>db :call vimspector#BreakpointsAsQuickFix()<cr>
 nmap <silent> <leader>di <Plug>VimspectorBalloonEval
-nmap <silent> <leader>dc <Plug>VimspectorContinue
-nmap <silent> <leader>dr <Plug>VimspectorRestart
+nmap <silent> <leader>dc :wa<CR>:execute "normal \<Plug>VimspectorContinue"<CR>
+nmap <silent> <leader>dr :wa<CR>:execute "normal \<Plug>VimspectorRestart"<CR>
 nmap <silent> <leader>dp <Plug>VimspectorPause
 nmap <silent> <leader>ds <Plug>VimspectorStop
 nmap <silent> <leader>dsi <Plug>VimspectorStepInto
