@@ -1680,9 +1680,10 @@ nnoremap <leader>ts :ALEFix trim_whitespace<CR>
 " Search for multiple terms
 nnoremap <leader>/ /\v<c-r>/\|
 
+" Decided to disable this so it's not confusing when I use other applications with vi mode such as tmux
 " Search forward and backwards consistently
-nnoremap <expr> n 'Nn'[v:searchforward]
-nnoremap <expr> N 'nN'[v:searchforward]
+" nnoremap <expr> n 'Nn'[v:searchforward]
+" nnoremap <expr> N 'nN'[v:searchforward]
 
 " Sorting {{{2
 " Sort paragraph
