@@ -912,8 +912,9 @@ let g:NERDRemoveExtraSpaces=1
 let g:NERDCustomDelimiters = {
             \ 'python': { 'left': '#', 'right': '' },
             \ 'dosbatch': { 'left': 'REM', 'right': '' },
-            \ 'sebol': { 'left': '!', 'right': '' },
+            \ 'kql': { 'left': '//', 'right': '' },
             \ 'mermaid': { 'left': '%%', 'right': '' },
+            \ 'sebol': { 'left': '!', 'right': '' },
             \ 'vader': { 'left': '#'}
             \ }
 
