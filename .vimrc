@@ -1238,6 +1238,9 @@ if has('mac')
   set rtp+=/usr/local/opt/fzf
 endif
 
+" Without this ctrl+a skips 8s and 9s when incrementing
+set nrformats-=octal
+
 " Folding{{{3
 set foldenable
 set foldlevelstart=0
