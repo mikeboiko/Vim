@@ -1379,13 +1379,8 @@ nnoremap <leader>aw :ALEFindReferences -quickfix<CR>:top 5 copen<CR>
 
 " Clipboard {{{2
 
-if has('mac') || has('win32')
-  nnoremap <leader>cfp :let @+ = expand("%:p:~")<CR>
-  nnoremap <leader>cwd :let @+ = expand("%:p:~:h")<CR>
-elseif has('unix')
-+ nnoremap <leader>cfp :let @" = expand("%:p:~")<CR>
-  nnoremap <leader>cwd :let @" = expand("%:p:~:h")<CR>
-endif
+nnoremap <leader>cfp :let @+ = expand("%:p:~")<CR>
+nnoremap <leader>cwd :let @+ = expand("%:p:~:h")<CR>
 
 " Close Toggle {{{2
 " Toggle between ++close and ++noclose when running term <leader>rr
