@@ -1377,6 +1377,16 @@ nnoremap <leader>a; mzA;<esc>`z
 nnoremap <leader>se :call ALERunLint()<CR>
 nnoremap <leader>aw :ALEFindReferences -quickfix<CR>:top 5 copen<CR>
 
+" Clipboard {{{2
+
+if has('mac') || has('win32')
+  nnoremap <leader>cfp :let @+ = expand("%:p:~")<CR>
+  nnoremap <leader>cwd :let @+ = expand("%:p:~:h")<CR>
+elseif has('unix')
++ nnoremap <leader>cfp :let @" = expand("%:p:~")<CR>
+  nnoremap <leader>cwd :let @" = expand("%:p:~:h")<CR>
+endif
+
 " Close Toggle {{{2
 " Toggle between ++close and ++noclose when running term <leader>rr
 nnoremap <leader>ct :CloseToggle<CR>
