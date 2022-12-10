@@ -778,7 +778,7 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_linters = {
             \ 'cs': ['omnisharp'],
             \ 'go': ['gopls'],
-            \ 'python': ['flake8', 'pylsp'],
+            \ 'python': ['pyright'],
             \ 'vim': ['vint']
             \ }
 
@@ -802,6 +802,7 @@ let g:ale_set_loclist = 0
 let g:ale_python_pylint_options = '--rcfile ~/Documents/GitRepos/Work/SRS/.standard.rc'
 
 " python language server config
+" switched from pylsp to pyright, but I'll keep this here in case I switch back
 let g:ale_python_pylsp_config = {
                           \   'pylsp': {
                           \     'plugins': {
