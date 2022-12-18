@@ -53,20 +53,20 @@ nnoremap <buffer> gd zR:OmniSharpGotoDefinition<CR>
 " Save all files, compile and open AccuTune.exe
 au BufWinEnter,BufEnter */AccuTune/Main/*
             \ let b:startapp='' |
-            \ let b:startfile=$HOME.'/Documents/GitRepos/AccuTune/Main/AccuTune/bin/Release/AccuTune.com' |
+            \ let b:startfile=$HOME.'/git/AccuTune/Main/AccuTune/bin/Release/AccuTune.com' |
             \ let b:startargs='--unlockApp -t Simulink.Device1.Python -s Kepware.KEPServerEX.V5 --log'
 
 " AccuTuneDocDump " {{{2
 " AccuTune Documentation/ScreenCapture
 au BufWinEnter,BufEnter */AccuTune/Docs/*
             \ let b:startapp='' |
-            \ let b:startfile=$HOME.'/Documents/GitRepos/AccuTune/Docs/AccuTune/Docs/ScreenCapture/ScreenCapture/bin/Release/ScreenCapture.exe' |
+            \ let b:startfile=$HOME.'/git/AccuTune/Docs/AccuTune/Docs/ScreenCapture/ScreenCapture/bin/Release/ScreenCapture.exe' |
             \ let b:startargs=''
 
 " AccuTuneTests " {{{2
 " AccuTune Automated Tests
 au BufWinEnter,BufEnter */AccuTune/Tests/*
             \ let b:startapp='' |
-            \ let b:startfile=$HOME.'/Documents/GitRepos/AccuTune/Tests/Tests/bin/Release/Tests.exe' |
+            \ let b:startfile=$HOME.'/git/AccuTune/Tests/Tests/bin/Release/Tests.exe' |
             \ let b:startargs=''
 

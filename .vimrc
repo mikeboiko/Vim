@@ -1,6 +1,6 @@
 " Constants {{{1
 
-let $CODE='$HOME/Documents/GitRepos'
+let $CODE='$HOME/git'
 
 " Max Number of Records to show in QF/Location Lists
 let g:maxQFlistRecords = 8
@@ -345,13 +345,13 @@ function! GitAddCommitPush() abort " {{{2
 
     if has('unix') " Linux
         if has('nvim')
-            exe 'sp term://bash --login -c \"'.$HOME.'/Documents/GitRepos/Linux/git/gap '.commit_text.'\"'
-            " exe 'sp term://bash --login -c \"/home/mike/Documents/GitRepos/Linux/git/gap\"'
+            exe 'sp term://bash --login -c \"'.$HOME.'/git/Linux/git/gap '.commit_text.'\"'
+            " exe 'sp term://bash --login -c \"/home/mike/git/Linux/git/gap\"'
         else
-            exe 'term ++close bash --login -c "'.$HOME.'/Documents/GitRepos/Linux/git/gap '.commit_text.'"'
+            exe 'term ++close bash --login -c "'.$HOME.'/git/Linux/git/gap '.commit_text.'"'
         endif
     else " Windows
-        exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/Documents/GitRepos/Linux/git/gap '.commit_text
+        exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/git/Linux/git/gap '.commit_text
     endif
     redraw!
 
@@ -674,7 +674,7 @@ command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
 " Mani {{{2
 
 command! -nargs=+ -complete=command Mani try |
-            \ exe "terminal bash -c \"mani -c ~/Documents/GitRepos/Linux/config/mani.yaml "
+            \ exe "terminal bash -c \"mani -c ~/git/Linux/config/mani.yaml "
             \ . <q-args> . "\""| catch | endtry
 
 " SpellToggle {{{2
@@ -799,7 +799,7 @@ let g:ale_fixers = {
 let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 0
 
-let g:ale_python_pylint_options = '--rcfile ~/Documents/GitRepos/Work/SRS/.standard.rc'
+let g:ale_python_pylint_options = '--rcfile ~/git/Work/SRS/.standard.rc'
 
 " python language server config
 " switched from pylsp to pyright, but I'll keep this here in case I switch back
@@ -817,7 +817,7 @@ let g:ale_python_pylsp_config = {
                           \ }
 
 " C# fixer
-let g:ale_c_uncrustify_options = '-c ~/Documents/GitRepos/Linux/config/uncrustify.cfg'
+let g:ale_c_uncrustify_options = '-c ~/git/Linux/config/uncrustify.cfg'
 
 " Configure repo-specific linters/fixers
 " let g:ale_pattern_options = {
@@ -940,7 +940,7 @@ let g:UltiSnipsJumpForwardTrigger = '<Tab>'
 let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 
 " Additional UltiSnips config.
-let g:UltiSnipsSnippetDirectories=[$HOME.'/Documents/GitRepos/Vim/snippets']
+let g:UltiSnipsSnippetDirectories=[$HOME.'/git/Vim/snippets']
 
 " Vim-QF {{{2
 " let g:qf_mapping_ack_style = 1
@@ -1012,8 +1012,8 @@ let g:vimspector_sidebar_width = 60
 
 " vira {{{2
 
-let g:vira_config_file_projects = $HOME.'/Documents/GitRepos/Linux/config/vira_projects.yaml'
-let g:vira_config_file_servers = $HOME.'/Documents/GitRepos/Linux/config/vira_servers.yaml'
+let g:vira_config_file_projects = $HOME.'/git/Linux/config/vira_projects.yaml'
+let g:vira_config_file_servers = $HOME.'/git/Linux/config/vira_servers.yaml'
 let g:vira_issue_limit = 100
 
 " let g:vira_report_width = 100
@@ -1530,10 +1530,10 @@ map gv mm:vs %<CR>`mgdzMzvzz
 " Grep with ag {{{2
 
 " Search code
-nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/Documents/GitRepos<s-left><space><left>
+nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/git<s-left><space><left>
 
 " Search notes
-nnoremap <leader>fn :Grep --md ~/files/Notes ~/Documents/GitRepos<s-left><s-left><space><left>
+nnoremap <leader>fn :Grep --md ~/files/Notes ~/git<s-left><s-left><space><left>
 
 " Search git repo
 nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
@@ -1654,10 +1654,10 @@ augroup END
 " Reports {{{2
 
 if has('nvim')
-  nnoremap <leader>tp :tabe term://python /home/mike/Documents/GitRepos/Tables/scripts/tables.py cli -f printbalance<CR>
+  nnoremap <leader>tp :tabe term://python /home/mike/git/Tables/scripts/tables.py cli -f printbalance<CR>
   nnoremap <leader>cw :tabe term://curl wttr.in/Calgary?m"<CR>
 else
-  nnoremap <leader>tp :tabe<CR>:terminal ++curwin bash -c "python ~/Documents/GitRepos/Tables/scripts/tables.py cli -f printbalance"<CR><CR>
+  nnoremap <leader>tp :tabe<CR>:terminal ++curwin bash -c "python ~/git/Tables/scripts/tables.py cli -f printbalance"<CR><CR>
   nnoremap <leader>cw :tabe<CR>:terminal ++curwin bash -c "curl wttr.in/Calgary"<CR>
 endif
 
