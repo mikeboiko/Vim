@@ -348,7 +348,7 @@ function! GitAddCommitPush() abort " {{{2
             exe 'sp term://bash --login -c \"'.$HOME.'/git/Linux/git/gap '.commit_text.'\"'
             " exe 'sp term://bash --login -c \"/home/mike/git/Linux/git/gap\"'
         else
-            exe 'term ++close bash --login -c "'.$HOME.'/git/Linux/git/gap '.commit_text.'"'
+            exe 'term ++close bash --login -c "export TERM=tmux-256color; '.$HOME.'/git/Linux/git/gap '.commit_text.'"'
         endif
     else " Windows
         exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/git/Linux/git/gap '.commit_text
@@ -1233,6 +1233,8 @@ if has('nvim')
     autocmd TermClose * stopinsert
   augroup END
 endif
+
+set term=$TERM
 
 " Required for fzf-folds
 if has('mac')
