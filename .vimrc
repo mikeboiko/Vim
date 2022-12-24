@@ -227,6 +227,7 @@ function! GetLastFoldString() " {{{3
   if (len(filter(split(execute(':scriptname'), "\n"), 'v:val =~? "vim-coiled-snake"')) > 0
      \ && &filetype ==# 'python')
      \ || &filetype ==# 'markdown'
+     \ || &filetype ==# 'vim'
     let foldStr = FormatFoldString(GetLastFoldLineNum(foldlevel("."))) . "|$}{$"
   else
     let foldStr = ""
@@ -1411,22 +1412,21 @@ nnoremap q; q:
 
 " Comment {{{2
 
-" Inline Comment
-nnoremap <leader>cii :call PromptAndComment(1, 'Comment Text: ', '')<CR>
+" Main Comment Mappings
+nnoremap cii :call PromptAndComment(1, 'Comment Text: ', '')<CR>
+map cl <plug>NERDCommenterToggle
+map cp vip<plug>NERDCommenterYank
+map cu vip<plug>NERDCommenterUncomment
 
 " Inline comments with folds
-map <leader>ci1 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>1<ESC>
-map <leader>ci2 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>2<ESC>
-map <leader>ci3 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>3<ESC>
-map <leader>ci4 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>4<ESC>
+map ci1 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>1<ESC>
+map ci2 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>2<ESC>
+map ci3 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>3<ESC>
+map ci4 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>4<ESC>
 
 " Comment, Yank and Paste
-nnoremap <leader>cy "zyy:silent execute "cal NERDComment('n',\"comment\")"<CR>"zp
-vnoremap <leader>cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
-
-" Comment/Uncomment Paragraph
-map <leader>cp vip<plug>NERDCommenterYank
-map <leader>cu vip<plug>NERDCommenterUncomment
+nnoremap cy "zyy:silent execute "cal NERDComment('n',\"comment\")"<CR>"zp
+vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
 
 " Conflicts {{{2
 
