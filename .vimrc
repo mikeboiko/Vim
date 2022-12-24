@@ -174,7 +174,7 @@ function! FindFunc(...) " {{{2
     lexpr []
 
     " Put Results into QuickFix Window
-    silent execute 'g/'.a:1.'/laddexpr expand("%") . ":" . line(".") . ":" . GetLastFoldString() . "$}{$" . getline(".") '
+    silent execute 'g/'.a:1.'/laddexpr expand("%") . ":" . line(".") . ":" . GetLastFoldString() . getline(".") '
 
     " Prepare location list height - minimum or record count and max allowable limit
     let w:locListHeight = min([ g:maxQFlistRecords, len(getloclist(0)) ])
@@ -201,7 +201,7 @@ function! FindFunc(...) " {{{2
     GoToMatchedColumn
 endfunction
 
-" FoldText{{{2
+" FoldText {{{2
 function! GetFoldStrings() " {{{3
     " Make the status string a list of all the folds
     " Iterate through each fold level and add fold string to list
@@ -223,8 +223,15 @@ function! GetFoldStrings() " {{{3
 endfunction
 
 function! GetLastFoldString() " {{{3
-    " Get the text of the last fold
-    return FormatFoldString(GetLastFoldLineNum(foldlevel(".")))."|"
+  " Get the text of the last fold if following conditions exist
+  if (len(filter(split(execute(':scriptname'), "\n"), 'v:val =~? "vim-coiled-snake"')) > 0
+     \ && &filetype ==# 'python')
+     \ || &filetype ==# 'markdown'
+    let foldStr = FormatFoldString(GetLastFoldLineNum(foldlevel("."))) . "|$}{$"
+  else
+    let foldStr = ""
+  endif
+  return foldStr
 endfunction
 
 function! GetLastFoldLineNum(foldLvl) " {{{3
@@ -779,7 +786,7 @@ let g:ale_linters = {
             \ 'cs': ['omnisharp'],
             \ 'go': ['gopls'],
             \ 'python': ['pyright'],
-            \ 'vim': ['vint']
+            \ 'vim': ['vimls', 'vint']
             \ }
 
 let g:ale_fixers = {
@@ -1853,4 +1860,3 @@ nnoremap <leader>ya mzggyG`z
     " " Substitute equations between the VIM_EVAL and END_EVAL equations
     " autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
 " augroup END
-
