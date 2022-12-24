@@ -757,6 +757,7 @@ Plug 'mikeboiko/vim-sort-folds'                                               " 
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                  " Jira integration
 Plug 'posva/vim-vue'                                                          " Vue filetype recognition
 Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-python'} " Vim degbugger
+Plug 'rhysd/conflict-marker.vim'                                              " Git conflict resolution
 Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                               " fzf for folds
 Plug 'roxma/nvim-yarp'                                                        " Auto-completion engine
 Plug 'roxma/vim-hug-neovim-rpc'                                               " Auto-completion engine
