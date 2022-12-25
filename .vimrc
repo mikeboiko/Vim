@@ -998,8 +998,9 @@ let g:vimspector_configurations = {
       \     'request': 'launch',
       \     'type': 'python',
       \     'cwd': '${fileDirname}',
-      \     'args': ["*${ARGS}"],
+      \     'args': ['*${ARGS}'],
       \     'program': '${file}',
+      \     'python': '~/.pyenv/shims/python',
       \     'stopOnEntry': v:false,
       \     'console': 'integratedTerminal'
       \   },
