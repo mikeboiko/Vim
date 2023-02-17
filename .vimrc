@@ -1553,7 +1553,7 @@ map gv mm:vs %<CR>`mgdzMzvzz
 nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/git<s-left><space><left>
 
 " Search notes
-nnoremap <leader>fn :Grep --md ~/git/Notes ~/git<s-left><s-left><space><left>
+nnoremap <leader>fn :Grep --md ~/git<s-left><s-left><space><left>
 
 " Search git repo
 nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
