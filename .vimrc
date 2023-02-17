@@ -353,8 +353,8 @@ function! GitAddCommitPush() abort " {{{2
 
     if has('unix') " Linux
         if has('nvim')
-            exe 'sp term://bash --login -c \"'.$HOME.'/git/Linux/git/gap '.commit_text.'\"'
-            " exe 'sp term://bash --login -c \"/home/mike/git/Linux/git/gap\"'
+            " exe 'sp term://bash --login -c \"export VIMRUNTME=/usr/share/nvim/runtime; '.$HOME.'/git/Linux/git/gap '.commit_text.'\"'
+            exe 'sp term://bash /home/mike/git/Linux/git/gap'
         else
             exe 'term ++close bash --login -c "export TERM=tmux-256color; '.$HOME.'/git/Linux/git/gap '.commit_text.'"'
         endif
@@ -682,8 +682,11 @@ command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
 " Mani {{{2
 
 command! -nargs=+ -complete=command Mani try |
-            \ exe "terminal bash -c \"mani -c ~/git/Linux/config/mani.yaml "
-            \ . <q-args> . "\""| catch | endtry
+            \ exe "sp term://mani -c ~/git/Linux/config/mani.yaml "
+            \ . <q-args> . ""| catch | endtry
+
+            # For vim:
+            " \ exe "terminal bash -c \"mani -c ~/git/Linux/config/mani.yaml "
 
 " SpellToggle {{{2
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
@@ -1240,11 +1243,14 @@ if has('nvim')
   augroup END
 endif
 
-set term=$TERM
+
+if !has('nvim')
+  set term=$TERM
+endif
 
 " Required for fzf-folds
 if has('mac')
-  set rtp+=/usr/local/opt/fzf
+  set runtimepath+=/usr/local/opt/fzf
 endif
 
 " Without this ctrl+a skips 8s and 9s when incrementing
