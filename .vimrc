@@ -32,6 +32,48 @@ endif
 
 " Functions {{{1
 
+function! s:getExitStatus() abort " {{{2
+  " Get the exit status from a terminal buffer by looking for a line near the end
+  " of the buffer with the format, '[Process exited ?]'.
+  let ln = line('$')
+  " The terminal buffer includes several empty lines after the 'Process exited'
+  " line that need to be skipped over.
+  while ln >= 1
+    let l = getline(ln)
+    let ln -= 1
+    let exitCode = substitute(l, '^\[Process exited \([0-9]\+\)\]$', '\1', '')
+    if l != '' && l == exitCode
+      " The pattern did not match, and the line was not empty. It looks like
+      " there is no process exit message in this buffer.
+      break
+    elseif exitCode != ''
+      return str2nr(exitCode)
+    endif
+  endwhile
+  throw 'Could not determine exit status for buffer, ' . expand('%')
+endfunc
+
+function! s:afterTermClose(...) abort
+  if a:0 > 0
+    let expected_code = a:1
+  else
+    let expected_code = 0
+  end
+  if s:getExitStatus() == expected_code
+    bdelete!
+  endif
+endfunc
+
+augroup MyNeoterm
+  autocmd!
+  " The line '[Process exited ?]' is appended to the terminal buffer after the
+  " `TermClose` event. So we use a timer to wait a few milliseconds to read the
+  " exit status. Setting the timer to 0 or 1 ms is not sufficient; 20 ms seems
+  " to work for me.
+  autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose(1) })
+  autocmd TermClose * if (g:term_close == '++close') | call timer_start(20, { -> s:afterTermClose() }) | endif
+augroup END
+
 function! ALEOpenResults() " {{{2
   let l:bfnum = bufnr('')
   let l:items = ale#engine#GetLoclist(l:bfnum)
@@ -1553,7 +1595,7 @@ map gv mm:vs %<CR>`mgdzMzvzz
 nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/git<s-left><space><left>
 
 " Search notes
-nnoremap <leader>fn :Grep --md ~/git<s-left><s-left><space><left>
+nnoremap <leader>fn :Grep --md ~/git<s-left><space><left>
 
 " Search git repo
 nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
