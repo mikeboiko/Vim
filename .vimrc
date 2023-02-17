@@ -26,6 +26,10 @@ else
     let vimHomeDir = $HOME . '/vimfiles'
 endif
 
+if has('mac')
+  let g:python3_host_prog='/usr/bin/python3'
+endif
+
 " Functions {{{1
 
 function! ALEOpenResults() " {{{2
@@ -354,7 +358,7 @@ function! GitAddCommitPush() abort " {{{2
     if has('unix') " Linux
         if has('nvim')
             " exe 'sp term://bash --login -c \"export VIMRUNTME=/usr/share/nvim/runtime; '.$HOME.'/git/Linux/git/gap '.commit_text.'\"'
-            exe 'sp term://bash /home/mike/git/Linux/git/gap'
+            exe 'sp term://bash ~/git/Linux/git/gap'
         else
             exe 'term ++close bash --login -c "export TERM=tmux-256color; '.$HOME.'/git/Linux/git/gap '.commit_text.'"'
         endif
@@ -1670,7 +1674,7 @@ augroup END
 " Reports {{{2
 
 if has('nvim')
-  nnoremap <leader>tp :tabe term://python /home/mike/git/Tables/scripts/tables.py cli -f printbalance<CR>
+  nnoremap <leader>tp :tabe term://python ~/git/Tables/scripts/tables.py cli -f printbalance<CR>
   nnoremap <leader>cw :tabe term://curl wttr.in/Calgary?m"<CR>
 else
   nnoremap <leader>tp :tabe<CR>:terminal ++curwin bash -c "python ~/git/Tables/scripts/tables.py cli -f printbalance"<CR><CR>
@@ -1747,7 +1751,6 @@ nnoremap <c-t> mm:tabe <c-r>%<CR>`m
 nnoremap qm gt
 nnoremap qn gT
 nnoremap <C-g> :tabp<CR>
-tnoremap <C-g> <C-W>:tabp<CR>
 
 " TagBar {{{2
 nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
@@ -1845,10 +1848,21 @@ nnoremap qh <C-W>h
 nnoremap ql <C-W>l
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
-tnoremap <C-j> <C-W>j
-tnoremap <C-k> <C-W>k
-tnoremap <C-h> <C-W>h
-tnoremap <C-l> <C-W>l
+
+
+if has('nvim')
+  tnoremap <C-g> <C-\><C-n>:tabp<CR>
+  tnoremap <C-j> <C-\><C-n><C-w>j
+  tnoremap <C-k> <C-\><C-n><C-w>k
+  tnoremap <C-h> <C-\><C-n><C-w>h
+  tnoremap <C-l> <C-\><C-n><C-w>l
+else
+  tnoremap <C-g> <C-W>:tabp<CR>
+  tnoremap <C-j> <C-W>j
+  tnoremap <C-k> <C-W>k
+  tnoremap <C-h> <C-W>h
+  tnoremap <C-l> <C-W>l
+endif
 
 " Yank {{{2
 " Yank till the end of the line
