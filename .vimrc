@@ -685,8 +685,7 @@ command! -nargs=+ -complete=command Mani try |
             \ exe "sp term://mani -c ~/git/Linux/config/mani.yaml "
             \ . <q-args> . ""| catch | endtry
 
-            # For vim:
-            " \ exe "terminal bash -c \"mani -c ~/git/Linux/config/mani.yaml "
+          " \ exe "terminal bash -c \"mani -c ~/git/Linux/config/mani.yaml "
 
 " SpellToggle {{{2
 command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
