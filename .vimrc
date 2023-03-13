@@ -54,6 +54,14 @@ function! s:getExitStatus() abort " {{{2
 endfunc
 
 function! s:afterTermClose(...) abort
+  " This is a hack to easily handle the situation where I switched focus away
+  " from the terminal window
+  let winName = bufname('%')
+  if winName !~# '/tmp/flow'
+    call AllClose()
+    return
+  endif
+
   if a:0 > 0
     let expected_code = a:1
   else
@@ -100,19 +108,19 @@ function! AllClose() " {{{2
     Windofast lclose
     cclose
     pclose
-    for bufname in ['^fugitive', '!/tmp/flow']
+    for bufname in ['^fugitive', '/tmp/flow']
       let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~# bufname'), ' ')
       if trim(buffers) !=? ''
-        silent! exe 'bd '. buffers
+        silent! exe 'bdelete '. buffers
       endif
     endfor
 endf
 
 function! BufDo(command) " {{{2
     " Just like bufdo, but restore the current buffer when done.
-    let currBuff=bufnr("%")
-    execute 'bufdo ' . a:command
-    execute 'buffer ' . currBuff
+    let currBuff=bufnr('%')
+    silent! execute 'bufdo ' . a:command
+    silent! execute 'buffer ' . currBuff
 endfunction
 
 function! CloseQuickFixWindow() " {{{2
@@ -399,7 +407,6 @@ function! GitAddCommitPush() abort " {{{2
 
     if has('unix') " Linux
         if has('nvim')
-            " exe 'sp term://bash --login -c \"export VIMRUNTME=/usr/share/nvim/runtime; '.$HOME.'/git/Linux/git/gap '.commit_text.'\"'
             exe 'sp term://bash ~/git/Linux/git/gap'
         else
             exe 'term ++close bash --login -c "export TERM=tmux-256color; '.$HOME.'/git/Linux/git/gap '.commit_text.'"'
@@ -586,6 +593,7 @@ function! ToggleList(bufname, pfx) " {{{2
     let buflist = GetBufferList()
     for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
         if bufwinnr(bufnum) != -1
+            " exec('quit')
             exec(a:pfx.'close')
             return
         endif
@@ -595,17 +603,17 @@ function! ToggleList(bufname, pfx) " {{{2
     let winnr = winnr()
 
     " Location List
-    if a:pfx == 'l'
+    if a:pfx ==# 'l'
         " Nicer error message than original
         if len(getloclist(0)) == 0
             echohl ErrorMsg
-            echo "Location List is Empty."
+            echo 'Location List is Empty.'
             return
         endif
         " Open window with minimum height
         exec 'bot '. w:locListHeight .a:pfx.'open'
         " QuickFix List
-    elseif a:pfx == 'c'
+    elseif a:pfx ==# 'c'
         " Open window with minimum height
         exec 'top '. g:qfListHeight .a:pfx.'open'
     endif
@@ -783,6 +791,7 @@ Plug 'PProvost/vim-ps1'                                                       " 
 Plug 'Shougo/deoplete.nvim'                                                   " Auto-completion engine
 Plug 'SirVer/ultisnips'                                                       " Snippet engine
 Plug 'Yggdroot/indentLine'                                                    " Indent lines
+Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}                                 " NeoVim terminal improvements
 Plug 'altercation/vim-colors-solarized'                                       " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                                         " Switch beween vim splits & tmux panes seamslessly
 Plug 'ctrlpvim/ctrlp.vim'                                                     " Browse recent/project files
@@ -926,10 +935,6 @@ augroup CustomFugitive
   autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 augroup end
 
-" indentLine {{{2
-
-let g:indentLine_char = '│'
-
 " MarkdownPreview {{{2
 
 let g:mkdp_auto_close = 0
@@ -982,6 +987,26 @@ augroup CustomNERDcommenter
   autocmd BufEnter * silent! call nerdcommenter#SetUp()
 augroup end
 
+" OmniSharp {{{2
+
+" C# linting/completion
+
+" For WSL:
+" First download the WINDOWS HTTP 64 bit release and place into directory below:
+" https://github.com/OmniSharp/omnisharp-roslyn/releases
+
+" For Arch Linux install dependencies:
+" s pacman -S mono
+" let g:OmniSharp_translate_cygwin_wsl = 1
+" let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'
+" let g:OmniSharp_port = 2000
+
+let g:OmniSharp_selector_ui = 'ctrlp'
+let g:OmniSharp_timeout = 2
+" let g:OmniSharp_highlight_types = 1
+let g:OmniSharp_server_use_mono = 1
+let g:OmniSharp_server_stdio = 1
+
 " QFEnter {{{2
 
 let g:qfenter_keymap = {}
@@ -1026,6 +1051,20 @@ let g:airline_section_a = '%{g:vira_commit_text_enable}%{ViraStatusLine()}'
 " fzf-folds {{{2
 
 let g:fzf_folds_open = 1
+
+" indentLine {{{2
+
+let g:indentLine_char = '│'
+
+" toggleterm {{{2
+
+if has('nvim')
+  lua require("toggleterm").setup{ 
+        \ open_mapping = [[<c-\>]],
+        \ hide_numbers = true
+        \ }
+  autocmd! TermOpen term://* lua set_terminal_keymaps()
+endif
 
 " vim-unstack {{{2
 
@@ -1075,26 +1114,6 @@ let g:vira_config_file_servers = $HOME.'/git/Linux/config/vira_servers.yaml'
 let g:vira_issue_limit = 100
 
 " let g:vira_report_width = 100
-
-" OmniSharp {{{2
-
-" C# linting/completion
-
-" For WSL:
-" First download the WINDOWS HTTP 64 bit release and place into directory below:
-" https://github.com/OmniSharp/omnisharp-roslyn/releases
-
-" For Arch Linux install dependencies:
-" s pacman -S mono
-" let g:OmniSharp_translate_cygwin_wsl = 1
-" let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'
-" let g:OmniSharp_port = 2000
-
-let g:OmniSharp_selector_ui = 'ctrlp'
-let g:OmniSharp_timeout = 2
-" let g:OmniSharp_highlight_types = 1
-let g:OmniSharp_server_use_mono = 1
-let g:OmniSharp_server_stdio = 1
 
 " Editor Settings {{{1
 " Display{{{2
@@ -1643,6 +1662,12 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 " Go back to the last file
 nnoremap <BS> <C-^>
 
+" NeoVim {{{2
+
+if has('nvim')
+  lua require("mappings")
+endif
+
 " New line {{{2
 
 " Add blank line after current line
@@ -1904,20 +1929,11 @@ nnoremap ql <C-W>l
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
 
-
-if has('nvim')
-  tnoremap <C-g> <C-\><C-n>:tabp<CR>
-  tnoremap <C-j> <C-\><C-n><C-w>j
-  tnoremap <C-k> <C-\><C-n><C-w>k
-  tnoremap <C-h> <C-\><C-n><C-w>h
-  tnoremap <C-l> <C-\><C-n><C-w>l
-else
-  tnoremap <C-g> <C-W>:tabp<CR>
-  tnoremap <C-j> <C-W>j
-  tnoremap <C-k> <C-W>k
-  tnoremap <C-h> <C-W>h
-  tnoremap <C-l> <C-W>l
-endif
+tnoremap <C-g> <C-W>:tabp<CR>
+tnoremap <C-j> <C-W>j
+tnoremap <C-k> <C-W>k
+tnoremap <C-h> <C-W>h
+tnoremap <C-l> <C-W>l
 
 " Yank {{{2
 " Yank till the end of the line
