@@ -1235,11 +1235,24 @@ set noswapfile
 
 " Use linux shard clipboard in VIM
 if has('mac') || has('win32')
-    " set clipboard=unnamed,unnamedplus
-    set clipboard=unnamed
+    set clipboard=unnamed,unnamedplus
 elseif has('unix')
     set clipboard=unnamedplus
 endif
+
+" https://github.com/neovim/neovim/blob/master/runtime/autoload/provider/clipboard.vim#L88
+let g:clipboard = {
+      \   'name': 'xsel clipboard',
+      \   'copy': {
+      \      '+': ['xsel', '--nodetach', '-i', '-b'],
+      \      '*': ['xsel', '--nodetach', '-i', '-p'],
+      \    },
+      \   'paste': {
+      \      '+': ['xsel', '-o', '-b'],
+      \      '*': ['xsel', '-o', '-p'],
+      \   },
+      \   'cache_enabled': 1,
+      \ }
 
 " Vertical splits open on the right instead of the default of left
 set splitright
