@@ -79,10 +79,10 @@ augroup MyNeoterm
   autocmd!
   " The line '[Process exited ?]' is appended to the terminal buffer after the
   " `TermClose` event. So we use a timer to wait a few milliseconds to read the
-  " exit status. Setting the timer to 0 or 1 ms is not sufficient; 20 ms seems
-  " to work for me.
-  autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose('/git/Linux/git/gap', 1) })
+  " exit status. Setting the timer to 0 or 1 ms is not sufficient; 20 ms seems to work for me.
   autocmd TermClose * if (g:term_close == '++close') | call timer_start(20, { -> s:afterTermClose('/tmp/flow') }) | endif
+  autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose('/git/Linux/git/gap') })
+  " autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose('/git/Linux/git/gap', 1) })
 augroup END
 
 function! ALEOpenResults() " {{{2
