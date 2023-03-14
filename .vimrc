@@ -54,16 +54,19 @@ function! s:getExitStatus() abort " {{{2
 endfunc
 
 function! s:afterTermClose(...) abort
+  " a:0 -> number of arguments
+  " a:1 -> expected name of buffer (with Process exited message)
+  " a:2 -> expected exit code (default is 0)
   " This is a hack to easily handle the situation where I switched focus away
   " from the terminal window
   let winName = bufname('%')
-  if winName !~# '/tmp/flow'
+  if winName !~# a:1
     call AllClose()
     return
   endif
 
-  if a:0 > 0
-    let expected_code = a:1
+  if a:0 > 1
+    let expected_code = a:2
   else
     let expected_code = 0
   end
@@ -78,8 +81,8 @@ augroup MyNeoterm
   " `TermClose` event. So we use a timer to wait a few milliseconds to read the
   " exit status. Setting the timer to 0 or 1 ms is not sufficient; 20 ms seems
   " to work for me.
-  autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose(1) })
-  autocmd TermClose * if (g:term_close == '++close') | call timer_start(20, { -> s:afterTermClose() }) | endif
+  autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose('/git/Linux/git/gap', 1) })
+  autocmd TermClose * if (g:term_close == '++close') | call timer_start(20, { -> s:afterTermClose('/tmp/flow') }) | endif
 augroup END
 
 function! ALEOpenResults() " {{{2
