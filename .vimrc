@@ -1263,12 +1263,12 @@ endif
 let g:clipboard = {
       \   'name': 'xsel clipboard',
       \   'copy': {
-      \      '+': ['xsel', '--nodetach', '-i', '-b'],
-      \      '*': ['xsel', '--nodetach', '-i', '-p'],
+      \      '+': ['clipsy', 'copy'],
+      \      '*': ['clipsy', 'copy'],
       \    },
       \   'paste': {
-      \      '+': ['xsel', '-o', '-b'],
-      \      '*': ['xsel', '-o', '-p'],
+      \      '+': ['clipsy', 'paste'],
+      \      '*': ['clipsy', 'paste'],
       \   },
       \   'cache_enabled': 1,
       \ }
