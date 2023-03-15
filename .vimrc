@@ -817,7 +817,7 @@ Plug 'mikeboiko/vim-markdown-folding'                                         " 
 Plug 'mikeboiko/vim-sort-folds'                                               " Sort vim folds
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                  " Jira integration
 Plug 'posva/vim-vue'                                                          " Vue filetype recognition
-Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-python'} " Vim degbugger
+Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-python --enable-go'}
 Plug 'rhysd/conflict-marker.vim'                                              " Git conflict resolution
 Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                               " fzf for folds
 Plug 'roxma/nvim-yarp'                                                        " Auto-completion engine
@@ -1062,7 +1062,7 @@ let g:indentLine_char = '│'
 " toggleterm {{{2
 
 if has('nvim')
-  lua require("toggleterm").setup{ 
+  lua require("toggleterm").setup{
         \ open_mapping = [[<c-\>]],
         \ hide_numbers = true
         \ }
