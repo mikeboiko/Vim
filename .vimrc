@@ -794,7 +794,7 @@ Plug 'PProvost/vim-ps1'                                                       " 
 Plug 'Shougo/deoplete.nvim'                                                   " Auto-completion engine
 Plug 'SirVer/ultisnips'                                                       " Snippet engine
 Plug 'Yggdroot/indentLine'                                                    " Indent lines
-Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}                                 " NeoVim terminal improvements
+" Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}                                 " NeoVim terminal improvements
 Plug 'altercation/vim-colors-solarized'                                       " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                                         " Switch beween vim splits & tmux panes seamslessly
 Plug 'ctrlpvim/ctrlp.vim'                                                     " Browse recent/project files
@@ -1062,10 +1062,10 @@ let g:indentLine_char = '│'
 " toggleterm {{{2
 
 if has('nvim')
-  lua require("toggleterm").setup{ 
-        \ open_mapping = [[<c-\>]],
-        \ hide_numbers = true
-        \ }
+  " lua require("toggleterm").setup{ 
+        " \ open_mapping = [[<c-\>]],
+        " \ hide_numbers = true
+        " \ }
   autocmd! TermOpen term://* lua set_terminal_keymaps()
 endif
 
