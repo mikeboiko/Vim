@@ -1318,7 +1318,7 @@ if has('nvim')
   augroup nvim_term
     autocmd!
     autocmd TermOpen * startinsert
-    " autocmd TermClose * stopinsert
+    autocmd TermClose * stopinsert
   augroup END
 endif
 
