@@ -1942,11 +1942,11 @@ nnoremap <leader>ya mzggyG`z
 " Templates {{{1
 " Load template based on current file extension (:help template)
 
-" augroup templates
-    " " Remove ALL auto commands for the current group
-    " autocmd!
-    " " Expand file extension and search templates placing content at top of file
-    " autocmd BufNewFile *.* silent! execute '0r $CODE/Vim/templates/skeleton.'.expand("<afile>:e")
-    " " Substitute equations between the VIM_EVAL and END_EVAL equations
-    " autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
-" augroup END
+augroup templates
+    " Remove ALL auto commands for the current group
+    autocmd!
+    " Expand file extension and search templates placing content at top of file
+    autocmd BufNewFile *.* silent! execute '0r $CODE/Vim/templates/skeleton.'.expand("<afile>:e")
+    " Substitute equations between the VIM_EVAL and END_EVAL equations
+    autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
+augroup END
