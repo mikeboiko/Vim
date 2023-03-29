@@ -1061,7 +1061,7 @@ let g:indentLine_char = '│'
 " toggleterm {{{2
 
 if has('nvim')
-  " lua require("toggleterm").setup{ 
+  " lua require("toggleterm").setup{
         " \ open_mapping = [[<c-\>]],
         " \ hide_numbers = true
         " \ }
@@ -1100,7 +1100,25 @@ let g:vimspector_configurations = {
       \       'userUnhandled': 'Y'
       \     }
       \   }
-      \ } }
+      \ },
+      \ 'delve_config': {
+      \   'adapter': 'vscode-go',
+      \   'filetypes': ['go'],
+      \   'configuration': {
+      \     'request': 'launch',
+      \     'program': '${fileDirname}',
+      \     'mode': 'debug',
+      \     'dlvToolPath': '$HOME/go/bin/dlv'
+      \   },
+      \   'breakpoints': {
+      \     'exception': {
+      \       'raised': 'Y',
+      \       'uncaught': 'Y',
+      \       'userUnhandled': 'Y'
+      \     }
+      \   }
+      \ }
+      \ }
 
 let g:vimspector_sidebar_width = 60
 
@@ -1946,7 +1964,7 @@ augroup templates
     " Remove ALL auto commands for the current group
     autocmd!
     " Expand file extension and search templates placing content at top of file
-    autocmd BufNewFile *.* silent! execute '0r $CODE/Vim/templates/skeleton.'.expand("<afile>:e")
+    autocmd BufNewFile main.* silent! execute '0r $CODE/Vim/templates/skeleton.'.expand("<afile>:e")
     " Substitute equations between the VIM_EVAL and END_EVAL equations
-    autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
+    " autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
 augroup END
