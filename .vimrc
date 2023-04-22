@@ -867,8 +867,6 @@ let g:ale_fixers = {
 let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 0
 
-let g:ale_python_pylint_options = '--rcfile ~/git/Work/SRS/.standard.rc'
-
 " python language server config
 " switched from pylsp to pyright, but I'll keep this here in case I switch back
 let g:ale_python_pylsp_config = {
@@ -892,6 +890,7 @@ let g:ale_c_uncrustify_options = '-c ~/git/Linux/config/uncrustify.cfg'
             " \ 'Sync/SRS/*': {'ale_linters': ['pylint', 'pylsp']},
 " \}
 " let g:ale_pattern_options_enabled = 1
+" let g:ale_python_pylint_options = '--rcfile ~/git/Work/SRS/.standard.rc'
 
 " CtrlP {{{2
 " Fuzzy file/buffer/tag open
@@ -1916,7 +1915,6 @@ nnoremap <silent> <leader>vbm :ViraLoadProject __default__<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbn :ViraLoadProject Nuance<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbv :ViraLoadProject vira<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbw :ViraLoadProject Work<cr>:ViraIssues<cr>
-nnoremap <silent> <leader>vbs :ViraLoadProject SRS<cr>:ViraIssues<cr>
 
 " Misc
 nnoremap <silent> <leader>vsi :let g:vira_active_issue="
