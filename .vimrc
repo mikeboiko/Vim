@@ -787,13 +787,13 @@ call plug#begin(vimPlugDir)
 " Plug 'file:///home/mike/.vim/plugged/test'
 " Plug 'vimwiki/vimwiki'                                     " Nice wiki format
 " Plug 'tommcdo/vim-fubitive'                                             " Extend fugitive.vim to support Bitbucket URLs in :Gbrowse.
+" Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}                                 " NeoVim terminal improvements
 
 Plug 'OmniSharp/omnisharp-vim'                                                " C# magic
 Plug 'PProvost/vim-ps1'                                                       " Powershell file types
 Plug 'Shougo/deoplete.nvim'                                                   " Auto-completion engine
 Plug 'SirVer/ultisnips'                                                       " Snippet engine
-Plug 'Yggdroot/indentLine'                                                    " Indent lines
-" Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}                                 " NeoVim terminal improvements
+Plug 'Yggdroot/indentLine'                                                    " Visual indent lines
 Plug 'altercation/vim-colors-solarized'                                       " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                                         " Switch beween vim splits & tmux panes seamslessly
 Plug 'ctrlpvim/ctrlp.vim'                                                     " Browse recent/project files
@@ -811,7 +811,7 @@ Plug 'majutsushi/tagbar'                                                      " 
 Plug 'mattboehm/vim-unstack'                                                  " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                                   " Auto-close brackets
 Plug 'mikeboiko/vim-coiled-snake', trim(system('hostname -s')) =~ 'RO-MBOIKO-M' ? { 'on': [] } : {}
-Plug 'mikeboiko/vim-flow'                                                     " For a neat developing workflow
+Plug 'mikeboiko/vim-flow'                                                     " For a neat development workflow
 Plug 'mikeboiko/vim-markdown-folding'                                         " Syntax based folding for md
 Plug 'mikeboiko/vim-sort-folds'                                               " Sort vim folds
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                  " Jira integration
@@ -860,6 +860,7 @@ let g:ale_fixers = {
             \ 'markdown': ['prettier'],
             \ 'python': ['yapf'],
             \ 'vue': ['prettier'],
+            \ 'xml': ['prettier'],
             \ 'yaml': ['prettier']
             \ }
 
