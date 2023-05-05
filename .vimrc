@@ -1119,7 +1119,7 @@ let g:vimspector_configurations = {
       \ }
       \ }
 
-let g:vimspector_sidebar_width = 60
+let g:vimspector_sidebar_width = 70
 
 " vimwiki {{{2
 
