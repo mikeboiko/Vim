@@ -28,6 +28,8 @@ endif
 
 if has('mac')
   let g:python3_host_prog='/usr/bin/python3'
+else
+  let g:python3_host_prog='/usr/bin/python'
 endif
 
 " Functions {{{1
