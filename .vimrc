@@ -716,7 +716,7 @@ command! FoldOpen let save_cursor = getcurpos() | try | silent foldopen! | catch
 
 " Grep {{{2
 " Use ag to grep and put results quickfix list
-command! -nargs=+ Grep execute 'silent grep! --follow --hidden <args>' | let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ]) | exe 'top ' . g:qfListHeight . ' copen' | redraw!
+command! -nargs=+ Grep execute 'silent grep! --ignore node_modules --follow --hidden <args>' | let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ]) | exe 'top ' . g:qfListHeight . ' copen' | redraw!
 
 " QuickFix/Location List Next {{{2
 " Wrap around after hitting first/last record
@@ -1097,9 +1097,9 @@ let g:vimspector_configurations = {
       \   },
       \   'breakpoints': {
       \     'exception': {
-      \       'raised': 'Y',
-      \       'uncaught': 'Y',
-      \       'userUnhandled': 'Y'
+      \       'raised': 'N',
+      \       'uncaught': 'N',
+      \       'userUnhandled': 'N'
       \     }
       \   }
       \ },
