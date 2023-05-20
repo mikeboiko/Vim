@@ -1647,10 +1647,10 @@ nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/git<s-left><space><left>
 nnoremap <leader>fn :Grep --md ~/git<s-left><space><left>
 
 " Search git repo
-nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>q<s-left><space><left>
+nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep "<c-r>q"<home><s-right><space>
 
 " Search for word under cursor in git repo
-map <leader>gw "xyiw:let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>x <c-r>q<cr>
+map <leader>gw "xyiw:let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>x "<c-r>q"<cr>
 
 " Help {{{2
 
