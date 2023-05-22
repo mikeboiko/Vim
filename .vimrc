@@ -1078,6 +1078,7 @@ let g:unstack_layout = "portrait"
 " vimspector {{{2
 
 let g:vimspector_enable_mappings = 'HUMAN'
+let g:vimspector_enable_winbar=0
 
 " See https://code.visualstudio.com/docs/python/debugging
 " https://puremourning.github.io/vimspector/schema/vimspector.schema.json
