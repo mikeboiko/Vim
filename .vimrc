@@ -1772,7 +1772,7 @@ augroup END
 " Reports {{{2
 
 if has('nvim')
-  nnoremap <leader>tp :tabe term://python ~/git/Tables/scripts/tables.py cli -f printbalance<CR>
+  nnoremap <leader>tp :tabe term:///usr/bin/python ~/git/Tables/scripts/tables.py cli -f printbalance<CR>
   nnoremap <leader>cw :tabe term://curl wttr.in/Calgary?m"<CR>
 else
   nnoremap <leader>tp :tabe<CR>:terminal ++curwin bash -c "python ~/git/Tables/scripts/tables.py cli -f printbalance"<CR><CR>
