@@ -1169,7 +1169,7 @@ endif
 set number
 
 " Display relative line number along the left hand side
-set relativenumber
+" set relativenumber
 
 " Start scrolling <x> lines before window border
 set scrolloff=8
@@ -1618,7 +1618,7 @@ nnoremap <leader>ms :Mani run git-status --parallel --tags $MANI_TAG<cr>
 nnoremap <leader>mu :Mani run git-up --parallel --tags $MANI_TAG<cr>
 
 " Add all changes, commit and push
-nnoremap <leader>gap :silent call GitAddCommitPush()<CR>
+nnoremap <leader>gap :wa<CR>:silent call GitAddCommitPush()<CR>
 
 " Create new git branch based on active vira issue
 nnoremap <leader>gnb :call GitNewBranch()<cr>
