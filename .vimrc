@@ -936,7 +936,7 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-# Disable preview window
+" Disable preview window
 let g:fzf_preview_window = []
 
 " fzf-folds {{{2
