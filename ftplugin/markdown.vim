@@ -17,7 +17,8 @@ syn match markdownError "\w\@<=\w\@="
 " Turn on spell-check
 setlocal spell
 
-" Use fzf-folds instead of CtrlP
+" Use fzf-folds instead of :Tags
 nnoremap <buffer> <leader>. :Folds<cr>
+" TODO-MB [230615] - on buffer load, edit file so folds are fixed from telescope bug
 
 " vim: foldmethod=manual:foldlevel=3

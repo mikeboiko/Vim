@@ -697,11 +697,6 @@ com! -nargs=+ -complete=command Windofast noautocmd call WinDo(<q-args>)
 " CloseToggle {{{2
 command! CloseToggle if (g:term_close == '') | let g:term_close = '++close' | echo 'Term will close' | else | let g:term_close = '' | echo 'Term will not close' | endif
 
-" CtrlpToggle {{{2
-
-" Toggle between CtrlP MRU/Project Files
-command! ToggleCtrlP if (g:ctrlp_cmd == 'CtrlPMRU') | let g:ctrlp_cmd = 'CtrlP' | echo 'CtrlP in Project Files Mode' | else | let g:ctrlp_cmd = 'CtrlPMRU' | echo 'CtrlP in MRU Files Mode' | endif
-
 " FindLocal {{{2
 " Search for string in current file and put results in Location window
 command! -nargs=+ -complete=command FindLocal
@@ -717,7 +712,7 @@ command! FoldOpen let save_cursor = getcurpos() | try | silent foldopen! | catch
 " Grep {{{2
 " Use ag to grep and put results quickfix list
 command! -nargs=+ Grep execute 'silent grep! --ignore node_modules --follow --hidden <args>' | let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ]) | exe 'top ' . g:qfListHeight . ' copen' | redraw!
-" Use flag in HA repo: --skip-vcs-ignores 
+" Use flag in HA repo: --skip-vcs-ignores
 
 " QuickFix/Location List Next {{{2
 " Wrap around after hitting first/last record
@@ -762,7 +757,7 @@ command! -nargs=1 StartAsyncNeoVim
 command! ViraEnable if (g:vira_commit_text_enable == '') | let g:vira_commit_text_enable = '+' | echo 'Jira issue git message prepending enabled' | else | let g:vira_commit_text_enable = '' | echo 'Jira issue git message prepending disabled' | endif
 
 " Plugins{{{1
-" Custom Languages {{{2
+" Plugin Setup {{{2
 
 augroup CustomSetFileType
   autocmd!
@@ -770,13 +765,11 @@ augroup CustomSetFileType
   autocmd BufRead,BufNewFile *.mmd setfiletype mermaid
 augroup end
 
-" vim-polyglot {{{2
-
 " markdown: I was getting some weird indentation happening with - lists
 " This setting has to be configured before vim-polyglot is loaded by vim-plug
 let g:polyglot_disabled = ['markdown', 'csv']
 
-" vim-plug {{{2
+" _vim-plug {{{2
 
 " Plugin manager
 
@@ -799,7 +792,6 @@ Plug 'SirVer/ultisnips'                                                       " 
 Plug 'Yggdroot/indentLine'                                                    " Visual indent lines
 Plug 'altercation/vim-colors-solarized'                                       " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                                         " Switch beween vim splits & tmux panes seamslessly
-Plug 'ctrlpvim/ctrlp.vim'                                                     " Browse recent/project files
 Plug 'deoplete-plugins/deoplete-tag'                                          " Complete from ctags
 Plug 'ervandew/supertab'                                                      " Insert mode completions
 Plug 'godlygeek/tabular'                                                      " Align things
@@ -841,7 +833,22 @@ Plug 'yssl/QFEnter'                                                           " 
 " End initialization of plugin system
 call plug#end()
 
-" ALE {{{2
+" ag - silver searcher {{{2
+if executable('ag')
+    " Use ag instead of grep (performance increase)
+    " set grepprg=ag\ --nogroup\ --nocolor
+    set grepprg=ag\ --silent\ --vimgrep\ $*
+    set grepformat=%f:%l:%c:%m
+endif
+
+" airline {{{2
+
+" Fix font inconsistencies
+let g:airline_powerline_fonts=1
+
+let g:airline_section_a = '%{g:vira_commit_text_enable}%{ViraStatusLine()}'
+
+" ale {{{2
 
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_hover_cursor = 0
@@ -896,27 +903,7 @@ let g:ale_c_uncrustify_options = '-c ~/git/Linux/config/uncrustify.cfg'
 " let g:ale_pattern_options_enabled = 1
 " let g:ale_python_pylint_options = '--rcfile ~/git/Work/SRS/.standard.rc'
 
-" CtrlP {{{2
-" Fuzzy file/buffer/tag open
-
-" Since I'm toggling CtrlP functionality, I remapped my own <c-p> command
-let g:ctrlp_map = ''
-
-" Most recent files is default
-let g:ctrlp_cmd = 'CtrlPMRU'
-
-" Use filename instead of full path for searching
-" let g:ctrlp_by_filename = 1
-
-" Remap hotkeys
-let g:ctrlp_prompt_mappings = {
-            \ 'PrtSelectMove("j")':   ['J', '<down>'],
-            \ 'PrtSelectMove("k")':   ['K', '<up>'],
-            \ 'ToggleType(1)':        ['<c-f>'],
-            \ 'ToggleType(-1)':       ['<c-b>'],
-            \ }
-
-" Deoplete {{{2
+" deoplete {{{2
 
 let g:deoplete#enable_at_startup = 1
 let deoplete#tag#cache_limit_size = 5000000
@@ -933,42 +920,36 @@ call deoplete#custom#option('sources', {
 " This fixes the problem of tabbing through the menu from top to bottom (reverse order)
 let g:SuperTabDefaultCompletionType = '<c-n>'
 
-" Fugitive {{{2
+" fugitive {{{2
 
 augroup CustomFugitive
   autocmd!
   autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 augroup end
 
-" MarkdownPreview {{{2
+" fzf {{{2
+
+" Remap hotkeys
+
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+" fzf-folds {{{2
+
+let g:fzf_folds_open = 1
+
+" indentLine {{{2
+
+let g:indentLine_char = '│'
+
+" markdownpreview {{{2
 
 let g:mkdp_auto_close = 0
 let g:mkdp_refresh_slow = 1
 
-" NERDTree{{{2
-
-" Close NERDTree when opening file
-let NERDTreeQuitOnOpen = 1
-
-" Show hidden files by default
-let NERDTreeShowHidden = 1
-
-" Enable Bookmarks by default
-let NERDTreeShowBookmarks = 1
-
-" Line Numbers
-let NERDTreeShowLineNumbers=1
-
-" vim-tmux-navigator conflict
-let g:NERDTreeMapJumpNextSibling = ''
-let g:NERDTreeMapJumpPrevSibling = ''
-
-" Match CtrlP when opening new files
-let g:NERDTreeMapOpenSplit = '<c-s>'
-let g:NERDTreeMapOpenVSplit = '<c-v>'
-let g:NERDTreeMapOpenInTab = '<c-t>'
-
-" NerdCommenter{{{2
+" nerdcommenter {{{2
 
 " NerdCommenter add a space after comment
 let g:NERDSpaceDelims=1
@@ -992,7 +973,30 @@ augroup CustomNERDcommenter
   autocmd BufEnter * silent! call nerdcommenter#SetUp()
 augroup end
 
-" OmniSharp {{{2
+" nerdtree{{{2
+
+" Close NERDTree when opening file
+let NERDTreeQuitOnOpen = 1
+
+" Show hidden files by default
+let NERDTreeShowHidden = 1
+
+" Enable Bookmarks by default
+let NERDTreeShowBookmarks = 1
+
+" Line Numbers
+let NERDTreeShowLineNumbers=1
+
+" vim-tmux-navigator conflict
+let g:NERDTreeMapJumpNextSibling = ''
+let g:NERDTreeMapJumpPrevSibling = ''
+
+" Open new files in splits/tabs
+let g:NERDTreeMapOpenSplit = '<c-x>'
+let g:NERDTreeMapOpenVSplit = '<c-v>'
+let g:NERDTreeMapOpenInTab = '<c-t>'
+
+" omnisharp {{{2
 
 " C# linting/completion
 
@@ -1006,60 +1010,18 @@ augroup end
 " let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'
 " let g:OmniSharp_port = 2000
 
-let g:OmniSharp_selector_ui = 'ctrlp'
+" let g:OmniSharp_selector_ui = 'ctrlp'
 let g:OmniSharp_timeout = 2
 " let g:OmniSharp_highlight_types = 1
 let g:OmniSharp_server_use_mono = 1
 let g:OmniSharp_server_stdio = 1
 
-" QFEnter {{{2
+" qfenter {{{2
 
 let g:qfenter_keymap = {}
 let g:qfenter_keymap.vopen = ['<C-v>']
-let g:qfenter_keymap.hopen = ['<C-s>']
+let g:qfenter_keymap.hopen = ['<C-x>']
 let g:qfenter_keymap.topen = ['<C-t>']
-
-" UltiSnips {{{2
-
-" YouCompleteMe and UltiSnips compatibility.
-let g:UltiSnipsExpandTrigger = '<Tab>'
-let g:UltiSnipsJumpForwardTrigger = '<Tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
-
-" Additional UltiSnips config.
-let g:UltiSnipsSnippetDirectories=[$HOME.'/git/Vim/snippets']
-
-" Vim-QF {{{2
-" let g:qf_mapping_ack_style = 1
-
-" ag - silver searcher {{{2
-if executable('ag')
-    " Use ag instead of grep (performance increase)
-    " set grepprg=ag\ --nogroup\ --nocolor
-    set grepprg=ag\ --silent\ --vimgrep\ $*
-    set grepformat=%f:%l:%c:%m
-
-    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-    let g:ctrlp_user_command = 'ag --hidden %s -l --nocolor -g ""'
-
-    " ag is fast enough that CtrlP doesn't need to cache
-    " let g:ctrlp_use_caching = 0
-endif
-
-" airline {{{2
-
-" Fix font inconsistencies
-let g:airline_powerline_fonts=1
-
-let g:airline_section_a = '%{g:vira_commit_text_enable}%{ViraStatusLine()}'
-
-" fzf-folds {{{2
-
-let g:fzf_folds_open = 1
-
-" indentLine {{{2
-
-let g:indentLine_char = '│'
 
 " toggleterm {{{2
 
@@ -1070,6 +1032,19 @@ if has('nvim')
         " \ }
   autocmd! TermOpen term://* lua set_terminal_keymaps()
 endif
+
+" ultisnips {{{2
+
+" YouCompleteMe and UltiSnips compatibility.
+let g:UltiSnipsExpandTrigger = '<Tab>'
+let g:UltiSnipsJumpForwardTrigger = '<Tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+
+" Additional UltiSnips config.
+let g:UltiSnipsSnippetDirectories=[$HOME.'/git/Vim/snippets']
+
+" vim-qf {{{2
+" let g:qf_mapping_ack_style = 1
 
 " vim-unstack {{{2
 
@@ -1547,12 +1522,14 @@ nnoremap <leader>ctm mz:e ++ff=mac<CR>`z
 " Convert to Unix
 nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 
-" CtrlP {{{2
+" FZF {{{2
 
-" Either run CtrlP or CtrPMRU
-" This can be toggled with the ToggleCtrlP command
-nmap <c-p> :execute g:ctrlp_cmd<CR>
-nnoremap <leader>. :CtrlPTag<cr>
+nnoremap <c-p> :History<cr>
+nnoremap <c-.> :Tags<cr>
+
+" TODO-MB [230607] - add all common
+" :Commands	Commands
+" :Maps	Normal mode mappings
 
 " Cycle through Auto-Suggestions {{{2
 inoremap <c-j> <c-n>
@@ -1837,9 +1814,6 @@ noremap <c-z> <nop>
 " Add new TODO above current line
 let todoPrefix = 'TODO-MB [' . strftime('%y%m%d') . '] - '
 nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', todoPrefix)<CR>
-
-" Find all TODOs
-nnoremap <silent> <leader>tf :call GetTODOs()<CR>
 
 " Tabs {{{2
 
