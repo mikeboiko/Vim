@@ -1527,8 +1527,9 @@ nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 nnoremap <c-p> :History<cr>
 nnoremap <c-.> :Tags<cr>
 
-" TODO-MB [230607] - add all common
-" :Commands	Commands
+" https://github.com/junegunn/fzf.vim#commands
+" :Files [PATH]	Files
+" :GFiles [OPTS]	Git files (git ls-files)
 " :Maps	Normal mode mappings
 
 " Cycle through Auto-Suggestions {{{2
