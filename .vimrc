@@ -6,9 +6,6 @@ let $CODE='$HOME/git'
 let g:maxQFlistRecords = 8
 let g:qfListHeight = 5
 
-" Data entry prompts
-let g:promptCommentText = 'Comment Text: '
-
 " Fold marker string used through vimrc file without messing up folding
 let g:fold_marker_string = '{'. '{'. '{'
 
@@ -1528,6 +1525,7 @@ nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 " FZF {{{2
 
 nnoremap <c-p> :History<cr>
+nnoremap <leader>p :GFiles<cr>
 nnoremap <c-.> :Tags<cr>
 
 " https://github.com/junegunn/fzf.vim#commands
