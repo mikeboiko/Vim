@@ -806,6 +806,7 @@ Plug 'mikeboiko/vim-coiled-snake', trim(system('hostname -s')) =~ 'RO-MBOIKO-M' 
 Plug 'mikeboiko/vim-flow'                                                     " For a neat development workflow
 Plug 'mikeboiko/vim-markdown-folding'                                         " Syntax based folding for md
 Plug 'mikeboiko/vim-sort-folds'                                               " Sort vim folds
+Plug 'mipmip/vim-scimark'                                                     " Spreadsheet magic
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                  " Jira integration
 Plug 'posva/vim-vue'                                                          " Vue filetype recognition
 Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-python --enable-go'}
