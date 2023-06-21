@@ -17,8 +17,26 @@ syn match markdownError "\w\@<=\w\@="
 " Turn on spell-check
 setlocal spell
 
+function! s:SurroundWithBackticks()
+  execute "normal! {o```\<ESC>}O```\<ESC>"
+endfunction
+
+function! s:SelectFencedCodeA()
+    execute "normal! $?^````*$\<CR>V/^````*$\<CR>o"
+endfunction
+
+function! s:SelectFencedCodeI()
+    call <SID>SelectFencedCodeA()
+    normal! joko
+endfunction
+
 " Use fzf-folds instead of :Tags
 nnoremap <buffer> <leader>. :Folds<cr>
-" TODO-MB [230615] - on buffer load, edit file so folds are fixed from telescope bug
+
+nmap     <buffer>         ys`      :call <SID>SurroundWithBackticks()<CR>
+nmap     <buffer>         va`      :call <SID>SelectFencedCodeA()<CR>
+nmap     <buffer>         vi`      :call <SID>SelectFencedCodeI()<CR>
+onoremap <buffer><silent> a`       :call <SID>SelectFencedCodeA()<CR>
+onoremap <buffer><silent> i`       :call <SID>SelectFencedCodeI()<CR>
 
 " vim: foldmethod=manual:foldlevel=3

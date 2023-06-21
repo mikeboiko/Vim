@@ -777,10 +777,11 @@ call plug#begin(vimPlugDir)
 " Cheat.sh was not letting me perform Gdiff on .py files in Ubuntu18
 " Plug 'dbeniamine/cheat.sh-vim'                              " cheat sheet
 
+" Old plugins
 " Plug 'file:///home/mike/.vim/plugged/test'
-" Plug 'vimwiki/vimwiki'                                     " Nice wiki format
-" Plug 'tommcdo/vim-fubitive'                                             " Extend fugitive.vim to support Bitbucket URLs in :Gbrowse.
 " Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}                                 " NeoVim terminal improvements
+" Plug 'honza/vim-snippets'                                                     " Snippet library
+" Plug 'mattboehm/vim-unstack'                                                  " Jump to python errors
 
 Plug 'OmniSharp/omnisharp-vim'                                                " C# magic
 Plug 'PProvost/vim-ps1'                                                       " Powershell file types
@@ -792,7 +793,6 @@ Plug 'christoomey/vim-tmux-navigator'                                         " 
 Plug 'deoplete-plugins/deoplete-tag'                                          " Complete from ctags
 Plug 'ervandew/supertab'                                                      " Insert mode completions
 Plug 'godlygeek/tabular'                                                      " Align things
-Plug 'honza/vim-snippets'                                                     " Snippet library
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }       " Preview md in brwoser
 Plug 'jkramer/vim-checkbox'                                                   " Checkbox toggle
 Plug 'junegunn/fzf.vim'                                                       " fzf plugin
@@ -800,7 +800,6 @@ Plug 'junegunn/gv.vim'                                                        " 
 Plug 'junegunn/vader.vim',  { 'on': 'Vader', 'for': 'vader'  }                " VimScript testing
 Plug 'ludovicchabant/vim-gutentags'                                           " Manage ctags
 Plug 'majutsushi/tagbar'                                                      " Use c-tags in real time and display tag bar
-Plug 'mattboehm/vim-unstack'                                                  " Jump to python errors
 Plug 'mikeboiko/auto-pairs'                                                   " Auto-close brackets
 Plug 'mikeboiko/vim-coiled-snake', trim(system('hostname -s')) =~ 'RO-MBOIKO-M' ? { 'on': [] } : {}
 Plug 'mikeboiko/vim-flow'                                                     " For a neat development workflow
