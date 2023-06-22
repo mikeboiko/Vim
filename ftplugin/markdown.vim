@@ -34,9 +34,9 @@ endfunction
 nnoremap <buffer> <leader>. :Folds<cr>
 
 nmap     <buffer>         ys`      :call <SID>SurroundWithBackticks()<CR>
-nmap     <buffer>         va`      :call <SID>SelectFencedCodeA()<CR>
-nmap     <buffer>         vi`      :call <SID>SelectFencedCodeI()<CR>
-onoremap <buffer><silent> a`       :call <SID>SelectFencedCodeA()<CR>
-onoremap <buffer><silent> i`       :call <SID>SelectFencedCodeI()<CR>
+" nmap     <buffer>         va`      :call <SID>SelectFencedCodeA()<CR>
+" nmap     <buffer>         vi`      :call <SID>SelectFencedCodeI()<CR>
+" onoremap <buffer><silent> a`       :call <SID>SelectFencedCodeA()<CR>
+" onoremap <buffer><silent> i`       :call <SID>SelectFencedCodeI()<CR>
 
 " vim: foldmethod=manual:foldlevel=3

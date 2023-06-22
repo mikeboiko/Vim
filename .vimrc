@@ -1526,7 +1526,7 @@ nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 
 nnoremap <c-p> :History<cr>
 nnoremap <leader>p :GFiles<cr>
-nnoremap <c-.> :Tags<cr>
+nnoremap <leader>. :Tags<cr>
 
 " https://github.com/junegunn/fzf.vim#commands
 " :Files [PATH]	Files
