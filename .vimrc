@@ -780,7 +780,6 @@ call plug#begin(vimPlugDir)
 " Old plugins
 " Plug 'file:///home/mike/.vim/plugged/test'
 " Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}                                 " NeoVim terminal improvements
-" Plug 'honza/vim-snippets'                                                     " Snippet library
 " Plug 'mattboehm/vim-unstack'                                                  " Jump to python errors
 
 Plug 'OmniSharp/omnisharp-vim'                                                " C# magic
@@ -793,6 +792,7 @@ Plug 'christoomey/vim-tmux-navigator'                                         " 
 Plug 'deoplete-plugins/deoplete-tag'                                          " Complete from ctags
 Plug 'ervandew/supertab'                                                      " Insert mode completions
 Plug 'godlygeek/tabular'                                                      " Align things
+Plug 'honza/vim-snippets'                                                     " Snippet library
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }       " Preview md in brwoser
 Plug 'jkramer/vim-checkbox'                                                   " Checkbox toggle
 Plug 'junegunn/fzf.vim'                                                       " fzf plugin
