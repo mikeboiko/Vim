@@ -930,7 +930,7 @@ augroup end
 
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
+  \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
 " Disable preview window
@@ -992,7 +992,7 @@ let g:NERDTreeMapJumpNextSibling = ''
 let g:NERDTreeMapJumpPrevSibling = ''
 
 " Open new files in splits/tabs
-let g:NERDTreeMapOpenSplit = '<c-x>'
+let g:NERDTreeMapOpenSplit = '<c-s>'
 let g:NERDTreeMapOpenVSplit = '<c-v>'
 let g:NERDTreeMapOpenInTab = '<c-t>'
 
@@ -1020,7 +1020,7 @@ let g:OmniSharp_server_stdio = 1
 
 let g:qfenter_keymap = {}
 let g:qfenter_keymap.vopen = ['<C-v>']
-let g:qfenter_keymap.hopen = ['<C-x>']
+let g:qfenter_keymap.hopen = ['<C-s>']
 let g:qfenter_keymap.topen = ['<C-t>']
 
 " toggleterm {{{2
@@ -1848,6 +1848,7 @@ nmap <silent> <leader>dso <Plug>VimspectorStepOut
 " F4          | <Plug>VimspectorRestart          | Restart debugging.
 " F5          | <Plug>VimspectorContinue         | When debugging, continue. Otherwise start debugging.
 " F6          | <Plug>VimspectorPause            | Pause debuggee.
+" <leader>F8  | <Plug>VimspecdtorRunToCursor     | Run to Cursor
 " F9          | <Plug>VimspectorToggleBreakpoint | Toggle line breakpoint on the current line.
 " F10         | <Plug>VimspectorStepOver         | Step Over
 " F11         | <Plug>VimspectorStepInto         | Step Into
