@@ -467,7 +467,7 @@ function! GitMerge() abort " {{{2
 endfunction
 
 function! OnSave() " {{{2
-
+  wshada
 endfunction
 
 function! MyTabLine() " {{{2
@@ -1219,6 +1219,11 @@ if has('GUI')
     set guioptions -=T
 endif
 
+" Increase number of oldfiles. Original is 100. Used in fzf-vim :History
+if has('nvim')
+  set shada=!,'300,<50,s10,h
+endif
+
 " General settings required for highlighting
 " I removed this line because it was giving me an error in vira for =bg
 " syntax on
@@ -1524,7 +1529,7 @@ nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 
 " FZF {{{2
 
-nnoremap <c-p> :History<cr>
+nnoremap <c-p> :rshada!<cr>:History<cr>
 nnoremap <leader>p :GFiles<cr>
 nnoremap <leader>. :Tags<cr>
 
