@@ -1220,8 +1220,10 @@ if has('GUI')
 endif
 
 " Increase number of oldfiles. Original is 100. Used in fzf-vim :History
+" Don't save selected buffer naes to shadafile
 if has('nvim')
   set shada=!,'300,<50,s10,h
+  " set shada^=rterm://,rfugitive
 endif
 
 " General settings required for highlighting
@@ -1529,7 +1531,7 @@ nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 
 " FZF {{{2
 
-nnoremap <c-p> :rshada!<cr>:History<cr>
+nnoremap <c-p> :rshada!<cr>:call AllClose()<cr>:History<cr>
 nnoremap <leader>p :GFiles<cr>
 nnoremap <leader>. :Tags<cr>
 
