@@ -466,6 +466,14 @@ function! GitMerge() abort " {{{2
 
 endfunction
 
+function! InstallVimspectorGadgets(info) " {{{2
+  if a:info.status == 'installed' || a:info.force
+    !./install_gadget.py --enable-python
+    !./install_gadget.py --enable-go --update-gadget-config
+    !./install_gadget.py --force-enable-csharp --update-gadget-config
+  endif
+endfunction
+
 function! OnSave() " {{{2
   wshada
 endfunction
@@ -808,7 +816,7 @@ Plug 'mikeboiko/vim-sort-folds'                                               " 
 Plug 'mipmip/vim-scimark'                                                     " Spreadsheet magic
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                  " Jira integration
 Plug 'posva/vim-vue'                                                          " Vue filetype recognition
-Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-python --enable-go'}
+Plug 'puremourning/vimspector', {'do': function('InstallVimspectorGadgets')}  " DAP
 Plug 'rhysd/conflict-marker.vim'                                              " Git conflict resolution
 Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                               " fzf for folds
 Plug 'roxma/nvim-yarp'                                                        " Auto-completion engine
@@ -1096,6 +1104,25 @@ let g:vimspector_configurations = {
       \       'userUnhandled': 'Y'
       \     }
       \   }
+      \ },
+      \ 'netcoredbg': {
+      \   'adapter': 'netcoredbg',
+      \   'filetypes': ['cs'],
+      \   'configuration': {
+      \     'request': 'launch',
+      \     'program': '${workspaceRoot}/bin/Debug/net7.0/MyApp.dll',
+      \     'args': [],
+      \     'stopAtEntry': v:false,
+      \     'cwd': '${workspaceRoot}',
+      \     'env': {}
+      \   },
+      \   'breakpoints': {
+      \     'exception': {
+      \       'raised': 'N',
+      \       'uncaught': 'N',
+      \       'userUnhandled': 'N'
+      \     }
+      \   }
       \ }
       \ }
 
@@ -1222,7 +1249,7 @@ endif
 " Increase number of oldfiles. Original is 100. Used in fzf-vim :History
 " Don't save selected buffer naes to shadafile
 if has('nvim')
-  set shada=!,'300,<50,s10,h
+  set shada=!,'500,<50,s10,h
   " set shada^=rterm://,rfugitive
 endif
 

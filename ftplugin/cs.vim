@@ -39,11 +39,9 @@ function! CompileCsharp()
     return
 endfunction
 
-" Compile and Run C# Application
-nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
-
 " Mappings {{{1
 
+" nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
 nnoremap <buffer> <leader>fi :OmniSharpCodeFormat<CR>
 nnoremap <buffer> <leader>h :OmniSharpDocumentation<CR>
 nnoremap <buffer> gd zR:OmniSharpGotoDefinition<CR>
