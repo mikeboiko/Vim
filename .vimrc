@@ -1110,7 +1110,7 @@ let g:vimspector_configurations = {
       \   'filetypes': ['cs'],
       \   'configuration': {
       \     'request': 'launch',
-      \     'program': '${workspaceRoot}/bin/Debug/net7.0/MyApp.dll',
+      \     'program': '${workspaceRoot}/bin/Debug/net7.0/dotnet-test.dll',
       \     'args': [],
       \     'stopAtEntry': v:false,
       \     'cwd': '${workspaceRoot}',
