@@ -815,6 +815,7 @@ Plug 'mikeboiko/vim-markdown-folding'                                         " 
 Plug 'mikeboiko/vim-sort-folds'                                               " Sort vim folds
 Plug 'mipmip/vim-scimark'                                                     " Spreadsheet magic
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                  " Jira integration
+Plug 'pbogut/fzf-mru.vim'                                                     " CtrlP style MRU files
 Plug 'posva/vim-vue'                                                          " Vue filetype recognition
 Plug 'puremourning/vimspector', {'do': function('InstallVimspectorGadgets')}  " DAP
 Plug 'rhysd/conflict-marker.vim'                                              " Git conflict resolution
@@ -935,6 +936,8 @@ augroup end
 " fzf {{{2
 
 " Remap hotkeys
+
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
@@ -1331,7 +1334,7 @@ augroup CustomOptions
   " Auto reload file when changed from another source
   autocmd CursorHold * if &buftype != "nofile" | checktime | endif
   " Peform actions right before saving bugger
-  autocmd BufWritePre * call OnSave()
+  " autocmd BufWritePre * call OnSave()
   " Preview Window
   autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
   " Enable spelling for these buffers
@@ -1558,7 +1561,8 @@ nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 
 " FZF {{{2
 
-nnoremap <c-p> :rshada!<cr>:call AllClose()<cr>:History<cr>
+" nnoremap <c-p> :rshada!<cr>:call AllClose()<cr>:History<cr>
+nnoremap <c-p> :FZFMru<cr>
 nnoremap <leader>p :GFiles<cr>
 nnoremap <leader>. :Tags<cr>
 
