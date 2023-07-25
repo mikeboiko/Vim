@@ -39,12 +39,26 @@ function! CompileCsharp()
     return
 endfunction
 
+" Functions {{{1
+
+function! s:DotNetDebug()
+  let buffer_name ='*dotnet-build.sh*'
+  let buffer_number = bufnr(buffer_name)
+  if buffer_number > 0
+    tabprevious
+    silent! exe 'bdelete! '. buffer_number
+  endif
+  tabe term://~/git/Work/CT/scripts/dotnet-build.sh
+endfunction
+
 " Mappings {{{1
 
 " nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
 nnoremap <buffer> <leader>fi :OmniSharpCodeFormat<CR>
 nnoremap <buffer> <leader>h :OmniSharpDocumentation<CR>
 nnoremap <buffer> gd zR:OmniSharpGotoDefinition<CR>
+
+nnoremap <buffer> <leader>dr :call <SID>DotNetDebug()<CR>
 
 " Project Specific {{{1
 " AccuTuneMain " {{{2
@@ -67,4 +81,3 @@ au BufWinEnter,BufEnter */AccuTune/Tests/*
             \ let b:startapp='' |
             \ let b:startfile=$HOME.'/git/AccuTune/Tests/Tests/bin/Release/Tests.exe' |
             \ let b:startargs=''
-

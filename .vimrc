@@ -1347,12 +1347,13 @@ set spellfile=$HOME/files/Sync/Documents/en.utf-8.add
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
 
-" Auto-insert when nvim is nested with a terminal
+" nvim terminal
 if has('nvim')
   augroup nvim_term
     autocmd!
-    autocmd TermOpen * startinsert
-    autocmd TermClose * stopinsert
+    autocmd TermOpen *gap,*printbalance startinsert
+    autocmd TermClose *gap stopinsert
+    autocmd TermOpen *dotnet-build.sh call timer_start(7000, { -> vimspector#Launch() })
   augroup END
 endif
 
