@@ -1351,9 +1351,9 @@ set spellfile=$HOME/files/Sync/Documents/en.utf-8.add
 if has('nvim')
   augroup nvim_term
     autocmd!
-    autocmd TermOpen *gap,*printbalance startinsert
+    autocmd TermOpen *gap, startinsert
     autocmd TermClose *gap stopinsert
-    autocmd TermOpen *dotnet-build.sh call timer_start(7000, { -> vimspector#Launch() })
+    autocmd TermOpen */dotnet-build.sh* call timer_start(8000, { -> vimspector#Launch() })
   augroup END
 endif
 

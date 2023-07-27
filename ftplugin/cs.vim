@@ -41,14 +41,15 @@ endfunction
 
 " Functions {{{1
 
-function! s:DotNetDebug()
-  let buffer_name ='*dotnet-build.sh*'
+function! s:DotNetDebug(path)
+  wa
+  let buffer_name ='*/*dotnet-build.sh*'
   let buffer_number = bufnr(buffer_name)
   if buffer_number > 0
     tabprevious
     silent! exe 'bdelete! '. buffer_number
   endif
-  tabe term://~/git/Work/CT/scripts/dotnet-build.sh
+  silent! exe 'tabe term://~/git/Work/CT/scripts/dotnet-build.sh ' . a:path
 endfunction
 
 " Mappings {{{1
@@ -58,7 +59,7 @@ nnoremap <buffer> <leader>fi :OmniSharpCodeFormat<CR>
 nnoremap <buffer> <leader>h :OmniSharpDocumentation<CR>
 nnoremap <buffer> gd zR:OmniSharpGotoDefinition<CR>
 
-nnoremap <buffer> <leader>dr :call <SID>DotNetDebug()<CR>
+nnoremap <buffer> <leader>dr :call <SID>DotNetDebug(expand('%:p:h'))<CR>
 
 " Project Specific {{{1
 " AccuTuneMain " {{{2
