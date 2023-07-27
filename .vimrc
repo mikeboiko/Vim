@@ -1210,7 +1210,7 @@ set tabline=%!MyTabLine()
 " Functionality {{{2
 " Vim Start {{{3
 
-" " Save last file when exiting vim
+" Save last file when exiting vim
 " autocmd VimLeave * nested if (!isdirectory(vimHomeDir)) |
             " \ call mkdir(vimHomeDir) |
             " \ endif |
@@ -1228,6 +1228,11 @@ augroup CustomLastPosition
   autocmd!
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
               \| exe "normal! g'\"" | endif
+augroup end
+
+augroup VimOnExit
+  autocmd!
+  autocmd VimLeave * call fzf_mru#mrufiles#refresh()
 augroup end
 
 " General{{{3
