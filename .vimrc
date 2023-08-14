@@ -770,10 +770,6 @@ augroup CustomSetFileType
   autocmd BufRead,BufNewFile *.mmd setfiletype mermaid
 augroup end
 
-" markdown: I was getting some weird indentation happening with - lists
-" This setting has to be configured before vim-polyglot is loaded by vim-plug
-let g:polyglot_disabled = ['markdown', 'csv']
-
 " _vim-plug {{{2
 
 " Plugin manager

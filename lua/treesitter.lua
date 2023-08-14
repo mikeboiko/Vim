@@ -10,7 +10,7 @@ opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = { "python", "lua", "vim", "vimdoc", "markdown", "mermaid",
+  ensure_installed = { "python", "lua", "vim", "vimdoc", "markdown", "markdown_inline", "mermaid",
                      "c_sharp", "gitignore", "go", "javascript", "json", "yaml", "vue" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
