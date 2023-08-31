@@ -1370,15 +1370,6 @@ set nrformats-=octal
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
-" Folding{{{3
-
-set foldenable
-set foldlevelstart=0
-set foldnestmax=10
-set foldmethod=marker
-set foldignore=
-set foldlevel=2
-
 " Indenting/Tabs{{{3
 " Do smart auto indenting when starting a new line
 set autoindent
