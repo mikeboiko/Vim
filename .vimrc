@@ -808,6 +808,7 @@ Plug 'mikeboiko/vim-flow'                                                    " F
 Plug 'mikeboiko/vim-markdown-folding'                                        " Syntax based folding for md
 Plug 'mikeboiko/vim-sort-folds'                                              " Sort vim folds
 Plug 'mipmip/vim-scimark'                                                    " Spreadsheet magic
+Plug 'mtdl9/vim-log-highlighting'                                            " log file highlighting
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                 " Jira integration
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}                  " Tree sitter
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'                           " Tree sitter text objects
