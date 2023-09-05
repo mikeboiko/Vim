@@ -471,6 +471,7 @@ function! InstallVimspectorGadgets(info) " {{{2
     !./install_gadget.py --enable-python
     !./install_gadget.py --enable-go --update-gadget-config
     !./install_gadget.py --force-enable-csharp --update-gadget-config
+    !./install_gadget.py --force-enable-node --update-gadget-config
   endif
 endfunction
 
@@ -1101,6 +1102,22 @@ let g:vimspector_configurations = {
       \       'raised': 'Y',
       \       'uncaught': 'Y',
       \       'userUnhandled': 'Y'
+      \     }
+      \   }
+      \ },
+      \ 'vscode-js-debug': {
+      \   'adapter': 'js-debug',
+      \   'filetypes': ['javascript'],
+      \   'configuration': {
+      \     'request': 'launch',
+      \     'program': '${file}',
+      \     'cwd': '${workspaceRoot}',
+      \     'stopOnEntry': v:false
+      \   },
+      \   'breakpoints': {
+      \     'exception': {
+      \       'all': '',
+      \       'uncaught': ''
       \     }
       \   }
       \ },
