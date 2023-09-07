@@ -790,7 +790,7 @@ Plug 'OmniSharp/omnisharp-vim'                                               " C
 Plug 'PProvost/vim-ps1'                                                      " Powershell file types
 Plug 'Shougo/deoplete.nvim'                                                  " Auto-completion engine
 Plug 'SirVer/ultisnips'                                                      " Snippet engine
-Plug 'Yggdroot/indentLine'                                                   " Visual indent lines
+Plug 'lukas-reineke/indent-blankline.nvim'                                   " Visual indent lines
 Plug 'altercation/vim-colors-solarized'                                      " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                                        " Switch beween vim splits & tmux panes seamslessly
 Plug 'deoplete-plugins/deoplete-tag'                                         " Complete from ctags
@@ -1457,8 +1457,6 @@ augroup CustomFileTypes
   autocmd FileType html,javascript,json,vue,css,scss,yml,yaml,markdown,vim setlocal tabstop=2
   " Markdown -Fix the syntax highlighting that randomly stops
   autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
-  " Vue - Fix the syntax highlighting that randomly stops
-  autocmd FileType vue syntax sync fromstart
 augroup end
 
 " Speed up vim when in vue files
