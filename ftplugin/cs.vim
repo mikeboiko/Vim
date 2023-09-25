@@ -43,13 +43,13 @@ endfunction
 
 function! s:DotNetDebug(path)
   wa
-  let buffer_name ='*/*dotnet-build.sh*'
+  let buffer_name ='*/*dotnet-test.sh*'
   let buffer_number = bufnr(buffer_name)
   if buffer_number > 0
     tabprevious
     silent! exe 'bdelete! '. buffer_number
   endif
-  silent! exe 'tabe term://~/git/Work/CT/scripts/dotnet-build.sh ' . a:path
+  silent! exe 'tabe term://~/git/Work/CT/scripts/dotnet-test.sh ' . a:path
 endfunction
 
 " Mappings {{{1
