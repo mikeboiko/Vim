@@ -387,6 +387,15 @@ function! GetBufferList() " {{{2
     return buflist
 endfunction
 
+function! GetCurrentGitRepo() " {{{2
+    let result = system('basename "$(git -C ' . expand('%:h') . ' rev-parse --show-toplevel)"')
+    if v:shell_error || stridx(result, 'fatal') != -1
+        return ''
+    else
+        return substitute(result, '\n', '', 'g')
+    endif
+endfunction
+
 function! GetTODOs() " {{{2
     " TODO [171103] - Add current file ONLY option
     " Binary files that can be ignored
@@ -849,7 +858,7 @@ endif
 " Fix font inconsistencies
 let g:airline_powerline_fonts=1
 
-let g:airline_section_a = '%{g:vira_commit_text_enable}%{ViraStatusLine()}'
+let g:airline_section_a = '%{GetCurrentGitRepo()}'
 
 " ale {{{2
 
