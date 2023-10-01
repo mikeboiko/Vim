@@ -1380,7 +1380,7 @@ if has('nvim')
     autocmd!
     autocmd TermOpen *gap, startinsert
     autocmd TermClose *gap stopinsert
-    autocmd TermOpen */dotnet-test.sh* call timer_start(12000, { -> vimspector#Launch() })
+    autocmd TermOpen */dotnet-test.sh* call timer_start(11000, { -> vimspector#Launch() })
   augroup END
 endif
 
