@@ -49,7 +49,7 @@ function! s:DotNetDebug(path)
     tabprevious
     silent! exe 'bdelete! '. buffer_number
   endif
-  silent! exe 'tabe term://~/git/Work/CT/scripts/dotnet-test.sh ' . a:path
+  silent! exe 'tabe term://~/git/Work/CT/scripts/dotnet-test.sh true true \"' . a:path .'\"'
 endfunction
 
 " Mappings {{{1
