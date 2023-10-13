@@ -1880,9 +1880,8 @@ nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', todoPrefix)<CR>
 nnoremap <c-t> mm:tabe <c-r>%<CR>`m
 
 " Toggle tabs
-nnoremap qm gt
-nnoremap qn gT
-nnoremap <C-g> :tabp<CR>
+nnoremap <Tab> :tabnext<CR>
+nnoremap <S-Tab> :tabprev<CR>
 
 " TagBar {{{2
 nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
