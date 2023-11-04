@@ -799,11 +799,11 @@ Plug 'OmniSharp/omnisharp-vim'                                               " C
 Plug 'PProvost/vim-ps1'                                                      " Powershell file types
 Plug 'Shougo/deoplete.nvim'                                                  " Auto-completion engine
 Plug 'SirVer/ultisnips'                                                      " Snippet engine
-Plug 'lukas-reineke/indent-blankline.nvim'                                   " Visual indent lines
 Plug 'altercation/vim-colors-solarized'                                      " Color-scheme
 Plug 'christoomey/vim-tmux-navigator'                                        " Switch beween vim splits & tmux panes seamslessly
 Plug 'deoplete-plugins/deoplete-tag'                                         " Complete from ctags
 Plug 'ervandew/supertab'                                                     " Insert mode completions
+Plug 'github/copilot.vim'                                                    " AI assistant
 Plug 'godlygeek/tabular'                                                     " Align things
 Plug 'honza/vim-snippets'                                                    " Snippet library
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }      " Preview md in brwoser
@@ -812,6 +812,7 @@ Plug 'junegunn/fzf.vim'                                                      " f
 Plug 'junegunn/gv.vim'                                                       " Access git files easier
 Plug 'junegunn/vader.vim',  { 'on': 'Vader', 'for': 'vader'  }               " VimScript testing
 Plug 'ludovicchabant/vim-gutentags'                                          " Manage ctags
+Plug 'lukas-reineke/indent-blankline.nvim'                                   " Visual indent lines
 Plug 'majutsushi/tagbar'                                                     " Use c-tags in real time and display tag bar
 Plug 'mikeboiko/auto-pairs'                                                  " Auto-close brackets
 Plug 'mikeboiko/vim-flow'                                                    " For a neat development workflow
@@ -1560,6 +1561,10 @@ map ci4 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>4<ESC>
 " Comment, Yank and Paste
 nnoremap cy "zyy:silent execute "cal NERDComment('n',\"comment\")"<CR>"zp
 vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
+
+" Copilot {{{2
+
+nnoremap <leader>cp :Copilot panel<CR>
 
 " Conflicts {{{2
 
