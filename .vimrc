@@ -1958,6 +1958,7 @@ nnoremap <silent> <leader>vbf :ViraLoadProject Model<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbh :ViraLoadProject Home<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbi :ViraLoadProject Inbox<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbj :ViraLoadProject Jesse<cr>:ViraIssues<cr>
+nnoremap <silent> <leader>vbb :ViraLoadProject __default__<cr>:python3 Vira.api.userconfig_filter["statusCategory"] = ""<cr>:python3 Vira.api.userconfig_filter["status"] = "Backlog"<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbm :ViraLoadProject __default__<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbn :ViraLoadProject Nuance<cr>:ViraIssues<cr>
 nnoremap <silent> <leader>vbv :ViraLoadProject vira<cr>:ViraIssues<cr>
