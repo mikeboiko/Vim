@@ -73,6 +73,37 @@ function! s:afterTermClose(...) abort
   endif
 endfunc
 
+function! s:VimspectorDotNet(i) abort
+  " Run vimspector debugger if DotNet build/test script succeeded
+  let i = a:i + 1
+
+  " Read file into memory and check if it contains the string: "Process Id:"
+  let filepath = '/tmp/dotnet-test.log'
+  let file = readfile(filepath)
+  let found = 0
+  for line in file
+    if line =~# 'Process Id:'
+      let found = 1
+      break
+    endif
+  endfor
+
+  if found
+    " Launch vimspector debugger
+    echo 'VimspectorDotNet passed'
+    call timer_start(20, { -> vimspector#Launch() })
+    return
+  else
+    " Keep retrying for 20 seconds
+    if i > 40
+      echo 'VimspectorDotNet failed'
+      return
+    endif
+    call timer_start(500, {-> s:VimspectorDotNet(i)})
+  endif
+
+endfunc
+
 augroup MyNeoterm
   autocmd!
   " The line '[Process exited ?]' is appended to the terminal buffer after the
@@ -1381,7 +1412,7 @@ if has('nvim')
     autocmd!
     autocmd TermOpen *gap, startinsert
     autocmd TermClose *gap stopinsert
-    autocmd TermOpen */dotnet-test.sh* call timer_start(20000, { -> vimspector#Launch() })
+    autocmd TermOpen */dotnet-test.sh* call timer_start(20, { -> s:VimspectorDotNet(0) })
   augroup END
 endif
 
