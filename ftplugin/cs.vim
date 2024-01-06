@@ -41,15 +41,34 @@ endfunction
 
 " Functions {{{1
 
+function! SwitchToBufferTab(buffer_number)
+  " Try to find the tab that contains the buffer and switch to it
+  let l:num_tabs = tabpagenr('$')
+  for l:tabnr in range(1, l:num_tabs)
+      execute 'tabnext ' . l:tabnr
+      " Check if the buffer is in the current tab
+      if index(tabpagebuflist(l:tabnr), a:buffer_number) != -1
+          break
+      endif
+  endfor
+endfunction
+
 function! s:DotNetDebug(path)
   wa
   let buffer_name ='*/*dotnet-test.sh*'
   let buffer_number = bufnr(buffer_name)
+  let debugger_found = 0
   if buffer_number > 0
-    tabprevious
+    call SwitchToBufferTab(buffer_number)
     silent! exe 'bdelete! '. buffer_number
+    let debugger_found = 1
   endif
-  silent! exe 'tabe term://~/git/Work/CT/scripts/dotnet-test.sh true false \"' . a:path .'\" \| tee /tmp/dotnet-test.log'
+  silent! exe '6sp term://~/git/Work/CT/scripts/dotnet-test.sh true false \"' . a:path .'\" \| tee /tmp/dotnet-test.log'
+  $ " Go to the end of the buffer
+  wincmd j " Go to the bottom window
+  " if debugger_found
+    " tabprevious
+  " endif
 endfunction
 
 " Mappings {{{1
