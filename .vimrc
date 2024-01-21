@@ -140,7 +140,7 @@ function! AllClose() " {{{2
     Windofast lclose
     cclose
     pclose
-    for bufname in ['^fugitive', '/tmp/flow', '~/git/Linux/git/gap', '~/git/Linux/config/mani.yaml']
+    for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml', 'dotnet-test.sh']
       let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~# bufname'), ' ')
       if trim(buffers) !=? ''
         silent! exe 'bdelete '. buffers
