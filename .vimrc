@@ -830,7 +830,7 @@ Plug 'OmniSharp/omnisharp-vim'                                               " C
 Plug 'PProvost/vim-ps1'                                                      " Powershell file types
 Plug 'Shougo/deoplete.nvim'                                                  " Auto-completion engine
 Plug 'SirVer/ultisnips'                                                      " Snippet engine
-Plug 'altercation/vim-colors-solarized'                                      " Color-scheme
+Plug 'ellisonleao/gruvbox.nvim'                                              " Gruvbox colorscheme
 Plug 'christoomey/vim-tmux-navigator'                                        " Switch beween vim splits & tmux panes seamslessly
 Plug 'deoplete-plugins/deoplete-tag'                                         " Complete from ctags
 Plug 'ervandew/supertab'                                                     " Insert mode completions
@@ -1208,14 +1208,7 @@ set t_Co=256
 set background=dark
 
 " Preferred color scheme
-silent! colorscheme solarized
-
-" Solarized settings
-" let g:solarized_italic=0
-let g:solarized_bold=0
-" This gets rid of the grey background
-let g:solarized_termtrans = 1
-set t_Cs="Fix bad spell issue in solarized theme"
+silent! colorscheme gruvbox
 
 " Set GVIM Font
 " To select form availbale fonts :set guifont=*
