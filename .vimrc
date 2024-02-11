@@ -1637,7 +1637,7 @@ omap L $
 
 " Disable Highlighting
 " When I used a single escape, vim started in Replace mode everytime
-nnoremap <esc><esc> :noh<esc>
+nnoremap <leader>n :noh<esc>
 
 " Find Local {{{2
 

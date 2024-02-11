@@ -63,7 +63,7 @@ function! s:DotNetDebug(path)
     silent! exe 'bdelete! '. buffer_number
     let debugger_found = 1
   endif
-  silent! exe '6sp term://~/git/Work/CT/scripts/dotnet-test.sh true false \"' . a:path .'\" 99 \| tee /tmp/dotnet-test.log'
+  silent! exe '6sp term://~/git/Work/CT/scripts/dotnet-test.sh true false \"' . a:path .'\" 1 \| tee /tmp/dotnet-test.log'
   $ " Go to the end of the buffer
   wincmd j " Go to the bottom window
   " if debugger_found
