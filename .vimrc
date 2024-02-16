@@ -554,52 +554,6 @@ function! MyTabLabel(n) " {{{2
   return fnamemodify(buf, ':t')
 endfunction
 
-function! PasteClipboard() abort " {{{2
-  " See https://github.com/ferrine/md-img-paste.vim
-  let targets = filter(
-        \ systemlist('xclip -selection clipboard -t TARGETS -o'),
-        \ 'v:val =~# ''image''')
-
-  " Past regular text if not an image
-  if empty(targets)
-    normal! o
-    normal! P==
-    return
-  endif
-
-  let outdir = expand('%:p:h') . '/img'
-  if !isdirectory(outdir)
-    call mkdir(outdir)
-  endif
-
-  let mimetype = targets[0]
-  let extension = split(mimetype, '/')[-1]
-  let tmpfile = outdir . '/savefile_tmp.' . extension
-  call system(printf('xclip -selection clipboard -t %s -o > %s',
-        \ mimetype, tmpfile))
-
-  let cnt = 0
-  let filename = outdir . '/image' . cnt . '.' . extension
-  while filereadable(filename)
-    call system('diff ' . tmpfile . ' ' . filename)
-    if !v:shell_error
-      call delete(tmpfile)
-      break
-    endif
-
-    let cnt += 1
-    let filename = outdir . '/image' . cnt . '.' . extension
-  endwhile
-
-  if filereadable(tmpfile)
-    call rename(tmpfile, filename)
-  endif
-
-  let @* = '![](./' . fnamemodify(filename, ':.') . ')'
-  normal! o
-  normal! "*P
-endfunction
-
 " Quit {{{2
 
 " Close location list, preview window and quit
@@ -830,9 +784,9 @@ Plug 'OmniSharp/omnisharp-vim'                                               " C
 Plug 'PProvost/vim-ps1'                                                      " Powershell file types
 Plug 'Shougo/deoplete.nvim'                                                  " Auto-completion engine
 Plug 'SirVer/ultisnips'                                                      " Snippet engine
-Plug 'ellisonleao/gruvbox.nvim'                                              " Gruvbox colorscheme
 Plug 'christoomey/vim-tmux-navigator'                                        " Switch beween vim splits & tmux panes seamslessly
 Plug 'deoplete-plugins/deoplete-tag'                                         " Complete from ctags
+Plug 'ellisonleao/gruvbox.nvim'                                              " Gruvbox colorscheme
 Plug 'ervandew/supertab'                                                     " Insert mode completions
 Plug 'github/copilot.vim'                                                    " AI assistant
 Plug 'godlygeek/tabular'                                                     " Align things
@@ -846,6 +800,7 @@ Plug 'ludovicchabant/vim-gutentags'                                          " M
 Plug 'lukas-reineke/indent-blankline.nvim'                                   " Visual indent lines
 Plug 'majutsushi/tagbar'                                                     " Use c-tags in real time and display tag bar
 Plug 'mikeboiko/auto-pairs'                                                  " Auto-close brackets
+Plug 'mikeboiko/img-paste.vim'                                               " Paste images from clipboard
 Plug 'mikeboiko/vim-flow'                                                    " For a neat development workflow
 Plug 'mikeboiko/vim-markdown-folding'                                        " Syntax based folding for md
 Plug 'mikeboiko/vim-sort-folds'                                              " Sort vim folds
@@ -988,6 +943,16 @@ let g:fzf_preview_window = []
 " fzf-folds {{{2
 
 let g:fzf_folds_open = 1
+
+" img-paste {{{2
+
+augroup ImgPaste
+  autocmd!
+  autocmd FileType markdown nmap <buffer><silent> <c-v> :call mdip#MarkdownClipboardImage()<CR>
+augroup end
+
+" let g:mdip_imgdir = 'img'
+let g:mdip_imgname = 'img'
 
 " indentLine {{{2
 
@@ -2000,7 +1965,6 @@ nnoremap <c-y> <c-r>
 inoremap <c-y> <Esc><C-r>
 
 " Paste from clipboard
-nnoremap <c-v> :call PasteClipboard()<cr>
 inoremap <c-v> <c-r>+
 cmap <c-v> <c-r>+
 
