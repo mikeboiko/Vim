@@ -1027,7 +1027,8 @@ let g:NERDTreeMapOpenInTab = '<c-t>'
 " let g:OmniSharp_selector_ui = 'ctrlp'
 let g:OmniSharp_timeout = 2
 " let g:OmniSharp_highlight_types = 1
-let g:OmniSharp_server_use_mono = 1
+" let g:OmniSharp_server_use_mono = 1
+let g:OmniSharp_server_use_net6 = 1
 let g:OmniSharp_server_stdio = 1
 
 " qfenter {{{2
