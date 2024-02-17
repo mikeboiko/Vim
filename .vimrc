@@ -554,6 +554,24 @@ function! MyTabLabel(n) " {{{2
   return fnamemodify(buf, ':t')
 endfunction
 
+function! PasteClipboard() abort " {{{2
+  " See https://github.com/ferrine/md-img-paste.vim
+  let targets = filter(
+        \ systemlist('xclip -selection clipboard -t TARGETS -o'),
+        \ 'v:val =~# ''image''')
+
+  " Paste regular text if not an image
+  if empty(targets)
+    normal! o
+    normal! P==
+    return
+  endif
+
+  " Paste image into markdown document
+  call mdip#MarkdownClipboardImage()
+
+endfunction
+
 " Quit {{{2
 
 " Close location list, preview window and quit
@@ -945,11 +963,6 @@ let g:fzf_preview_window = []
 let g:fzf_folds_open = 1
 
 " img-paste {{{2
-
-augroup ImgPaste
-  autocmd!
-  autocmd FileType markdown nmap <buffer><silent> <c-v> :call mdip#MarkdownClipboardImage()<CR>
-augroup end
 
 " let g:mdip_imgdir = 'img'
 let g:mdip_imgname = 'img'
@@ -1966,6 +1979,7 @@ nnoremap <c-y> <c-r>
 inoremap <c-y> <Esc><C-r>
 
 " Paste from clipboard
+nnoremap <c-v> :call PasteClipboard()<cr>
 inoremap <c-v> <c-r>+
 cmap <c-v> <c-r>+
 
