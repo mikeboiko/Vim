@@ -1569,6 +1569,12 @@ vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
 
 nnoremap <leader>cp :Copilot panel<CR>
 
+let g:copilot_filetypes = {
+    \ 'gitcommit': v:true,
+    \ 'markdown': v:true,
+    \ 'yaml': v:true
+    \ }
+
 " Conflicts {{{2
 
 " This is to fix a <C-r> conflict
