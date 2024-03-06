@@ -869,6 +869,7 @@ let g:airline_section_a = '%{GetCurrentGitRepo()}'
 
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_hover_cursor = 0
+let g:ale_floating_preview = 1
 
 let g:ale_linters = {
             \ 'cs': ['omnisharp'],
