@@ -2,5 +2,3 @@
 " === Description ...: Go Settings
 " === Author ........: Mike Boiko
 " =======================================================================
-
-nnoremap <buffer> <leader>h  :ALEHover<CR>

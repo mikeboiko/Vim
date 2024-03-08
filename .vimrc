@@ -791,24 +791,18 @@ augroup end
 let vimPlugDir = vimHomeDir . '/plugged'
 call plug#begin(vimPlugDir)
 
-" Cheat.sh was not letting me perform Gdiff on .py files in Ubuntu18
-" Plug 'dbeniamine/cheat.sh-vim'                              " cheat sheet
-
-" Old plugins
 " Plug 'file:///home/mike/.vim/plugged/test'
-" Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}                                 " NeoVim terminal improvements
 
+Plug 'L3MON4D3/LuaSnip'                                                      " Autocompletion
 Plug 'OmniSharp/omnisharp-vim'                                               " C# magic
 Plug 'PProvost/vim-ps1'                                                      " Powershell file types
-Plug 'Shougo/deoplete.nvim'                                                  " Auto-completion engine
-Plug 'SirVer/ultisnips'                                                      " Snippet engine
+Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}                         " Simple LSP config
 Plug 'christoomey/vim-tmux-navigator'                                        " Switch beween vim splits & tmux panes seamslessly
-Plug 'deoplete-plugins/deoplete-tag'                                         " Complete from ctags
 Plug 'ellisonleao/gruvbox.nvim'                                              " Gruvbox colorscheme
-Plug 'ervandew/supertab'                                                     " Insert mode completions
 Plug 'github/copilot.vim'                                                    " AI assistant
 Plug 'godlygeek/tabular'                                                     " Align things
-Plug 'honza/vim-snippets'                                                    " Snippet library
+Plug 'hrsh7th/cmp-nvim-lsp'                                                  " Autocompletion
+Plug 'hrsh7th/nvim-cmp'                                                      " Autocompletion
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }      " Preview md in brwoser
 Plug 'jkramer/vim-checkbox'                                                  " Checkbox toggle
 Plug 'junegunn/fzf.vim'                                                      " fzf plugin
@@ -825,15 +819,16 @@ Plug 'mikeboiko/vim-sort-folds'                                              " S
 Plug 'mipmip/vim-scimark'                                                    " Spreadsheet magic
 Plug 'mtdl9/vim-log-highlighting'                                            " log file highlighting
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                 " Jira integration
+Plug 'neovim/nvim-lspconfig'                                                 " LSP Support
+Plug 'nvim-lua/plenary.nvim'                                                 " Lua functions (prereq for null-ls)
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}                  " Tree sitter
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'                           " Tree sitter text objects
+Plug 'nvimtools/none-ls.nvim'                                                " Custom LSP sources
 Plug 'pbogut/fzf-mru.vim'                                                    " CtrlP style MRU files
 Plug 'posva/vim-vue'                                                         " Vue filetype recognition
 Plug 'puremourning/vimspector', {'do': function('InstallVimspectorGadgets')} " DAP
 Plug 'rhysd/conflict-marker.vim'                                             " Git conflict resolution
 Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                              " fzf for folds
-Plug 'roxma/nvim-yarp'                                                       " Auto-completion engine
-Plug 'roxma/vim-hug-neovim-rpc'                                              " Auto-completion engine
 Plug 'rust-lang/rust.vim'                                                    " Rusty stuff
 Plug 'scrooloose/nerdcommenter'                                              " Commenting
 Plug 'scrooloose/nerdtree'                                                   " Tree file browser
@@ -844,7 +839,6 @@ Plug 'tpope/vim-scriptease'                                                  " F
 Plug 'tpope/vim-surround'                                                    " Surround all the stuff
 Plug 'vim-airline/vim-airline'                                               " Nice status bar
 Plug 'vim-scripts/ReplaceWithRegister'                                       " Replace without copying to buffer
-Plug 'w0rp/ale'                                                              " Async Linting
 Plug 'yssl/QFEnter'                                                          " QuickFix lists - open in tabs/split windows
 
 " End initialization of plugin system
@@ -864,79 +858,6 @@ endif
 let g:airline_powerline_fonts=1
 
 let g:airline_section_a = '%{GetCurrentGitRepo()}'
-
-" ale {{{2
-
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_hover_cursor = 0
-let g:ale_floating_preview = 1
-
-let g:ale_linters = {
-            \ 'cs': ['omnisharp'],
-            \ 'go': ['gopls'],
-            \ 'python': ['pyright'],
-            \ 'vim': ['vimls', 'vint']
-            \ }
-
-let g:ale_fixers = {
-            \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-            \ 'html': ['prettier'],
-            \ 'go': ['gofmt'],
-            \ 'javascript': ['prettier', 'eslint'],
-            \ 'javascript.jsx': ['eslint'],
-            \ 'json': ['prettier'],
-            \ 'markdown': ['prettier'],
-            \ 'python': ['yapf'],
-            \ 'vue': ['prettier'],
-            \ 'xml': ['prettier'],
-            \ 'yaml': ['prettier']
-            \ }
-
-" This will prevent my searches from getting messed up
-let g:ale_set_quickfix = 0
-let g:ale_set_loclist = 0
-
-" python language server config
-" switched from pylsp to pyright, but I'll keep this here in case I switch back
-let g:ale_python_pylsp_config = {
-                          \   'pylsp': {
-                          \     'plugins': {
-                          \       'pyflakes': {
-                          \         'enabled': v:false
-                          \       },
-                          \       'pycodestyle': {
-                          \         'enabled': v:false
-                          \       }
-                          \     }
-                          \   },
-                          \ }
-
-" C# fixer
-let g:ale_c_uncrustify_options = '-c ~/git/Linux/config/uncrustify.cfg'
-
-" Configure repo-specific linters/fixers
-" let g:ale_pattern_options = {
-            " \ 'Sync/SRS/*': {'ale_linters': ['pylint', 'pylsp']},
-" \}
-" let g:ale_pattern_options_enabled = 1
-" let g:ale_python_pylint_options = '--rcfile ~/git/Work/SRS/.standard.rc'
-
-" deoplete {{{2
-
-let g:deoplete#enable_at_startup = 1
-let deoplete#tag#cache_limit_size = 5000000
-call deoplete#custom#option('smart_case', v:true)
-
-call deoplete#custom#source('_',
-		\ 'matchers', ['matcher_full_fuzzy'])
-
-" Use the following plugins for completion of all filetypes
-call deoplete#custom#option('sources', {
-    \ '_': ['buffer', 'file', 'ale', 'tag'],
-\})
-
-" This fixes the problem of tabbing through the menu from top to bottom (reverse order)
-let g:SuperTabDefaultCompletionType = '<c-n>'
 
 " fugitive {{{2
 
@@ -1062,15 +983,6 @@ if has('nvim')
   autocmd! TermOpen term://* lua set_terminal_keymaps()
 endif
 
-" ultisnips {{{2
-
-" YouCompleteMe and UltiSnips compatibility.
-let g:UltiSnipsExpandTrigger = '<Tab>'
-let g:UltiSnipsJumpForwardTrigger = '<Tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
-
-" Additional UltiSnips config.
-let g:UltiSnipsSnippetDirectories=[$HOME.'/git/Vim/snippets']
 
 " vim-qf {{{2
 " let g:qf_mapping_ack_style = 1
@@ -1363,8 +1275,6 @@ augroup CustomOptions
   autocmd!
   " Don't add comment automatically on new line
   autocmd FileType * setlocal formatoptions-=cro
-  " Auto reload file when changed from another source
-  autocmd CursorHold * if &buftype != "nofile" | checktime | endif
   " Peform actions right before saving bugger
   " autocmd BufWritePre * call OnSave()
   " Preview Window
@@ -1522,11 +1432,6 @@ nnoremap <leader>a. mzA.<esc>`z
 inoremap ;; <esc>mzA;<esc>`z
 nnoremap <leader>a; mzA;<esc>`z
 
-" ALE {{{2
-
-nnoremap <leader>se :call ALERunLint()<CR>
-nnoremap <leader>aw :ALEFindReferences -quickfix<CR>:top 5 copen<CR>
-
 " Clipboard {{{2
 
 nnoremap <leader>cfp :let @+ = expand("%:p:~")<CR>
@@ -1633,9 +1538,6 @@ nnoremap <leader>fl :FindLocal<space>
 " Find word under cursor
 map <leader>fw "xyiw:call FindFunc("\\<".@x."\\>", '')<CR>
 
-" Fix errors {{{2
-nnoremap <leader>fi :ALEFix<CR>
-
 " Folding {{{2
 
 " Fold Everything except for the current section
@@ -1682,9 +1584,6 @@ nnoremap <leader>gm :call GitMerge()<cr>
 
 " Go to Definition{{{2
 
-" Go to definition and focus on fold
-nnoremap gd zR:ALEGoToDefinition<CR>
-
 " Preview definition and focus on fold
 map gt mm:tabe %<CR>`mgdzMzvzz
 map gs mm:sp %<CR>`mgdzMzvzz
@@ -1703,11 +1602,6 @@ nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:G
 
 " Search for word under cursor in git repo
 map <leader>gw "xyiw:let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>x "<c-r>q"<cr>
-
-" Help {{{2
-
-" Pull up help for word under cursor in a new tab
-nnoremap <expr> <leader>h ":help " . expand("<cword>") . "\n"
 
 " Marks {{{2
 " Jump to proper column when using marks
@@ -1735,7 +1629,10 @@ nnoremap <BS> <C-^>
 " NeoVim {{{2
 
 if has('nvim')
+  lua require("lsp_zero")
   lua require("mappings")
+  lua require("null_ls")
+  lua require("nvim_cmp")
   lua require("treesitter")
 endif
 
@@ -1852,10 +1749,6 @@ vnoremap K 5k
 " Scroll Down
 nnoremap J 5j
 vnoremap J 5j
-
-" Show and Trim Spaces {{{2
-
-nnoremap <leader>ts :ALEFix trim_whitespace<CR>
 
 " Search {{{2
 " Search for multiple terms
