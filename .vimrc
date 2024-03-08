@@ -1612,11 +1612,12 @@ nnoremap <leader>on :NERDTreeFind<CR>
 
 " Mouse {{{2
 
-" Disable mouse clicks but not scrolling
-nmap <LeftMouse> <nop>
-imap <LeftMouse> <nop>
-vmap <LeftMouse> <nop>
-map <2-LeftMouse> <Nop>
+set mouse-=a
+
+" " Disable mouse clicks but not scrolling
+" nmap <LeftMouse> <nop>
+" imap <LeftMouse> <nop>
+" vmap <LeftMouse> <nop>
 
 " Navigation {{{2
 " Do not automatically adjust for line wrapping
