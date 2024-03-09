@@ -804,6 +804,7 @@ Plug 'zbirenbaum/copilot-cmp'                                                " A
 Plug 'godlygeek/tabular'                                                     " Align things
 Plug 'hrsh7th/cmp-nvim-lsp'                                                  " Autocompletion
 Plug 'hrsh7th/nvim-cmp'                                                      " Autocompletion
+Plug 'hrsh7th/cmp-path'                                                      " Autocompletion
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }      " Preview md in brwoser
 Plug 'jkramer/vim-checkbox'                                                  " Checkbox toggle
 Plug 'junegunn/fzf.vim'                                                      " fzf plugin

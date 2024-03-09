@@ -9,9 +9,10 @@ lsp_zero.on_attach(function(client, bufnr)
 	lsp_zero.default_keymaps({ buffer = bufnr })
 	vim.keymap.set("n", "<leader>h", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
 	vim.keymap.set("n", "<leader>fr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
-	vim.keymap.set({ "n", "x" }, "<leader>fi", function()
-		vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
-	end, opts)
+	vim.keymap.set("n", "gR", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
+	-- vim.keymap.set({ "n", "x" }, "<leader>fi", function()
+	-- vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
+	-- end, opts)
 end)
 
 lsp_zero.set_sign_icons({
