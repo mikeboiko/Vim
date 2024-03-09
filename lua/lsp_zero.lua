@@ -41,8 +41,9 @@ local lspconfig = require("lspconfig")
 lspconfig.pyright.setup({
 	init_options = {
 		settings = {
-			-- Any extra CLI arguments for `ruff` go here.
 			args = {},
 		},
 	},
 })
+
+vim.api.nvim_set_keymap("n", "<Leader>se", "<cmd>lua vim.diagnostic.setqflist()<CR>", { noremap = true, silent = true })
