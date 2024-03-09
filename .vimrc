@@ -799,7 +799,8 @@ Plug 'PProvost/vim-ps1'                                                      " P
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}                         " Simple LSP config
 Plug 'christoomey/vim-tmux-navigator'                                        " Switch beween vim splits & tmux panes seamslessly
 Plug 'ellisonleao/gruvbox.nvim'                                              " Gruvbox colorscheme
-Plug 'github/copilot.vim'                                                    " AI assistant
+Plug 'zbirenbaum/copilot.lua'                                                " AI assistant
+Plug 'zbirenbaum/copilot-cmp'                                                " AI assistant
 Plug 'godlygeek/tabular'                                                     " Align things
 Plug 'hrsh7th/cmp-nvim-lsp'                                                  " Autocompletion
 Plug 'hrsh7th/nvim-cmp'                                                      " Autocompletion
@@ -1471,16 +1472,6 @@ map ci4 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>4<ESC>
 nnoremap cy "zyy:silent execute "cal NERDComment('n',\"comment\")"<CR>"zp
 vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
 
-" Copilot {{{2
-
-nnoremap <leader>cp :Copilot panel<CR>
-
-let g:copilot_filetypes = {
-    \ 'gitcommit': v:true,
-    \ 'markdown': v:true,
-    \ 'yaml': v:true
-    \ }
-
 " Conflicts {{{2
 
 " This is to fix a <C-r> conflict
@@ -1630,6 +1621,7 @@ nnoremap <BS> <C-^>
 " NeoVim {{{2
 
 if has('nvim')
+  lua require("lua_init")
   lua require("lsp_zero")
   lua require("mappings")
   lua require("null_ls")
