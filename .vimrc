@@ -563,7 +563,8 @@ function! PasteClipboard() abort " {{{2
   " Paste regular text if not an image
   if empty(targets)
     normal! o
-    normal! P==
+    normal! ==
+    normal! P
     return
   endif
 
