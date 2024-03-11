@@ -34,11 +34,11 @@ lsp_zero.format_on_save({
 })
 
 -- Setup language servers.
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 local lspconfig = require("lspconfig")
 
--- lspconfig.ruff_lsp.setup {}
+lspconfig.bashls.setup({})
 
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pyright
 lspconfig.pyright.setup({
 	init_options = {
 		settings = {
@@ -47,4 +47,5 @@ lspconfig.pyright.setup({
 	},
 })
 
+-- Key mappings
 vim.api.nvim_set_keymap("n", "<Leader>se", "<cmd>lua vim.diagnostic.setqflist()<CR>", { noremap = true, silent = true })
