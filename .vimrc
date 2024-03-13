@@ -800,12 +800,10 @@ Plug 'PProvost/vim-ps1'                                                      " P
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}                         " Simple LSP config
 Plug 'christoomey/vim-tmux-navigator'                                        " Switch beween vim splits & tmux panes seamslessly
 Plug 'ellisonleao/gruvbox.nvim'                                              " Gruvbox colorscheme
-Plug 'zbirenbaum/copilot.lua'                                                " AI assistant
-Plug 'zbirenbaum/copilot-cmp'                                                " AI assistant
 Plug 'godlygeek/tabular'                                                     " Align things
 Plug 'hrsh7th/cmp-nvim-lsp'                                                  " Autocompletion
-Plug 'hrsh7th/nvim-cmp'                                                      " Autocompletion
 Plug 'hrsh7th/cmp-path'                                                      " Autocompletion
+Plug 'hrsh7th/nvim-cmp'                                                      " Autocompletion
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }      " Preview md in brwoser
 Plug 'jkramer/vim-checkbox'                                                  " Checkbox toggle
 Plug 'junegunn/fzf.vim'                                                      " fzf plugin
@@ -835,6 +833,7 @@ Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                              " f
 Plug 'rust-lang/rust.vim'                                                    " Rusty stuff
 Plug 'scrooloose/nerdcommenter'                                              " Commenting
 Plug 'scrooloose/nerdtree'                                                   " Tree file browser
+Plug 'stevearc/dressing.nvim'                                                " Customize vim.ui.input
 Plug 'tpope/vim-fugitive'                                                    " Git wrapper
 Plug 'tpope/vim-repeat'                                                      " Repeat surround and commenting with .
 Plug 'tpope/vim-rhubarb'                                                     " GitHub integration with fugitive
@@ -843,6 +842,8 @@ Plug 'tpope/vim-surround'                                                    " S
 Plug 'vim-airline/vim-airline'                                               " Nice status bar
 Plug 'vim-scripts/ReplaceWithRegister'                                       " Replace without copying to buffer
 Plug 'yssl/QFEnter'                                                          " QuickFix lists - open in tabs/split windows
+Plug 'zbirenbaum/copilot-cmp'                                                " AI assistant
+Plug 'zbirenbaum/copilot.lua'                                                " AI assistant
 
 " End initialization of plugin system
 call plug#end()
