@@ -1624,8 +1624,9 @@ nnoremap <BS> <C-^>
 " NeoVim {{{2
 
 if has('nvim')
-  lua require("lua_init")
   lua require("lsp_zero")
+  lua require("lua_init")
+  lua require("lua_snip")
   lua require("mappings")
   lua require("null_ls")
   lua require("nvim_cmp")
