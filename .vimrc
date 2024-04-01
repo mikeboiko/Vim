@@ -730,8 +730,10 @@ command! FoldOpen let save_cursor = getcurpos() | try | silent foldopen! | catch
 
 " Grep {{{2
 " Use ag to grep and put results quickfix list
-command! -nargs=+ Grep execute 'silent grep! --ignore node_modules --follow --hidden <args>' | let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ]) | exe 'top ' . g:qfListHeight . ' copen' | redraw!
-" Use flag in HA repo: --skip-vcs-ignores
+command! -nargs=+ Grep execute 'silent grep! --ignore node_modules --follow <args>' | let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ]) | exe 'top ' . g:qfListHeight . ' copen' | redraw!
+" Optionally, add the following flags
+" Show hidden files: --hidden
+" Show git ignore files: --skip-vcs-ignores
 
 " QuickFix/Location List Next {{{2
 " Wrap around after hitting first/last record
