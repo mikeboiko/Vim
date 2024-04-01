@@ -2,10 +2,6 @@
 
 let $CODE='$HOME/git'
 
-" Max Number of Records to show in QF/Location Lists
-let g:maxQFlistRecords = 8
-let g:qfListHeight = 5
-
 " Fold marker string used through vimrc file without messing up folding
 let g:fold_marker_string = '{'. '{'. '{'
 
@@ -114,30 +110,9 @@ augroup MyNeoterm
   " autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose('/git/Linux/git/gap', 1) })
 augroup END
 
-function! ALEOpenResults() " {{{2
-  let l:bfnum = bufnr('')
-  let l:items = ale#engine#GetLoclist(l:bfnum)
-  call setqflist([], 'r', {'items': l:items, 'title': 'ALE results'})
-  let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ])
-  exe 'top ' . g:qfListHeight . ' cwindow'
-endfunction"
-
-function! ALERunLint() " {{{2
-  if empty(ale#engine#GetLoclist(bufnr('')))
-    let b:ale_enabled = 1
-    augroup ALEProgress
-      autocmd!
-      autocmd User ALELintPost call ALEOpenResults() | autocmd! ALEProgress
-    augroup end
-    call ale#Queue(0, 'lint_file')
-  else
-    call ALEOpenResults()
-  endif
-endfunction
-
 function! AllClose() " {{{2
     " Close all loc lists, qf, preview and terminal windows
-    Windofast lclose
+    lclose
     cclose
     pclose
     for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml', 'dotnet-test.sh']
@@ -196,30 +171,6 @@ function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
 
 endfunction
 
-function! ConvertWSLpath(path, ...) " {{{2
-    " I tested this on path in quickfix list
-    " nnoremap <leader>rp :execute 's@^[^\|]*\|@\=Con(submatch(0))@'<CR>
-
-    " Aligns with wslpath.exe flags
-    " -a    force result to absolute path format
-    " -u    translate from a Windows path to a WSL path (default)
-    " -w    translate from a WSL path to a Windows path
-    " -m    translate from a WSL path to a Windows path, with ‘/’ instead of ‘\\’
-    if a:0 > 0
-        let flag = a:1
-    else
-        let flag = ""
-    end
-
-    " This is only necessary for location list parsing/converting
-    let path = substitute(a:path, "|$", "", "")
-
-    " Use wslpath utility to convert path
-    let formattedPath = system('wslpath ' . flag . ' "' . path . '"')
-    return substitute(formattedPath, "\n", "", "")
-
-endfunction
-
 function! EditCommonFile(filename) " {{{2
     " Open file in new teb
     let current_filename = expand('%:t')
@@ -262,29 +213,8 @@ function! FindFunc(...) " {{{2
     " Put Results into QuickFix Window
     silent execute 'g/'.a:1.'/laddexpr expand("%") . ":" . line(".") . ":" . GetLastFoldString() . getline(".") '
 
-    " Prepare location list height - minimum or record count and max allowable limit
-    let w:locListHeight = min([ g:maxQFlistRecords, len(getloclist(0)) ])
+    top lopen
 
-    " If there are no matched records, return
-    if !w:locListHeight
-        lclose
-        return
-    endif
-
-    " Open Loc List and limit the record number
-    execute 'bot ' . w:locListHeight . 'lopen'
-
-    " Update search register
-    let @/=a:1
-
-    " Find initial line in QuickFix list
-    call search(@z)
-
-    " Jump to that record
-    exe "normal \<CR>"
-
-    " Go to proper column number (rather than the beginning of the line)
-    GoToMatchedColumn
 endfunction
 
 " FoldText {{{2
@@ -634,11 +564,10 @@ function! ToggleList(bufname, pfx) " {{{2
             return
         endif
         " Open window with minimum height
-        exec 'bot '. w:locListHeight .a:pfx.'open'
+        top lopen
         " QuickFix List
     elseif a:pfx ==# 'c'
-        " Open window with minimum height
-        exec 'top '. g:qfListHeight .a:pfx.'open'
+        copen
     endif
 
     " Change focus back to the orignal window
@@ -730,7 +659,7 @@ command! FoldOpen let save_cursor = getcurpos() | try | silent foldopen! | catch
 
 " Grep {{{2
 " Use ag to grep and put results quickfix list
-command! -nargs=+ Grep execute 'silent grep! --ignore node_modules --follow <args>' | let g:qfListHeight = min([ g:maxQFlistRecords, len(getqflist()) ]) | exe 'top ' . g:qfListHeight . ' copen' | redraw!
+command! -nargs=+ Grep execute 'silent grep! --ignore node_modules --follow <args>' | copen
 " Optionally, add the following flags
 " Show hidden files: --hidden
 " Show git ignore files: --skip-vcs-ignores
@@ -811,6 +740,7 @@ Plug 'jkramer/vim-checkbox'                                                  " C
 Plug 'junegunn/fzf.vim'                                                      " fzf plugin
 Plug 'junegunn/gv.vim'                                                       " Access git files easier
 Plug 'junegunn/vader.vim',  { 'on': 'Vader', 'for': 'vader'  }               " VimScript testing
+Plug 'kevinhwang91/nvim-bqf'                                                 " Quickfix niceties
 Plug 'ludovicchabant/vim-gutentags'                                          " Manage ctags
 Plug 'lukas-reineke/indent-blankline.nvim'                                   " Visual indent lines
 Plug 'majutsushi/tagbar'                                                     " Use c-tags in real time and display tag bar
@@ -843,7 +773,6 @@ Plug 'tpope/vim-scriptease'                                                  " F
 Plug 'tpope/vim-surround'                                                    " Surround all the stuff
 Plug 'vim-airline/vim-airline'                                               " Nice status bar
 Plug 'vim-scripts/ReplaceWithRegister'                                       " Replace without copying to buffer
-Plug 'yssl/QFEnter'                                                          " QuickFix lists - open in tabs/split windows
 Plug 'zbirenbaum/copilot-cmp'                                                " AI assistant
 Plug 'zbirenbaum/copilot.lua'                                                " AI assistant
 
@@ -989,9 +918,6 @@ if has('nvim')
   autocmd! TermOpen term://* lua set_terminal_keymaps()
 endif
 
-
-" vim-qf {{{2
-" let g:qf_mapping_ack_style = 1
 
 " vim-unstack {{{2
 
