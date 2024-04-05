@@ -201,9 +201,6 @@ function! FindFunc(...) " {{{2
         FoldOpen
     endif
 
-    " Save search string into window local var
-    let w:searchStr=a:1
-
     " Record initial line number into "z
     let @z = '|' . line('.') . '|'
 
@@ -670,10 +667,6 @@ command! Cnext try | cnext | catch | cfirst | catch | endtry
 command! Cprev try | cprev | catch | clast | catch | endtry
 command! Lnext try | lnext | catch | lfirst | catch | endtry
 command! Lprev try | lprev | catch | llast | catch | endtry
-
-" GoToMatchedColumn {{{2
-" Since the QF list isn't populated with col numbers, this function allows you to jump to the proper column.
-command! GoToMatchedColumn exe "normal b" | let @/=w:searchStr | call search(@/) | set hls
 
 " Replace ^M Line endings {{{2
 
@@ -1284,9 +1277,6 @@ augroup CustomQuickFix
   autocmd BufEnter * call CloseQuickFixWindow()
 augroup end
 
-" \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>
-" \| nnoremap <buffer> <CR> <CR>:FoldOpen<CR>:GoToMatchedColumn<CR>
-
 " Undo Files {{{3
 " Let's save undo info!
 if !isdirectory(vimHomeDir)
@@ -1592,8 +1582,8 @@ nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\double
 
 " Go to next/previous search result
 " nnoremap <leader>zf zMzvzz
-nnoremap <C-f> :Lnext<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
-nnoremap <C-d> :Lprev<CR>:GoToMatchedColumn<CR>:FoldOpen<CR>
+nnoremap <C-f> :Lnext<CR>:FoldOpen<CR>
+nnoremap <C-d> :Lprev<CR>:FoldOpen<CR>
 nnoremap <C-R> :Cnext<CR>:FoldOpen<CR>
 nnoremap <C-E> :Cprev<CR>:FoldOpen<CR>
 
