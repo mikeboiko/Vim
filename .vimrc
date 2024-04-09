@@ -776,7 +776,7 @@ call plug#end()
 if executable('ag')
     " Use ag instead of grep (performance increase)
     " set grepprg=ag\ --nogroup\ --nocolor
-    set grepprg=ag\ --silent\ --vimgrep\ $*
+    set grepprg=ag\ --silent\ --vimgrep\ --column\ $*
     set grepformat=%f:%l:%c:%m
 endif
 
@@ -1442,14 +1442,6 @@ omap L $
 " When I used a single escape, vim started in Replace mode everytime
 nnoremap <leader>n :noh<esc>
 
-" Find Local {{{2
-
-" Find string in current file
-nnoremap <leader>fl :FindLocal<space>
-
-" Find word under cursor
-map <leader>fw "xyiw:call FindFunc("\\<".@x."\\>", '')<CR>
-
 " Folding {{{2
 
 " Fold Everything except for the current section
@@ -1514,6 +1506,13 @@ nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:G
 
 " Search for word under cursor in git repo
 map <leader>gw "xyiw:let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>x "<c-r>q"<cr>
+
+" Find string in current file
+" nnoremap <leader>fl :FindLocal<space>
+nnoremap <leader>fl :Grep %<home><s-right><space>
+
+" Find word under cursor in current file
+map <leader>fw "xyiw:Grep <c-r>x %<cr>
 
 " Marks {{{2
 " Jump to proper column when using marks
