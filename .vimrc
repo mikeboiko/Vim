@@ -1581,10 +1581,8 @@ nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\double
 
 " Go to next/previous search result
 " nnoremap <leader>zf zMzvzz
-nnoremap <C-f> :Lnext<CR>:FoldOpen<CR>
-nnoremap <C-d> :Lprev<CR>:FoldOpen<CR>
-nnoremap <C-R> :Cnext<CR>:FoldOpen<CR>
-nnoremap <C-E> :Cprev<CR>:FoldOpen<CR>
+nnoremap <C-f> :Cnext<CR>:FoldOpen<CR>
+nnoremap <C-d> :Cprev<CR>:FoldOpen<CR>
 
 nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
 nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
