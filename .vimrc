@@ -925,7 +925,7 @@ let g:vimspector_enable_winbar=0
 " See https://code.visualstudio.com/docs/python/debugging
 " https://puremourning.github.io/vimspector/schema/vimspector.schema.json
 let g:vimspector_configurations = {
-      \ 'test_debugpy_config': {
+      \ 'debugpy_config': {
       \   'adapter': 'debugpy',
       \   'filetypes': ['python'],
       \   'configuration': {
@@ -1713,14 +1713,17 @@ nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 " Vimspector {{{2
 
-nmap <silent> <leader>db :call vimspector#BreakpointsAsQuickFix()<cr>
-nmap <silent> <leader>di <Plug>VimspectorBalloonEval
+nmap <silent> <leader>db <Plug>VimspectorBreakpoints
 nmap <silent> <leader>dc :wa<CR>:execute "normal \<Plug>VimspectorContinue"<CR>
-nmap <silent> <leader>dr :wa<CR>:execute "normal \<Plug>VimspectorRestart"<CR>
+nmap <silent> <leader>dd <Plug>VimspectorDownFrame
+nmap <silent> <leader>di <Plug>VimspectorBalloonEval
 nmap <silent> <leader>dp <Plug>VimspectorPause
+nmap <silent> <leader>dr :wa<CR>:execute "normal \<Plug>VimspectorRestart"<CR>
 nmap <silent> <leader>ds <Plug>VimspectorStop
-nmap <silent> <leader>dsi <Plug>VimspectorStepInto
-nmap <silent> <leader>dso <Plug>VimspectorStepOut
+nmap <silent> <leader>dt <Plug>VimspectorToggleBreakpoint
+nmap <silent> <leader>du <Plug>VimspectorUpFrame
+nmap <silent> <C-e> <Plug>VimspectorStepOver
+nmap <silent> <C-r> <Plug>VimspectorStepInto
 
 " Default mappings:
 
