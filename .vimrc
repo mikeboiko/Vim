@@ -549,9 +549,6 @@ function! ToggleList(bufname, pfx) " {{{2
         endif
     endfor
 
-    " Set orignal window
-    let winnr = winnr()
-
     " Location List
     if a:pfx ==# 'l'
         " Nicer error message than original
@@ -565,11 +562,6 @@ function! ToggleList(bufname, pfx) " {{{2
         " QuickFix List
     elseif a:pfx ==# 'c'
         copen
-    endif
-
-    " Change focus back to the orignal window
-    if winnr() != winnr
-        wincmd p
     endif
 
 endfunction
