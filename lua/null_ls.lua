@@ -1,5 +1,7 @@
 local null_ls = require("null-ls")
 
+-- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
+
 null_ls.setup({
 	sources = {
 		null_ls.builtins.completion.tags,

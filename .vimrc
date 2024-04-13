@@ -1709,6 +1709,7 @@ nmap <silent> <leader>db <Plug>VimspectorBreakpoints
 nmap <silent> <leader>dc :wa<CR>:execute "normal \<Plug>VimspectorContinue"<CR>
 nmap <silent> <leader>dd <Plug>VimspectorDownFrame
 nmap <silent> <leader>di <Plug>VimspectorBalloonEval
+nmap <silent> <leader>dl <Plug>VimspectorRunToCursor
 nmap <silent> <leader>dp <Plug>VimspectorPause
 nmap <silent> <leader>dr :wa<CR>:execute "normal \<Plug>VimspectorRestart"<CR>
 nmap <silent> <leader>ds <Plug>VimspectorStop
@@ -1724,7 +1725,7 @@ nmap <silent> <C-r> <Plug>VimspectorStepInto
 " F4          | <Plug>VimspectorRestart          | Restart debugging.
 " F5          | <Plug>VimspectorContinue         | When debugging, continue. Otherwise start debugging.
 " F6          | <Plug>VimspectorPause            | Pause debuggee.
-" <leader>F8  | <Plug>VimspecdtorRunToCursor     | Run to Cursor
+" <leader>F8  | <Plug>VimspectorRunToCursor      | Run to Cursor
 " F9          | <Plug>VimspectorToggleBreakpoint | Toggle line breakpoint on the current line.
 " F10         | <Plug>VimspectorStepOver         | Step Over
 " F11         | <Plug>VimspectorStepInto         | Step Into
