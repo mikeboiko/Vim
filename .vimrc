@@ -711,7 +711,6 @@ call plug#begin(vimPlugDir)
 " Plug 'file:///home/mike/.vim/plugged/test'
 
 Plug 'L3MON4D3/LuaSnip'                                                      " Autocompletion
-Plug 'OmniSharp/omnisharp-vim'                                               " C# magic
 Plug 'PProvost/vim-ps1'                                                      " Powershell file types
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}                         " Simple LSP config
 Plug 'christoomey/vim-tmux-navigator'                                        " Switch beween vim splits & tmux panes seamslessly
@@ -864,34 +863,6 @@ let g:NERDTreeMapJumpPrevSibling = ''
 let g:NERDTreeMapOpenSplit = '<c-s>'
 let g:NERDTreeMapOpenVSplit = '<c-v>'
 let g:NERDTreeMapOpenInTab = '<c-t>'
-
-" omnisharp {{{2
-
-" C# linting/completion
-
-" For WSL:
-" First download the WINDOWS HTTP 64 bit release and place into directory below:
-" https://github.com/OmniSharp/omnisharp-roslyn/releases
-
-" For Arch Linux install dependencies:
-" s pacman -S mono
-" let g:OmniSharp_translate_cygwin_wsl = 1
-" let g:OmniSharp_server_path = '/home/mike/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'
-" let g:OmniSharp_port = 2000
-
-" let g:OmniSharp_selector_ui = 'ctrlp'
-let g:OmniSharp_timeout = 2
-" let g:OmniSharp_highlight_types = 1
-" let g:OmniSharp_server_use_mono = 1
-let g:OmniSharp_server_use_net6 = 1
-let g:OmniSharp_server_stdio = 1
-
-" qfenter {{{2
-
-let g:qfenter_keymap = {}
-let g:qfenter_keymap.vopen = ['<C-v>']
-let g:qfenter_keymap.hopen = ['<C-s>']
-let g:qfenter_keymap.topen = ['<C-t>']
 
 " toggleterm {{{2
 

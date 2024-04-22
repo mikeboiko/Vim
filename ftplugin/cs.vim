@@ -73,12 +73,6 @@ endfunction
 
 " Mappings {{{1
 
-" nnoremap <buffer> <leader>rr :wa<CR>:call CompileCsharp()<CR>
-nnoremap <buffer> <leader>fi :OmniSharpCodeFormat<CR>
-nnoremap <buffer> <leader>h :OmniSharpDocumentation<CR>
-nnoremap <buffer> gd zR:OmniSharpGotoDefinition<CR>
-nnoremap <leader>aw :OmniSharpFindUsages<CR>
-
 nnoremap <buffer> <leader>dr :call <SID>DotNetDebug(expand('%:p:h'))<CR>
 
 " Project Specific {{{1

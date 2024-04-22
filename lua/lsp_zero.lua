@@ -47,5 +47,11 @@ lspconfig.pyright.setup({
 	},
 })
 
+-- First, install `omnisharp-roslyn` from AUR
+local pid = vim.fn.getpid()
+lspconfig.omnisharp.setup({
+	cmd = { "/usr/bin/omnisharp", "--languageserver", "--hostPID", tostring(pid) },
+})
+
 -- Key mappings
 vim.api.nvim_set_keymap("n", "<Leader>se", "<cmd>lua vim.diagnostic.setqflist()<CR>", { noremap = true, silent = true })
