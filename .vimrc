@@ -710,6 +710,7 @@ call plug#begin(vimPlugDir)
 
 " Plug 'file:///home/mike/.vim/plugged/test'
 
+Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }                " AI chat
 Plug 'L3MON4D3/LuaSnip'                                                      " Autocompletion
 Plug 'PProvost/vim-ps1'                                                      " Powershell file types
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}                         " Simple LSP config
@@ -1355,6 +1356,18 @@ map ci4 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>4<ESC>
 " Comment, Yank and Paste
 nnoremap cy "zyy:silent execute "cal NERDComment('n',\"comment\")"<CR>"zp
 vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
+
+" Copilot {{{2
+
+nnoremap <leader>cpc :CopilotChatOpen<CR>
+vnoremap <leader>cpe :CopilotChatExplain<CR>
+vnoremap <leader>cpr :CopilotChatReview<CR>
+vnoremap <leader>cpf :CopilotChatFix<CR>
+vnoremap <leader>cpo :CopilotChatOptimize<CR>
+vnoremap <leader>cpd :CopilotChatDocs<CR>
+nnoremap <leader>cpt :CopilotChatTests<CR>
+nnoremap <leader>cpf :CopilotChatFixDiagnostic<CR>
+nnoremap <leader>cpg :CopilotChatCommit<CR>
 
 " Conflicts {{{2
 
