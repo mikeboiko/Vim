@@ -115,6 +115,7 @@ function! AllClose() " {{{2
     lclose
     cclose
     pclose
+    CopilotChatClose
     for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml', 'dotnet-test.sh']
       let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~# bufname'), ' ')
       if trim(buffers) !=? ''
