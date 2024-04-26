@@ -55,7 +55,7 @@ function! s:afterTermClose(...) abort
   " This is a hack to easily handle the situation where I switched focus away
   " from the terminal window
   if bufname('%') !~# a:1
-    call AllClose()
+    call CloseAll()
     return
   endif
 
@@ -110,7 +110,7 @@ augroup MyNeoterm
   " autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose('/git/Linux/git/gap', 1) })
 augroup END
 
-function! AllClose() " {{{2
+function! CloseAll() " {{{2
     " Close all loc lists, qf, preview and terminal windows
     lclose
     cclose
@@ -821,6 +821,8 @@ let g:mkdp_refresh_slow = 1
 
 " nerdcommenter {{{2
 
+let g:NERDCreateDefaultMappings = 0
+
 " NerdCommenter add a space after comment
 let g:NERDSpaceDelims=1
 
@@ -843,7 +845,7 @@ augroup CustomNERDcommenter
   autocmd BufEnter * silent! call nerdcommenter#SetUp()
 augroup end
 
-" nerdtree{{{2
+" nerdtree {{{2
 
 " Close NERDTree when opening file
 let NERDTreeQuitOnOpen = 1
@@ -1330,7 +1332,7 @@ nnoremap <leader>ct :CloseToggle<CR>
 
 " Close all location lists {{{2
 
-nnoremap <leader>ac :call AllClose()<CR>
+nnoremap <leader>ca :call CloseAll()<CR>
 
 " Commands {{{2
 
@@ -1360,15 +1362,16 @@ vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
 
 " Copilot {{{2
 
-nnoremap <leader>cpc :CopilotChatOpen<CR>
-vnoremap <leader>cpe :CopilotChatExplain<CR>
-vnoremap <leader>cpr :CopilotChatReview<CR>
-vnoremap <leader>cpf :CopilotChatFix<CR>
-vnoremap <leader>cpo :CopilotChatOptimize<CR>
-vnoremap <leader>cpd :CopilotChatDocs<CR>
-nnoremap <leader>cpt :CopilotChatTests<CR>
-nnoremap <leader>cpf :CopilotChatFixDiagnostic<CR>
-nnoremap <leader>cpg :CopilotChatCommit<CR>
+nnoremap <leader>ac :CopilotChatOpen<CR>
+nnoremap <leader>af :CopilotChatFixDiagnostic<CR>
+nnoremap <leader>ag :CopilotChatCommit<CR>
+nnoremap <leader>aq :silent lua _G.myQuickChatFunction()<CR>
+nnoremap <leader>at :CopilotChatTests<CR>
+vnoremap <leader>ad :CopilotChatDocs<CR>
+vnoremap <leader>ae :CopilotChatExplain<CR>
+vnoremap <leader>af :CopilotChatFix<CR>
+vnoremap <leader>ao :CopilotChatOptimize<CR>
+vnoremap <leader>ar :CopilotChatReview<CR>
 
 " Conflicts {{{2
 
@@ -1388,7 +1391,6 @@ nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 
 " FZF {{{2
 
-" nnoremap <c-p> :rshada!<cr>:call AllClose()<cr>:History<cr>
 nnoremap <c-p> :FZFMru<cr>
 nnoremap <leader>p :GFiles<cr>
 nnoremap <leader>. :Tags<cr>

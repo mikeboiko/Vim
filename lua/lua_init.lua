@@ -8,10 +8,33 @@ require("copilot").setup({
 	},
 })
 
+-- TODO-MB [240426] - Move to new lua file
+local chat = require("CopilotChat")
+local select = require("CopilotChat.select")
 require("CopilotChat").setup({
 	debug = true, -- Enable debugging
-	-- See Configuration section for rest
+	prompts = {
+		ExplainBuffer = {
+			prompt = "/COPILOT_EXPLAIN Write an explanation for the selection as paragraphs of text.",
+			selection = select.buffer,
+		},
+	},
 })
+
+-- TODO-MB [240426] - Add CopilotChatVisual
+vim.api.nvim_create_user_command("CopilotChatBuffer", function(args)
+	chat.ask(args.args, { selection = select.buffer })
+end, { nargs = "*", range = true })
+
+-- TODO-MB [240426] - Rename func
+_G.myQuickChatFunction = function()
+	vim.ui.input({ prompt = "Ask ChatGPT (buffer selected): " }, function(query)
+		if query == nil then
+			return
+		end
+		vim.cmd("CopilotChatBuffer " .. query)
+	end)
+end
 
 require("copilot_cmp").setup()
 
