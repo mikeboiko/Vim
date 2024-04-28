@@ -19,6 +19,12 @@ require("CopilotChat").setup({
 			selection = select.buffer,
 		},
 	},
+	mappings = {
+		reset = {
+			normal = "<C-r>",
+			insert = "<C-r>",
+		},
+	},
 })
 
 -- TODO-MB [240426] - Add CopilotChatVisual

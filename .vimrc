@@ -115,7 +115,7 @@ function! CloseAll() " {{{2
     lclose
     cclose
     pclose
-    CopilotChatClose
+    " CopilotChatClose
     for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml', 'dotnet-test.sh']
       let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~# bufname'), ' ')
       if trim(buffers) !=? ''
@@ -1362,7 +1362,7 @@ vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
 
 " Copilot {{{2
 
-nnoremap <leader>ac :CopilotChatOpen<CR>
+nnoremap <leader>ac :CopilotChatToggle<CR>
 nnoremap <leader>af :CopilotChatFixDiagnostic<CR>
 nnoremap <leader>ag :CopilotChatCommit<CR>
 nnoremap <leader>aq :silent lua _G.myQuickChatFunction()<CR>
