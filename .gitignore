@@ -11,4 +11,4 @@ __pycache__
 *.accdb
 *.laccdb
 *.docx
-tags
+/tags
