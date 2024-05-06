@@ -1597,7 +1597,8 @@ augroup end
 
 " Rename Word {{{2
 
-nnoremap <silent> <leader>rw :silent lua vim.g.FuncFancyPromptRename("RenameWord", "New Word")<CR>
+nnoremap <silent> <leader>rw :silent lua vim.g.FancyPromptRename("RenameWord", "New Word")<CR>
+vnoremap <silent> <leader>rw :<C-u>silent lua vim.g.FancyPromptRename("RenameWord", "New Word", 1)<CR>
 
 " Reports {{{2
 
