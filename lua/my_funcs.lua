@@ -1,3 +1,21 @@
+local function get_visual_selection()
+	local bufnr = vim.api.nvim_get_current_buf()
+	local start_pos = vim.api.nvim_buf_get_mark(bufnr, "<")
+	local end_pos = vim.api.nvim_buf_get_mark(bufnr, ">")
+	local line = vim.api.nvim_buf_get_lines(bufnr, start_pos[1] - 1, start_pos[1], false)[1]
+	local selection = string.sub(line, start_pos[2] + 1, end_pos[2] + 1)
+	return selection
+	-- print(selection)
+end
+
+vim.api.nvim_create_user_command("EchoSelection", get_visual_selection, { range = true })
+
+vim.g.Cdo = function(new, original)
+	local cmd = string.format(":silent cdo s/%s/%s/g | update", original, new)
+	vim.cmd(cmd)
+	-- vim.api.nvim_echo({ { "New: " .. new .. " Original: " .. original } }, true, {})
+end
+
 vim.g.RenameWord = function(new, original)
 	-- vim.api.nvim_echo({ { "New: " .. new .. " Original: " .. original } }, true, {})
 	local buf = vim.api.nvim_get_current_buf()
@@ -13,18 +31,6 @@ vim.g.RenameWord = function(new, original)
 	vim.api.nvim_buf_set_lines(buf, start, finish, strict_indexing, lines)
 end
 
-local function get_visual_selection()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local start_pos = vim.api.nvim_buf_get_mark(bufnr, "<")
-	local end_pos = vim.api.nvim_buf_get_mark(bufnr, ">")
-	local line = vim.api.nvim_buf_get_lines(bufnr, start_pos[1] - 1, start_pos[1], false)[1]
-	local selection = string.sub(line, start_pos[2] + 1, end_pos[2] + 1)
-	return selection
-	-- print(selection)
-end
-
-vim.api.nvim_create_user_command("EchoSelection", get_visual_selection, { range = true })
-
 vim.g.FancyPromptRename = function(func, prompt, visual)
 	local original
 	if visual then
@@ -37,6 +43,6 @@ vim.g.FancyPromptRename = function(func, prompt, visual)
 			return
 		end
 		-- vim.g.RenameWord(query, original)
-		vim.g["RenameWord"](query, original)
+		vim.g[func](query, original)
 	end)
 end
