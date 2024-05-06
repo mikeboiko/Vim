@@ -36,7 +36,7 @@ vim.api.nvim_create_user_command("CopilotChatVisual", function(args)
 	chat.ask(args.args, { selection = select.visual })
 end, { nargs = "*", range = true })
 
-_G.CopilotQuickChat = function(mode)
+vim.g.CopilotQuickChat = function(mode)
 	local prompt = "Ask ChatGPT (" .. mode .. " selection): "
 	local command = "CopilotChat" .. mode .. " "
 	vim.ui.input({ prompt = prompt }, function(query)

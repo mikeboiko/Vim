@@ -1365,8 +1365,8 @@ vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
 nnoremap <leader>ac :CopilotChatToggle<CR>
 nnoremap <leader>af :CopilotChatFixDiagnostic<CR>
 nnoremap <leader>ag :CopilotChatCommit<CR>
-nnoremap <leader>aq :silent lua _G.CopilotQuickChat("Buffer")<CR>
-vnoremap <leader>aq :<C-u>silent lua _G.CopilotQuickChat("Visual")<CR>
+nnoremap <leader>aq :silent lua vim.g.CopilotQuickChat("Buffer")<CR>
+vnoremap <leader>aq :<C-u>silent lua vim.g.CopilotQuickChat("Visual")<CR>
 nnoremap <leader>at :CopilotChatTests<CR>
 vnoremap <leader>ad :CopilotChatDocs<CR>
 vnoremap <leader>ae :CopilotChatExplain<CR>
@@ -1522,6 +1522,7 @@ nnoremap <BS> <C-^>
 
 if has('nvim')
   lua require("copilot_init")
+  lua require("my_funcs")
   lua require("lsp_zero")
   lua require("lua_init")
   lua require("lua_snip")
@@ -1594,23 +1595,9 @@ augroup CustomCommandHistory
               \ nnoremap <buffer> qq :q!<CR>
 augroup end
 
-" Rename Tag {{{2
+" Rename Word {{{2
 
-" Copy word under cursor into "a and paste into new buffer
-nnoremap <leader>rt mz"ayiw:1sp wordRenamingBuffer<CR>"aP
-
-" After edits, press enter, the original word is renamed globally
-" The search is case sensitive because of I in .../gI
-" Press escape to cancel
-augroup RenamingBuffer
-  autocmd!
-  autocmd BufWinEnter,BufEnter wordRenamingBuffer setlocal modifiable
-        \| nnoremap <buffer> <Esc> :q!<CR>
-        \| nnoremap <buffer> <c-s> <nop>
-        \| nnoremap <buffer> qw <nop>
-        \| nnoremap <buffer> <Enter>
-        \ b"byiw:q!<CR>:%s/\<<c-r>a\>/<c-r>b/gI<CR>`z
-augroup END
+nnoremap <silent> <leader>rw :silent lua vim.g.FuncFancyPromptRename("RenameWord", "New Word")<CR>
 
 " Reports {{{2
 
