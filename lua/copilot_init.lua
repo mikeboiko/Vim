@@ -46,3 +46,24 @@ vim.g.CopilotQuickChat = function(mode)
 		vim.cmd(command .. query)
 	end)
 end
+
+-- Automated git commit messages
+vim.g.CopilotCommitMsg = function()
+	chat.ask(
+		"Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Don't include any text except for the commit message in your output, because this text will be used for automated git commit messages.",
+		{
+			selection = select.gitdiff,
+			callback = function(response)
+				-- Save response to a file
+				local file_path = "/tmp/copilot_commit_msg"
+				local file = io.open(file_path, "w")
+				file:write(response)
+				file:close()
+				vim.cmd("silent Git add -A")
+				vim.cmd("silent Git commit -F " .. file_path)
+				vim.cmd("silent Git push")
+			end,
+		}
+	)
+	-- chat.close()
+end

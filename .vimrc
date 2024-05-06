@@ -1452,6 +1452,7 @@ nnoremap <leader>mu :Mani run git-up --parallel --tags $MANI_TAG<cr>
 
 " Add all changes, commit and push
 nnoremap <leader>gap :wa<CR>:silent call GitAddCommitPush()<CR>
+nnoremap <silent> <leader>gc :wa<CR>:silent lua vim.g.CopilotCommitMsg()<CR>
 
 " Create new git branch based on active vira issue
 nnoremap <leader>gnb :call GitNewBranch()<cr>
