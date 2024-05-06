@@ -1233,13 +1233,9 @@ set smartcase
 " Align QuickFix on ver unique string '$}{$'
 augroup CustomQuickFix
   autocmd!
-  autocmd BufReadPost quickfix setlocal modifiable
-              \| silent exe 'Tab /|\$}{\$'
-              \| silent exe 'g/\$}{\$/s/'
-              \| setlocal nowrap
-              \| setlocal norelativenumber
-              \| setlocal cursorline
-              \| setlocal nomodifiable
+  autocmd FileType qf nnoremap <silent> <leader>rw :silent lua vim.g.FancyPromptRename("RenameWord", "QF Word")<CR>
+  " vnoremap <silent> <leader>rw :<C-u>silent lua vim.g.FancyPromptRename("RenameWord", "New Word", 1)<CR>
+  autocmd BufReadPost quickfix setlocal cursorline
   " Close QuickFix/Location lists automatically when it's the last window in current tab
   autocmd BufEnter * call CloseQuickFixWindow()
 augroup end
