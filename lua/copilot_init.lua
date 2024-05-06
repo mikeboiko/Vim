@@ -61,7 +61,7 @@ vim.g.CopilotCommitMsg = function()
 				file:close()
 				vim.cmd("silent Git add -A")
 				vim.cmd("silent Git commit -F " .. file_path)
-				vim.cmd("silent Git push")
+				vim.cmd("Git push")
 			end,
 		}
 	)
