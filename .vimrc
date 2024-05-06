@@ -1365,7 +1365,8 @@ vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
 nnoremap <leader>ac :CopilotChatToggle<CR>
 nnoremap <leader>af :CopilotChatFixDiagnostic<CR>
 nnoremap <leader>ag :CopilotChatCommit<CR>
-nnoremap <leader>aq :silent lua _G.myQuickChatFunction()<CR>
+nnoremap <leader>aq :silent lua _G.CopilotQuickChat("Buffer")<CR>
+vnoremap <leader>aq :<C-u>silent lua _G.CopilotQuickChat("Visual")<CR>
 nnoremap <leader>at :CopilotChatTests<CR>
 vnoremap <leader>ad :CopilotChatDocs<CR>
 vnoremap <leader>ae :CopilotChatExplain<CR>
@@ -1520,6 +1521,7 @@ nnoremap <BS> <C-^>
 " NeoVim {{{2
 
 if has('nvim')
+  lua require("copilot_init")
   lua require("lsp_zero")
   lua require("lua_init")
   lua require("lua_snip")
