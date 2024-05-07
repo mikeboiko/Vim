@@ -1358,16 +1358,17 @@ vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
 
 " Copilot {{{2
 
+" nnoremap <leader>ag :CopilotChatCommit<CR>
+
 nnoremap <leader>ac :CopilotChatToggle<CR>
 nnoremap <leader>af :CopilotChatFixDiagnostic<CR>
-nnoremap <leader>ag :CopilotChatCommit<CR>
 nnoremap <leader>aq :silent lua vim.g.CopilotQuickChat("Buffer")<CR>
-vnoremap <leader>aq :<C-u>silent lua vim.g.CopilotQuickChat("Visual")<CR>
 nnoremap <leader>at :CopilotChatTests<CR>
 vnoremap <leader>ad :CopilotChatDocs<CR>
 vnoremap <leader>ae :CopilotChatExplain<CR>
 vnoremap <leader>af :CopilotChatFix<CR>
 vnoremap <leader>ao :CopilotChatOptimize<CR>
+vnoremap <leader>aq :<C-u>silent lua vim.g.CopilotQuickChat("Visual")<CR>
 vnoremap <leader>ar :CopilotChatReview<CR>
 
 " Conflicts {{{2
@@ -1452,7 +1453,7 @@ nnoremap <leader>mu :Mani run git-up --parallel --tags $MANI_TAG<cr>
 
 " Add all changes, commit and push
 nnoremap <leader>gap :wa<CR>:silent call GitAddCommitPush()<CR>
-nnoremap <silent> <leader>gc :wa<CR>:silent lua vim.g.CopilotCommitMsg()<CR>
+nnoremap <silent> <leader>ag :wa<CR>:silent lua vim.g.CopilotCommitMsg()<CR>
 
 " Create new git branch based on active vira issue
 nnoremap <leader>gnb :call GitNewBranch()<cr>
