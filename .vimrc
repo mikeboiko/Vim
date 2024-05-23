@@ -486,7 +486,7 @@ function! PasteClipboard() abort " {{{2
   " See https://github.com/ferrine/md-img-paste.vim
   let targets = filter(
         \ systemlist('xclip -selection clipboard -t TARGETS -o'),
-        \ 'v:val =~# ''image''')
+        \ 'v:val =~# ''application/x-qt-image''')
 
   " Paste regular text if not an image
   if empty(targets)
