@@ -19,6 +19,9 @@ require("CopilotChat").setup({
 			prompt = "/COPILOT_EXPLAIN Write an explanation for the selection as paragraphs of text.",
 			selection = select.buffer,
 		},
+		ExplainBrief = {
+			prompt = "/COPILOT_EXPLAIN Write a brief explanation for the selection as paragraphs of text.",
+		},
 		Tests = {
 			prompt = "/COPILOT_GENERATE Please generate tests for my code using pytest.",
 		},
