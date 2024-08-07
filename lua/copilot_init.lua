@@ -13,7 +13,7 @@ require("copilot_cmp").setup()
 local chat = require("CopilotChat")
 local select = require("CopilotChat.select")
 require("CopilotChat").setup({
-	debug = true, -- Enable debugging
+	-- debug = true,
 	-- model = "gpt-4o-2024-05-13",
 	prompts = {
 		ExplainBuffer = {
