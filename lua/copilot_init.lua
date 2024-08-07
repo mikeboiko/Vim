@@ -14,6 +14,7 @@ local chat = require("CopilotChat")
 local select = require("CopilotChat.select")
 require("CopilotChat").setup({
 	debug = true, -- Enable debugging
+	-- model = "gpt-4o-2024-05-13",
 	prompts = {
 		ExplainBuffer = {
 			prompt = "/COPILOT_EXPLAIN Write an explanation for the selection as paragraphs of text.",
