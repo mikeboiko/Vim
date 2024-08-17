@@ -1601,7 +1601,7 @@ vnoremap <silent> <leader>rw :<C-u>silent lua vim.g.FancyPromptRename("RenameWor
 " Reports {{{2
 
 if has('nvim')
-  nnoremap <leader>tp :tabe term://cd ~/git/Tables; python ~/git/Tables/finances/main.py print_balances<CR>:$<CR>
+  nnoremap <leader>tp :tabe term://cd ~/git/Tables/finances; python main.py print_balances<CR>:$<CR>
   nnoremap <leader>cw :tabe term://curl wttr.in/Calgary?m"<CR>
 else
   nnoremap <leader>tp :tabe<CR>:terminal ++curwin bash -c "python ~/git/Tables/scripts/tables.py cli -f printbalance"<CR><CR>
