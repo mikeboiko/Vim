@@ -29,7 +29,7 @@ lsp_zero.format_on_save({
 		timeout_ms = 10000,
 	},
 	servers = {
-		["null-ls"] = { "python", "markdown", "lua", "vim", "yaml", "json", "sql" },
+		["null-ls"] = { "python", "markdown", "lua", "vim", "vue", "yaml", "json", "sql" },
 	},
 })
 
@@ -43,6 +43,19 @@ lspconfig.pyright.setup({
 	init_options = {
 		settings = {
 			args = {},
+		},
+	},
+})
+
+-- npm install -g @vue/language-server
+lspconfig.volar.setup({
+	filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+	init_options = {
+		typescript = {
+			tsdk = "/home/mike/npm-global/lib/node_modules/typescript/lib",
+		},
+		vue = {
+			hybridMode = false,
 		},
 	},
 })
