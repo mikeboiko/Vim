@@ -749,7 +749,7 @@ Plug 'puremourning/vimspector', {'do': function('InstallVimspectorGadgets')} " D
 Plug 'rhysd/conflict-marker.vim'                                             " Git conflict resolution
 Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                              " fzf for folds
 Plug 'rust-lang/rust.vim'                                                    " Rusty stuff
-Plug 'scrooloose/nerdcommenter'                                              " Commenting
+Plug 'echasnovski/mini.comment'                                              " Commenting
 Plug 'scrooloose/nerdtree'                                                   " Tree file browser
 Plug 'stevearc/dressing.nvim'                                                " Customize vim.ui.input
 Plug 'tpope/vim-fugitive'                                                    " Git wrapper
@@ -819,30 +819,14 @@ let g:indentLine_char = '│'
 let g:mkdp_auto_close = 0
 let g:mkdp_refresh_slow = 1
 
-" nerdcommenter {{{2
+" mini.comment {{{2
 
-let g:NERDCreateDefaultMappings = 0
-
-" NerdCommenter add a space after comment
-let g:NERDSpaceDelims=1
-
-" Remove extra spaces when uncommenting
-let g:NERDRemoveExtraSpaces=1
-
-" Custom comment delimiters
-let g:NERDCustomDelimiters = {
-            \ 'python': { 'left': '#', 'right': '' },
-            \ 'dosbatch': { 'left': 'REM', 'right': '' },
-            \ 'kql': { 'left': '//', 'right': '' },
-            \ 'mermaid': { 'left': '%%', 'right': '' },
-            \ 'sebol': { 'left': '!', 'right': '' },
-            \ 'vader': { 'left': '#'}
-            \ }
-
-" This used to happen automatically, but broke at ~v2.5
-augroup CustomNERDcommenter
+augroup CustomCommentStrings
   autocmd!
-  autocmd BufEnter * silent! call nerdcommenter#SetUp()
+  autocmd FileType kql setlocal commentstring=//%s
+  autocmd FileType mermaid setlocal commentstring=\%\%%s
+  autocmd FileType sebol setlocal commentstring=!%s
+  autocmd FileType vader setlocal commentstring=#%s
 augroup end
 
 " nerdtree {{{2
@@ -1267,34 +1251,6 @@ augroup CustomFileTypes
   " Markdown -Fix the syntax highlighting that randomly stops
   autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
 augroup end
-
-" Speed up vim when in vue files
-let g:vue_disable_pre_processors=1
-
-" NERDCommenter fix
-" En error occured when putting this code into a seperate vim.vue file
-
-let g:ft = ''
-
-function! NERDCommenter_before()
-    if &ft == 'vue'
-        let g:ft = 'vue'
-        let stack = synstack(line('.'), col('.'))
-        if len(stack) > 0
-            let syn = synIDattr((stack)[0], 'name')
-            if len(syn) > 0
-                exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
-            endif
-        endif
-    endif
-endfunction
-
-function! NERDCommenter_after()
-    if g:ft == 'vue'
-        setf vue
-        let g:ft = ''
-    endif
-endfunction
 
 " Mappings{{{1
 " Leader key {{{2
