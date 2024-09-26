@@ -29,7 +29,7 @@ lsp_zero.format_on_save({
 		timeout_ms = 10000,
 	},
 	servers = {
-		["null-ls"] = { "python", "markdown", "lua", "vim", "vue", "yaml", "json", "sql" },
+		["null-ls"] = { "python", "markdown", "lua", "vim", "vue", "yaml", "json", "sql", "javascript" },
 	},
 })
 
