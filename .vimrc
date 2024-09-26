@@ -157,12 +157,7 @@ function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
     let insert_command = (a:inline_comment) ? 'A ' : 'O'
 
     " Prepare execution script for adding commented line
-    let exe_string = 'normal ' . insert_command . b:NERDCommenterDelims['left'] . ' ' . a:comment_prefix . prompt
-
-    " Add inline comment (add right delimiter if it exists)
-    if (b:NERDCommenterDelims['right'] != '')
-        let exe_string .= ' ' . b:NERDCommenterDelims['right']
-    endif
+    let exe_string = 'normal ' . insert_command . substitute(&commentstring, '%s', a:comment_prefix . prompt, '')
 
     " Add commented line to document
     exe exe_string
@@ -186,8 +181,8 @@ function! Figlet(...) " {{{2
     let lines = systemlist('figlet ' . a:1)
 
     " Add comments to each lines
-    call map(lines, {index, val -> trim(b:NERDCommenterDelims["left"] . " " . val . " " . b:NERDCommenterDelims["right"])})
-    " call writefile(lines, expand("~/figlet.txt"))
+    call map(lines, {index, val -> trim(substitute(&commentstring, '%s', '', '') . val)})
+    " call writefile(lines, expand("/tmp/figlet.txt"))
 
     " Dump list on screen
     put=lines
@@ -278,7 +273,7 @@ function! RemoveSpecialCharacters(line) " {{{3
     " Remove special (comment related) characters and extra spaces
     " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
     " Remove fold marker string and comment characters
-    let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.b:NERDCommenterDelims['left'].'\|'.b:NERDCommenterDelims['right'], '', 'g')
+    let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.substitute(&commentstring, '%s', '', '').'\d\=\|', '', 'g')
     " Replace 2 or more spaces with a single space
     let text = substitute(text, ' \{2,}', ' ', 'g')
     " Remove leading and trailing spaces
@@ -526,19 +521,6 @@ function! SetCurrentWorkingDirectory() " {{{2
     exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
 endfunction
 
-function! StripComments(input) " {{{2
-    " Strip comments and trim
-
-    " Remove comments
-    let substitution = substitute(a:input, b:NERDCommenterDelims['left'].'\|'.b:NERDCommenterDelims['right'], '', 'g')
-
-    " Remove leading and trailing spaces
-    let substitution = substitute(substitution, '^\s*\|\s*$', '', 'g')
-
-    return substitution
-
-endfunction
-
 function! ToggleList(bufname, pfx) " {{{2
     " Toggle QuickFix/Location List, don't change focus
     let buflist = GetBufferList()
@@ -582,35 +564,6 @@ function! WinDo(command) " {{{2
     let currwin=winnr()
     execute 'windo ' . a:command
     execute currwin . 'wincmd w'
-endfunction
-
-function! WrapFold(foldlevel) range " {{{2
-    " Create a fold on the current line(s)
-    let foldlevel = a:foldlevel
-    if l:foldlevel == 0
-        let foldlevel = foldlevel(line('.'))
-        if l:foldlevel == 0
-            let foldlevel = 1
-        endif
-    endif
-
-    " User entered fold name
-    let prompt = UserInput('Fold Text: ')
-
-    " Abort the rest of the function if the user hit escape
-    if (prompt == '') | return | endif
-
-    " Prevent folding on seperate levels
-    let foldLevelFirst = foldlevel(a:firstline)
-    let foldLevelLast = foldlevel(a:lastline)
-    if len(getline(a:firstline, a:lastline)) == 0 || l:foldLevelFirst != l:foldLevelLast
-        return '' " No lines selected
-    endif
-
-    " Wrap selection with fold
-    execute 'normal! mm'
-    execute 'normal! ' . a:firstline . 'GO' . prompt . ' ' . g:fold_marker_string . l:foldlevel . "\<ESC>:call NERDComment(0,'toggle')\<CR>"
-    execute 'normal! `m'
 endfunction
 
 " Commands {{{1
@@ -1298,19 +1251,15 @@ nnoremap q; q:
 
 " Main Comment Mappings
 nnoremap cii :call PromptAndComment(1, 'Comment Text: ', '')<CR>
-map cl <plug>NERDCommenterToggle
-map cp vip<plug>NERDCommenterYank
-map cu vip<plug>NERDCommenterUncomment
 
 " Inline comments with folds
-map ci1 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>1<ESC>
-map ci2 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>2<ESC>
-map ci3 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>3<ESC>
-map ci4 <plug>NERDCommenterAppend<c-r>=g:fold_marker_string<CR>4<ESC>
+nnoremap ci1 :silent execute 'normal! A ' . substitute(&commentstring, '%s', g:fold_marker_string . "1", '')<CR>
+nnoremap ci2 :silent execute 'normal! A ' . substitute(&commentstring, '%s', g:fold_marker_string . "2", '')<CR>
+nnoremap ci3 :silent execute 'normal! A ' . substitute(&commentstring, '%s', g:fold_marker_string . "3", '')<CR>
+nnoremap ci4 :silent execute 'normal! A ' . substitute(&commentstring, '%s', g:fold_marker_string . "4", '')<CR>
 
 " Comment, Yank and Paste
-nnoremap cy "zyy:silent execute "cal NERDComment('n',\"comment\")"<CR>"zp
-vnoremap cy "zY:<c-u>silent execute "cal NERDComment('v',\"comment\")"<CR>}"zP
+nnoremap cy :let line = substitute(getline('.'), '\n$', '', '')<CR>:put=substitute(&commentstring, '%s', line, '')<CR>:normal k<CR>
 
 " Copilot {{{2
 
@@ -1379,11 +1328,6 @@ nnoremap <leader>n :noh<esc>
 
 " Fold Everything except for the current section
 nnoremap zx zMzvzz
-
-" Create Folds
-noremap <silent> <leader>zz :call WrapFold(v:count)<CR>
-noremap <silent> <leader>zj :call WrapFold(foldlevel(line(".")) + 1)<CR>
-noremap <silent> <leader>zk :call WrapFold(foldlevel(line(".")) - 1)<CR>
 
 " Font Size Bigger/Smaller {{{2
 
