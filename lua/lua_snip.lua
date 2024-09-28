@@ -2,7 +2,9 @@ local ls = require("luasnip")
 local t = ls.text_node
 local s = ls.snippet
 
-ls.add_snippets("all", {
+-- ls.add_snippets("all", {
+
+ls.add_snippets("markdown", {
 	s("cb", { t("- [ ] ") }),
 })
 
