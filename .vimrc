@@ -1272,6 +1272,7 @@ nnoremap ci2 :call InsertInlineComment("2")<CR>
 nnoremap ci3 :call InsertInlineComment("3")<CR>
 nnoremap ci4 :call InsertInlineComment("4")<CR>
 nnoremap cy :call CommentYank()<CR>
+nnoremap cp :normal gcap<CR>
 
 " Copilot {{{2
 
