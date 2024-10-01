@@ -90,8 +90,7 @@ function! RemoveSpecialCharacters(line) " {{{3
     " Remove special (comment related) characters and extra spaces
     " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
     " Remove fold marker string and comment characters
-    let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
-    let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.substitute(commentstring, '%s', '', '').'\d\=\|', '', 'g')
+    let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.substitute(GetCommentString(), '%s', '', '').'\d\=\|', '', 'g')
     " Replace 2 or more spaces with a single space
     let text = substitute(text, ' \{2,}', ' ', 'g')
     " Remove leading and trailing spaces
@@ -197,11 +196,9 @@ endfunction
 
 function! CommentYank() "{{{2
   let line = substitute(getline('.'), '\n$', '', '')
-  let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
-  silent put=substitute(commentstring, '%s', line, '')
+  silent put=substitute(GetCommentString(), '%s', line, '')
   normal! k
 endfunction
-nnoremap cy :call CommentYank()<CR>
 
 function! EditCommonFile(filename) " {{{2
     " Open file in new teb
@@ -217,8 +214,7 @@ function! Figlet(...) " {{{2
     let lines = systemlist('figlet ' . a:1)
 
     " Add comments to each lines
-    let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
-    call map(lines, {index, val -> trim(substitute(commentstring, '%s', '', '') . val)})
+    call map(lines, {index, val -> trim(substitute(GetCommentString(), '%s', '', '') . val)})
     " call writefile(lines, expand("/tmp/figlet.txt"))
 
     " Dump list on screen
@@ -253,6 +249,10 @@ function! GetBufferList() " {{{2
     silent! ls!
     redir END
     return buflist
+endfunction
+
+function! GetCommentString() "{{{2
+  return luaeval("require('ts_context_commentstring').calculate_commentstring()")
 endfunction
 
 function! GetCurrentGitRepo() " {{{2
@@ -343,9 +343,8 @@ function! GitNewBranch() abort " {{{2
 
 endfunction
 
-function! InsertComment(fold_marker) "{{{2
-  let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
-  execute 'normal! A ' . substitute(commentstring, '%s', g:fold_marker_string . a:fold_marker, '')
+function! InsertInlineComment(fold_marker) "{{{2
+  execute 'normal! A ' . substitute(GetCommentString(), '%s', g:fold_marker_string . a:fold_marker, '')
 endfunction
 
 function! InstallVimspectorGadgets(info) " {{{2
@@ -431,8 +430,7 @@ function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
     let insert_command = (a:inline_comment) ? 'A ' : 'O'
 
     " Prepare execution script for adding commented line
-    let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
-    let exe_string = 'normal ' . insert_command . substitute(commentstring, '%s', a:comment_prefix . prompt, '')
+    let exe_string = 'normal ' . insert_command . substitute(GetCommentString(), '%s', a:comment_prefix . prompt, '')
 
     " Add commented line to document
     exe exe_string
@@ -1269,15 +1267,11 @@ nnoremap q; q:
 " Main Comment Mappings
 nnoremap cii :call PromptAndComment(1, 'Comment Text: ', '')<CR>
 
-set shortmess+=I
-
-
-nnoremap ci1 :call InsertComment("1")<CR>
-nnoremap ci2 :call InsertComment("2")<CR>
-nnoremap ci3 :call InsertComment("3")<CR>
-nnoremap ci4 :call InsertComment("4")<CR>
-
-" nnoremap cy :silent let line = substitute(getline('.'), '\n$', '', '')<CR>:silent let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")<CR>:silent put=substitute(commentstring, '%s', line, '')<CR>:normal k<CR>
+nnoremap ci1 :call InsertInlineComment("1")<CR>
+nnoremap ci2 :call InsertInlineComment("2")<CR>
+nnoremap ci3 :call InsertInlineComment("3")<CR>
+nnoremap ci4 :call InsertInlineComment("4")<CR>
+nnoremap cy :call CommentYank()<CR>
 
 " Copilot {{{2
 
