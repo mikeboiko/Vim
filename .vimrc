@@ -27,191 +27,6 @@ endif
 
 " Functions {{{1
 
-function! s:getExitStatus() abort " {{{2
-  " Get the exit status from a terminal buffer by looking for a line near the end
-  " of the buffer with the format, '[Process exited ?]'.
-  let ln = line('$')
-  " The terminal buffer includes several empty lines after the 'Process exited'
-  " line that need to be skipped over.
-  while ln >= 1
-    let l = getline(ln)
-    let ln -= 1
-    let exitCode = substitute(l, '^\[Process exited \([0-9]\+\)\]$', '\1', '')
-    if l != '' && l == exitCode
-      " The pattern did not match, and the line was not empty. It looks like
-      " there is no process exit message in this buffer.
-      break
-    elseif exitCode != ''
-      return str2nr(exitCode)
-    endif
-  endwhile
-  throw 'Could not determine exit status for buffer, ' . expand('%')
-endfunc
-
-function! s:afterTermClose(...) abort
-  " a:0 -> number of arguments
-  " a:1 -> expected name of buffer (with Process exited message)
-  " a:2 -> expected exit code (default is 0)
-  " This is a hack to easily handle the situation where I switched focus away
-  " from the terminal window
-  if bufname('%') !~# a:1
-    call CloseAll()
-    return
-  endif
-
-  if a:0 > 1
-    let expected_code = a:2
-  else
-    let expected_code = 0
-  end
-  if s:getExitStatus() == expected_code
-    bdelete!
-  endif
-endfunc
-
-function! s:VimspectorDotNet(i) abort
-  " Run vimspector debugger if DotNet build/test script succeeded
-  let i = a:i + 1
-
-  " Read file into memory and check if it contains the string: "Process Id:"
-  let filepath = '/tmp/dotnet-test.log'
-  let file = readfile(filepath)
-  let found = 0
-  for line in file
-    if line =~# 'Process Id:'
-      let found = 1
-      break
-    endif
-  endfor
-
-  if found
-    " Launch vimspector debugger
-    echo 'VimspectorDotNet passed'
-    call timer_start(20, { -> vimspector#Launch() })
-    return
-  else
-    " Keep retrying for 20 seconds
-    if i > 40
-      echo 'VimspectorDotNet failed'
-      return
-    endif
-    call timer_start(500, {-> s:VimspectorDotNet(i)})
-  endif
-
-endfunc
-
-augroup MyNeoterm
-  autocmd!
-  " The line '[Process exited ?]' is appended to the terminal buffer after the
-  " `TermClose` event. So we use a timer to wait a few milliseconds to read the
-  " exit status. Setting the timer to 0 or 1 ms is not sufficient; 20 ms seems to work for me.
-  autocmd TermClose * if (g:term_close == '++close') | call timer_start(20, { -> s:afterTermClose('/tmp/flow') }) | endif
-  autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose('/git/Linux/git/gap') })
-  " autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose('/git/Linux/git/gap', 1) })
-augroup END
-
-function! CloseAll() " {{{2
-    " Close all loc lists, qf, preview and terminal windows
-    lclose
-    cclose
-    pclose
-    " CopilotChatClose
-    for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml', 'dotnet-test.sh']
-      let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~# bufname'), ' ')
-      if trim(buffers) !=? ''
-        silent! exe 'bdelete '. buffers
-      endif
-    endfor
-endf
-
-function! BufDo(command) " {{{2
-    " Just like bufdo, but restore the current buffer when done.
-    let currBuff=bufnr('%')
-    silent! execute 'bufdo ' . a:command
-    silent! execute 'buffer ' . currBuff
-endfunction
-
-function! CloseQuickFixWindow() " {{{2
-    " If the window is quickfix, proceed
-    if &buftype=="quickfix"
-        " If this window is last on screen quit without warning
-        if winbufnr(2) == -1
-            quit!
-        endif
-    endif
-endfunction
-
-function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
-    " Add inline comment and align with other inline comments
-
-    " Prompt user for comment text
-    let prompt = UserInput(a:prompt_text)
-
-    " Abort the rest of the function if the user hit escape
-    if (prompt == '') | return | endif
-
-    " Temporarily disable auto-pairs wrapping so the comment delimiter doesn't repeat
-    let b:autopairs_enabled = 0
-
-    " Either inline comment or comment above current line
-    let insert_command = (a:inline_comment) ? 'A ' : 'O'
-
-    " Prepare execution script for adding commented line
-    let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
-    let exe_string = 'normal ' . insert_command . substitute(commentstring, '%s', a:comment_prefix . prompt, '')
-
-    " Add commented line to document
-    exe exe_string
-
-    " Re-enable auto-pairs
-    let b:autopairs_enabled = 1
-
-endfunction
-
-function! EditCommonFile(filename) " {{{2
-    " Open file in new teb
-    let current_filename = expand('%:t')
-    let openfilestring = 'tabedit ' . a:filename
-    silent exec openfilestring
-endfunction
-
-function! Figlet(...) " {{{2
-    " Print ascii art comment
-
-    " Read figlet output into list
-    let lines = systemlist('figlet ' . a:1)
-
-    " Add comments to each lines
-    let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
-    call map(lines, {index, val -> trim(substitute(commentstring, '%s', '', '') . val)})
-    " call writefile(lines, expand("/tmp/figlet.txt"))
-
-    " Dump list on screen
-    put=lines
-
-endfunction
-
-function! FindFunc(...) " {{{2
-
-    " Move cursor to next pattern match
-    if (a:2 == 'next')
-        call search(a:1)
-        FoldOpen
-    endif
-
-    " Record initial line number into "z
-    let @z = '|' . line('.') . '|'
-
-    " Clear quickfix list
-    lexpr []
-
-    " Put Results into QuickFix Window
-    silent execute 'g/'.a:1.'/laddexpr expand("%") . ":" . line(".") . ":" . GetLastFoldString() . getline(".") '
-
-    top lopen
-
-endfunction
-
 " FoldText {{{2
 function! GetFoldStrings() " {{{3
     " Make the status string a list of all the folds
@@ -336,6 +151,102 @@ else
     endfunction
 endif
 
+" Quit {{{2
+
+" Close location list, preview window and quit
+function! Quit()
+    if (&buftype != "quickfix")
+        lclose
+    endif
+    if (!&previewwindow)
+        pclose
+    endif
+    quit
+endf
+
+function! BufDo(command) " {{{2
+    " Just like bufdo, but restore the current buffer when done.
+    let currBuff=bufnr('%')
+    silent! execute 'bufdo ' . a:command
+    silent! execute 'buffer ' . currBuff
+endfunction
+
+function! CloseAll() " {{{2
+    " Close all loc lists, qf, preview and terminal windows
+    lclose
+    cclose
+    pclose
+    " CopilotChatClose
+    for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml', 'dotnet-test.sh']
+      let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~# bufname'), ' ')
+      if trim(buffers) !=? ''
+        silent! exe 'bdelete '. buffers
+      endif
+    endfor
+endf
+
+function! CloseQuickFixWindow() " {{{2
+    " If the window is quickfix, proceed
+    if &buftype=="quickfix"
+        " If this window is last on screen quit without warning
+        if winbufnr(2) == -1
+            quit!
+        endif
+    endif
+endfunction
+
+function! CommentYank() "{{{2
+  let line = substitute(getline('.'), '\n$', '', '')
+  let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
+  silent put=substitute(commentstring, '%s', line, '')
+  normal! k
+endfunction
+nnoremap cy :call CommentYank()<CR>
+
+function! EditCommonFile(filename) " {{{2
+    " Open file in new teb
+    let current_filename = expand('%:t')
+    let openfilestring = 'tabedit ' . a:filename
+    silent exec openfilestring
+endfunction
+
+function! Figlet(...) " {{{2
+    " Print ascii art comment
+
+    " Read figlet output into list
+    let lines = systemlist('figlet ' . a:1)
+
+    " Add comments to each lines
+    let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
+    call map(lines, {index, val -> trim(substitute(commentstring, '%s', '', '') . val)})
+    " call writefile(lines, expand("/tmp/figlet.txt"))
+
+    " Dump list on screen
+    put=lines
+
+endfunction
+
+function! FindFunc(...) " {{{2
+
+    " Move cursor to next pattern match
+    if (a:2 == 'next')
+        call search(a:1)
+        FoldOpen
+    endif
+
+    " Record initial line number into "z
+    let @z = '|' . line('.') . '|'
+
+    " Clear quickfix list
+    lexpr []
+
+    " Put Results into QuickFix Window
+    silent execute 'g/'.a:1.'/laddexpr expand("%") . ":" . line(".") . ":" . GetLastFoldString() . getline(".") '
+
+    top lopen
+
+endfunction
+
 function! GetBufferList() " {{{2
     " load all current buffers into a list
     redir =>buflist
@@ -385,18 +296,6 @@ function! GitAddCommitPush() abort " {{{2
 
 endfunction
 
-function! GitNewBranch() abort " {{{2
-    " Create new git branch based on active vira issue
-
-    if g:vira_active_issue ==? 'none'
-      echom 'Please select issue first'
-      return
-    endif
-    execute('Git checkout -b ' . g:vira_active_issue)
-    Git push -u
-
-endfunction
-
 function! GitDeleteBranch() abort " {{{2
     " Delete branch for active vira issue
 
@@ -432,6 +331,23 @@ function! GitMerge() abort " {{{2
 
 endfunction
 
+function! GitNewBranch() abort " {{{2
+    " Create new git branch based on active vira issue
+
+    if g:vira_active_issue ==? 'none'
+      echom 'Please select issue first'
+      return
+    endif
+    execute('Git checkout -b ' . g:vira_active_issue)
+    Git push -u
+
+endfunction
+
+function! InsertComment(fold_marker) "{{{2
+  let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
+  execute 'normal! A ' . substitute(commentstring, '%s', g:fold_marker_string . a:fold_marker, '')
+endfunction
+
 function! InstallVimspectorGadgets(info) " {{{2
   if a:info.status == 'installed' || a:info.force
     !./install_gadget.py --enable-python
@@ -441,8 +357,12 @@ function! InstallVimspectorGadgets(info) " {{{2
   endif
 endfunction
 
-function! OnSave() " {{{2
-  wshada
+function! MyTabLabel(n) " {{{2
+  " The tab label looks better as file name only - without entire path
+  let buflist = tabpagebuflist(a:n)
+  let winnr = tabpagewinnr(a:n)
+  let buf = bufname(buflist[winnr - 1])
+  return fnamemodify(buf, ':t')
 endfunction
 
 function! MyTabLine() " {{{2
@@ -472,12 +392,8 @@ function! MyTabLine() " {{{2
   return tabstring
 endfunction
 
-function! MyTabLabel(n) " {{{2
-  " The tab label looks better as file name only - without entire path
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  let buf = bufname(buflist[winnr - 1])
-  return fnamemodify(buf, ':t')
+function! OnSave() " {{{2
+  wshada
 endfunction
 
 function! PasteClipboard() abort " {{{2
@@ -499,18 +415,32 @@ function! PasteClipboard() abort " {{{2
 
 endfunction
 
-" Quit {{{2
+function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
+    " Add inline comment and align with other inline comments
 
-" Close location list, preview window and quit
-function! Quit()
-    if (&buftype != "quickfix")
-        lclose
-    endif
-    if (!&previewwindow)
-        pclose
-    endif
-    quit
-endf
+    " Prompt user for comment text
+    let prompt = UserInput(a:prompt_text)
+
+    " Abort the rest of the function if the user hit escape
+    if (prompt == '') | return | endif
+
+    " Temporarily disable auto-pairs wrapping so the comment delimiter doesn't repeat
+    let b:autopairs_enabled = 0
+
+    " Either inline comment or comment above current line
+    let insert_command = (a:inline_comment) ? 'A ' : 'O'
+
+    " Prepare execution script for adding commented line
+    let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
+    let exe_string = 'normal ' . insert_command . substitute(commentstring, '%s', a:comment_prefix . prompt, '')
+
+    " Add commented line to document
+    exe exe_string
+
+    " Re-enable auto-pairs
+    let b:autopairs_enabled = 1
+
+endfunction
 
 function! SetCurrentWorkingDirectory() " {{{2
     " A standalone function to set the working directory to the project's root, or
@@ -568,6 +498,89 @@ function! WinDo(command) " {{{2
     execute 'windo ' . a:command
     execute currwin . 'wincmd w'
 endfunction
+
+function! s:getExitStatus() abort " {{{2
+  " Get the exit status from a terminal buffer by looking for a line near the end
+  " of the buffer with the format, '[Process exited ?]'.
+  let ln = line('$')
+  " The terminal buffer includes several empty lines after the 'Process exited'
+  " line that need to be skipped over.
+  while ln >= 1
+    let l = getline(ln)
+    let ln -= 1
+    let exitCode = substitute(l, '^\[Process exited \([0-9]\+\)\]$', '\1', '')
+    if l != '' && l == exitCode
+      " The pattern did not match, and the line was not empty. It looks like
+      " there is no process exit message in this buffer.
+      break
+    elseif exitCode != ''
+      return str2nr(exitCode)
+    endif
+  endwhile
+  throw 'Could not determine exit status for buffer, ' . expand('%')
+endfunc
+
+function! s:afterTermClose(...) abort
+  " a:0 -> number of arguments
+  " a:1 -> expected name of buffer (with Process exited message)
+  " a:2 -> expected exit code (default is 0)
+  " This is a hack to easily handle the situation where I switched focus away
+  " from the terminal window
+  if bufname('%') !~# a:1
+    call CloseAll()
+    return
+  endif
+
+  if a:0 > 1
+    let expected_code = a:2
+  else
+    let expected_code = 0
+  end
+  if s:getExitStatus() == expected_code
+    bdelete!
+  endif
+endfunc
+
+function! s:VimspectorDotNet(i) abort
+  " Run vimspector debugger if DotNet build/test script succeeded
+  let i = a:i + 1
+
+  " Read file into memory and check if it contains the string: "Process Id:"
+  let filepath = '/tmp/dotnet-test.log'
+  let file = readfile(filepath)
+  let found = 0
+  for line in file
+    if line =~# 'Process Id:'
+      let found = 1
+      break
+    endif
+  endfor
+
+  if found
+    " Launch vimspector debugger
+    echo 'VimspectorDotNet passed'
+    call timer_start(20, { -> vimspector#Launch() })
+    return
+  else
+    " Keep retrying for 20 seconds
+    if i > 40
+      echo 'VimspectorDotNet failed'
+      return
+    endif
+    call timer_start(500, {-> s:VimspectorDotNet(i)})
+  endif
+
+endfunc
+
+augroup MyNeoterm
+  autocmd!
+  " The line '[Process exited ?]' is appended to the terminal buffer after the
+  " `TermClose` event. So we use a timer to wait a few milliseconds to read the
+  " exit status. Setting the timer to 0 or 1 ms is not sufficient; 20 ms seems to work for me.
+  autocmd TermClose * if (g:term_close == '++close') | call timer_start(20, { -> s:afterTermClose('/tmp/flow') }) | endif
+  autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose('/git/Linux/git/gap') })
+  " autocmd TermClose *bash\ ~/git/Linux/git/gap call timer_start(20, { -> s:afterTermClose('/git/Linux/git/gap', 1) })
+augroup END
 
 " Commands {{{1
 " Figlet {{{2
@@ -1256,14 +1269,15 @@ nnoremap q; q:
 " Main Comment Mappings
 nnoremap cii :call PromptAndComment(1, 'Comment Text: ', '')<CR>
 
-" Inline comments with folds
-nnoremap ci1 :let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")<CR>:execute 'normal! A ' . substitute(commentstring, '%s', g:fold_marker_string . "1", '')<CR>
-nnoremap ci2 :let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")<CR>:execute 'normal! A ' . substitute(commentstring, '%s', g:fold_marker_string . "2", '')<CR>
-nnoremap ci3 :let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")<CR>:execute 'normal! A ' . substitute(commentstring, '%s', g:fold_marker_string . "3", '')<CR>
-nnoremap ci4 :let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")<CR>:execute 'normal! A ' . substitute(commentstring, '%s', g:fold_marker_string . "4", '')<CR>
+set shortmess+=I
 
-" Comment, Yank and Paste
-nnoremap cy :let line = substitute(getline('.'), '\n$', '', '')<CR>:put=substitute(&commentstring, '%s', line, '')<CR>:normal k<CR>
+
+nnoremap ci1 :call InsertComment("1")<CR>
+nnoremap ci2 :call InsertComment("2")<CR>
+nnoremap ci3 :call InsertComment("3")<CR>
+nnoremap ci4 :call InsertComment("4")<CR>
+
+" nnoremap cy :silent let line = substitute(getline('.'), '\n$', '', '')<CR>:silent let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")<CR>:silent put=substitute(commentstring, '%s', line, '')<CR>:normal k<CR>
 
 " Copilot {{{2
 
