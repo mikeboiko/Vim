@@ -14,11 +14,17 @@ require("bqf").setup({
 	},
 })
 
+require("ts_context_commentstring").setup({
+	enable_autocmd = false,
+})
+
 require("mini.comment").setup({
 	-- Options which control module behavior
 	options = {
 		-- Function to compute custom 'commentstring' (optional)
-		-- custom_commentstring = nil,
+		custom_commentstring = function()
+			return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+		end,
 
 		-- Whether to ignore blank lines when commenting
 		ignore_blank_line = true,

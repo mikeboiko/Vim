@@ -157,7 +157,8 @@ function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
     let insert_command = (a:inline_comment) ? 'A ' : 'O'
 
     " Prepare execution script for adding commented line
-    let exe_string = 'normal ' . insert_command . substitute(&commentstring, '%s', a:comment_prefix . prompt, '')
+    let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
+    let exe_string = 'normal ' . insert_command . substitute(commentstring, '%s', a:comment_prefix . prompt, '')
 
     " Add commented line to document
     exe exe_string
@@ -181,7 +182,8 @@ function! Figlet(...) " {{{2
     let lines = systemlist('figlet ' . a:1)
 
     " Add comments to each lines
-    call map(lines, {index, val -> trim(substitute(&commentstring, '%s', '', '') . val)})
+    let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
+    call map(lines, {index, val -> trim(substitute(commentstring, '%s', '', '') . val)})
     " call writefile(lines, expand("/tmp/figlet.txt"))
 
     " Dump list on screen
@@ -273,7 +275,8 @@ function! RemoveSpecialCharacters(line) " {{{3
     " Remove special (comment related) characters and extra spaces
     " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
     " Remove fold marker string and comment characters
-    let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.substitute(&commentstring, '%s', '', '').'\d\=\|', '', 'g')
+    let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
+    let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.substitute(commentstring, '%s', '', '').'\d\=\|', '', 'g')
     " Replace 2 or more spaces with a single space
     let text = substitute(text, ' \{2,}', ' ', 'g')
     " Remove leading and trailing spaces
@@ -665,10 +668,12 @@ call plug#begin(vimPlugDir)
 " Plug 'file:///home/mike/.vim/plugged/test'
 
 Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }                " AI chat
+Plug 'JoosepAlviste/nvim-ts-context-commentstring'                           " For vue commentstrings
 Plug 'L3MON4D3/LuaSnip'                                                      " Autocompletion
 Plug 'PProvost/vim-ps1'                                                      " Powershell file types
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}                         " Simple LSP config
 Plug 'christoomey/vim-tmux-navigator'                                        " Switch beween vim splits & tmux panes seamslessly
+Plug 'echasnovski/mini.comment'                                              " Commenting
 Plug 'ellisonleao/gruvbox.nvim'                                              " Gruvbox colorscheme
 Plug 'godlygeek/tabular'                                                     " Align things
 Plug 'hrsh7th/cmp-nvim-lsp'                                                  " Autocompletion
@@ -702,7 +707,6 @@ Plug 'puremourning/vimspector', {'do': function('InstallVimspectorGadgets')} " D
 Plug 'rhysd/conflict-marker.vim'                                             " Git conflict resolution
 Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                              " fzf for folds
 Plug 'rust-lang/rust.vim'                                                    " Rusty stuff
-Plug 'echasnovski/mini.comment'                                              " Commenting
 Plug 'scrooloose/nerdtree'                                                   " Tree file browser
 Plug 'stevearc/dressing.nvim'                                                " Customize vim.ui.input
 Plug 'tpope/vim-fugitive'                                                    " Git wrapper
@@ -1253,10 +1257,10 @@ nnoremap q; q:
 nnoremap cii :call PromptAndComment(1, 'Comment Text: ', '')<CR>
 
 " Inline comments with folds
-nnoremap ci1 :silent execute 'normal! A ' . substitute(&commentstring, '%s', g:fold_marker_string . "1", '')<CR>
-nnoremap ci2 :silent execute 'normal! A ' . substitute(&commentstring, '%s', g:fold_marker_string . "2", '')<CR>
-nnoremap ci3 :silent execute 'normal! A ' . substitute(&commentstring, '%s', g:fold_marker_string . "3", '')<CR>
-nnoremap ci4 :silent execute 'normal! A ' . substitute(&commentstring, '%s', g:fold_marker_string . "4", '')<CR>
+nnoremap ci1 :let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")<CR>:execute 'normal! A ' . substitute(commentstring, '%s', g:fold_marker_string . "1", '')<CR>
+nnoremap ci2 :let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")<CR>:execute 'normal! A ' . substitute(commentstring, '%s', g:fold_marker_string . "2", '')<CR>
+nnoremap ci3 :let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")<CR>:execute 'normal! A ' . substitute(commentstring, '%s', g:fold_marker_string . "3", '')<CR>
+nnoremap ci4 :let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")<CR>:execute 'normal! A ' . substitute(commentstring, '%s', g:fold_marker_string . "4", '')<CR>
 
 " Comment, Yank and Paste
 nnoremap cy :let line = substitute(getline('.'), '\n$', '', '')<CR>:put=substitute(&commentstring, '%s', line, '')<CR>:normal k<CR>
