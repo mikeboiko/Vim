@@ -195,9 +195,10 @@ function! CloseQuickFixWindow() " {{{2
 endfunction
 
 function! CommentYank() "{{{2
+  normal! mz
   let line = substitute(getline('.'), '\n$', '', '')
-  silent put=substitute(GetCommentString(), '%s', line, '')
-  normal! k
+  silent put!=substitute(GetCommentString(), '%s', line, '')
+  normal! `z
 endfunction
 
 function! EditCommonFile(filename) " {{{2
