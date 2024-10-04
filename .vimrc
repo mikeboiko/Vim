@@ -89,8 +89,12 @@ endfunction
 function! RemoveSpecialCharacters(line) " {{{3
     " Remove special (comment related) characters and extra spaces
     " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
-    " Remove fold marker string and comment characters
-    let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.substitute(GetCommentString(), '%s', '', '').'\d\=\|', '', 'g')
+    " Remove fold marker
+    let text = substitute(a:line, g:fold_marker_string.'\d\=', '', 'g')
+    " let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.substitute(GetCommentString(), '%s', '', '').'\d\=\|', '', 'g')
+    " For some reason, GetCommentString() is not working here
+    let text = substitute(text, substitute(&commentstring, '%s', '', ''), '', 'g')
+    " let text = substitute(text, substitute('# %s', '%s', '', ''), '', 'g')
     " Replace 2 or more spaces with a single space
     let text = substitute(text, ' \{2,}', ' ', 'g')
     " Remove leading and trailing spaces
