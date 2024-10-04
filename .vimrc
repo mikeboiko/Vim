@@ -92,8 +92,7 @@ function! RemoveSpecialCharacters(line) " {{{3
     " Remove fold marker
     let text = substitute(a:line, g:fold_marker_string.'\d\=', '', 'g')
     " let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.substitute(GetCommentString(), '%s', '', '').'\d\=\|', '', 'g')
-    " For some reason, GetCommentString() is not working here
-    let text = substitute(text, substitute(&commentstring, '%s', '', ''), '', 'g')
+    let text = substitute(text, substitute(GetCommentString(), '%s', '', ''), '', 'g')
     " let text = substitute(text, substitute('# %s', '%s', '', ''), '', 'g')
     " Replace 2 or more spaces with a single space
     let text = substitute(text, ' \{2,}', ' ', 'g')
@@ -257,7 +256,12 @@ function! GetBufferList() " {{{2
 endfunction
 
 function! GetCommentString() "{{{2
-  return luaeval("require('ts_context_commentstring').calculate_commentstring()")
+  let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
+  " ts_context_commentstring only works for html/js/vue
+  if commentstring == v:null
+    let commentstring = &commentstring
+  endif
+  return commentstring
 endfunction
 
 function! GetCurrentGitRepo() " {{{2
