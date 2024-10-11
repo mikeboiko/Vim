@@ -804,6 +804,7 @@ augroup CustomCommentStrings
   autocmd FileType mermaid setlocal commentstring=\%\%%s
   autocmd FileType sebol setlocal commentstring=!%s
   autocmd FileType vader setlocal commentstring=#%s
+  autocmd FileType autohotkey setlocal commentstring=;%s
 augroup end
 
 " nerdtree {{{2
