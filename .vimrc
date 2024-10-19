@@ -178,6 +178,7 @@ function! CloseAll() " {{{2
     lclose
     cclose
     pclose
+    NvimTreeClose
     " CopilotChatClose
     for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml', 'dotnet-test.sh']
       let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~# bufname'), ' ')
@@ -671,6 +672,10 @@ command! ViraEnable if (g:vira_commit_text_enable == '') | let g:vira_commit_tex
 " Plugins{{{1
 " Plugin Setup {{{2
 
+" For nvim-tree
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+
 augroup CustomSetFileType
   autocmd!
   autocmd BufRead,BufNewFile *.sebol setfiletype sebol
@@ -718,6 +723,7 @@ Plug 'mtdl9/vim-log-highlighting'                                            " l
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'branch': 'dev'}                 " Jira integration
 Plug 'neovim/nvim-lspconfig'                                                 " LSP Support
 Plug 'nvim-lua/plenary.nvim'                                                 " Lua functions (prereq for null-ls)
+Plug 'nvim-tree/nvim-tree.lua'                                               " File Browser
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}                  " Tree sitter
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'                           " Tree sitter text objects
 Plug 'nvimtools/none-ls.nvim'                                                " Custom LSP sources
@@ -727,7 +733,6 @@ Plug 'puremourning/vimspector', {'do': function('InstallVimspectorGadgets')} " D
 Plug 'rhysd/conflict-marker.vim'                                             " Git conflict resolution
 Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                              " fzf for folds
 Plug 'rust-lang/rust.vim'                                                    " Rusty stuff
-Plug 'scrooloose/nerdtree'                                                   " Tree file browser
 Plug 'stevearc/dressing.nvim'                                                " Customize vim.ui.input
 Plug 'tpope/vim-fugitive'                                                    " Git wrapper
 Plug 'tpope/vim-repeat'                                                      " Repeat surround and commenting with .
@@ -806,29 +811,6 @@ augroup CustomCommentStrings
   autocmd FileType vader setlocal commentstring=#%s
   autocmd FileType autohotkey setlocal commentstring=;%s
 augroup end
-
-" nerdtree {{{2
-
-" Close NERDTree when opening file
-let NERDTreeQuitOnOpen = 1
-
-" Show hidden files by default
-let NERDTreeShowHidden = 1
-
-" Enable Bookmarks by default
-let NERDTreeShowBookmarks = 1
-
-" Line Numbers
-let NERDTreeShowLineNumbers=1
-
-" vim-tmux-navigator conflict
-let g:NERDTreeMapJumpNextSibling = ''
-let g:NERDTreeMapJumpPrevSibling = ''
-
-" Open new files in splits/tabs
-let g:NERDTreeMapOpenSplit = '<c-s>'
-let g:NERDTreeMapOpenVSplit = '<c-v>'
-let g:NERDTreeMapOpenInTab = '<c-t>'
 
 " toggleterm {{{2
 
@@ -1420,9 +1402,6 @@ map <leader>fw "xyiw:Grep <c-r>x %<cr>
 " Jump to proper column when using marks
 nnoremap ' `
 
-" NERDTree {{{2
-nnoremap <leader>on :NERDTreeFind<CR>
-
 " Mouse {{{2
 
 set mouse-=a
@@ -1444,13 +1423,14 @@ nnoremap <BS> <C-^>
 
 if has('nvim')
   lua require("copilot_init")
-  lua require("my_funcs")
   lua require("lsp_zero")
   lua require("lua_init")
   lua require("lua_snip")
   lua require("mappings")
+  lua require("my_funcs")
   lua require("null_ls")
   lua require("nvim_cmp")
+  lua require("nvim_tree")
   lua require("treesitter")
 endif
 
