@@ -1,7 +1,7 @@
 -- https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#refactoring-of-on_attach-generated-code
 
 -- global
-vim.api.nvim_set_keymap("n", "<leader>on", ":NvimTreeToggle<cr>", { silent = true, noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>on", ":NvimTreeFindFileToggle .<cr>", { silent = true, noremap = true })
 
 local function my_on_attach(bufnr)
 	local api = require("nvim-tree.api")
