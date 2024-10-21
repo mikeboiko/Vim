@@ -3,6 +3,14 @@
 -- :LspInfo
 -- :help lsp-zero-keybindings
 
+-- To learn what capabilities are available you can run the following command in
+-- a buffer with a started LSP client: >vim
+-- :lua =vim.lsp.get_clients()[1].server_capabilities
+-- Note, I tried to get LSP file renaming to work with pyright, but pyright
+-- doesn't have the proper workspace capabilities.
+-- This is the plugin I tried
+-- https://github.com/antosha417/nvim-lsp-file-operations?tab=readme-ov-file
+
 local lsp_zero = require("lsp-zero")
 
 lsp_zero.on_attach(function(client, bufnr)
@@ -36,7 +44,7 @@ lsp_zero.format_on_save({
 })
 
 -- Setup language servers.
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 local lspconfig = require("lspconfig")
 
 lspconfig.bashls.setup({})
