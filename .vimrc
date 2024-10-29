@@ -201,7 +201,8 @@ endfunction
 function! CommentYank() "{{{2
   normal! mz
   let line = substitute(getline('.'), '\n$', '', '')
-  silent put!=substitute(GetCommentString(), '%s', line, '')
+  silent put!=line
+  lua require('mini.comment').toggle_lines(vim.fn.line('.'), vim.fn.line('.'))
   normal! `z
 endfunction
 
