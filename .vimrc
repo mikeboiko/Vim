@@ -1276,6 +1276,7 @@ nnoremap <leader>ac :CopilotChatToggle<CR>
 nnoremap <leader>af :CopilotChatFixDiagnostic<CR>
 nnoremap <leader>aq :silent lua vim.g.CopilotQuickChat("Buffer")<CR>
 nnoremap <leader>at :CopilotChatTests<CR>
+vnoremap <leader>ac :<C-u>CopilotChatToggle<CR>
 vnoremap <leader>ad :CopilotChatDocs<CR>
 vnoremap <leader>ae :CopilotChatExplainBrief<CR>
 vnoremap <leader>af :CopilotChatFix<CR>
