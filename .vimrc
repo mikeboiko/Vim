@@ -693,7 +693,7 @@ call plug#begin(vimPlugDir)
 
 " Plug 'file:///home/mike/.vim/plugged/test'
 
-Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }                " AI chat
+Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'main' }                  " AI assistant
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'                           " For vue commentstrings
 Plug 'L3MON4D3/LuaSnip'                                                      " Autocompletion
 Plug 'PProvost/vim-ps1'                                                      " Powershell file types
