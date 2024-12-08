@@ -13,8 +13,8 @@ require("copilot_cmp").setup()
 local chat = require("CopilotChat")
 local select = require("CopilotChat.select")
 require("CopilotChat").setup({
-	-- debug = true,
-	-- model = "gpt-4o-2024-05-13",
+	debug = true,
+	model = "claude-3.5-sonnet",
 	prompts = {
 		ExplainBuffer = {
 			prompt = "/COPILOT_EXPLAIN Write an explanation for the selection as paragraphs of text.",
@@ -57,9 +57,8 @@ end
 -- Automated git commit messages
 vim.g.CopilotCommitMsg = function(dir)
 	chat.ask(
-		"Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Don't include any text except for the commit message in your output, because this text will be used for automated git commit messages. Don't wrap in ```",
+		"#git:unstaged\n\nWrite commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Don't include any text except for the commit message in your output, because this text will be used for automated git commit messages. Don't wrap in ```",
 		{
-			selection = select.gitdiff,
 			callback = function(response)
 				-- Save response to a file
 				local file_path = "/tmp/copilot_commit_msg"
@@ -77,7 +76,7 @@ vim.g.CopilotCommitMsg = function(dir)
 						.. file_path
 						.. "; git -C "
 						.. dir
-						.. " push'"
+						.. " push > /dev/null 2>&1'"
 					-- .. " >> /tmp/gitdir.txt 2>&1"
 				)
 				-- vim.cmd("silent Git -C " .. dir .. "push")
