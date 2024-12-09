@@ -729,7 +729,6 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}                  " T
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'                           " Tree sitter text objects
 Plug 'nvimtools/none-ls.nvim'                                                " Custom LSP sources
 Plug 'pbogut/fzf-mru.vim'                                                    " CtrlP style MRU files
-Plug 'posva/vim-vue'                                                         " Vue filetype recognition
 Plug 'puremourning/vimspector', {'do': function('InstallVimspectorGadgets')} " DAP
 Plug 'rhysd/conflict-marker.vim'                                             " Git conflict resolution
 Plug 'roosta/fzf-folds.vim', {'branch': 'main'}                              " fzf for folds
