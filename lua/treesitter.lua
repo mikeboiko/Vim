@@ -13,6 +13,10 @@ require("nvim-treesitter.configs").setup({
 	ensure_installed = {
 		"c_sharp",
 		"diff",
+		"git_config",
+		"git_rebase",
+		"gitattributes",
+		"gitcommit",
 		"gitignore",
 		"go",
 		"javascript",
