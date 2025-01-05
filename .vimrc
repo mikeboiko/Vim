@@ -693,6 +693,12 @@ call plug#begin(vimPlugDir)
 
 " Plug 'file:///home/mike/.vim/plugged/test'
 
+" nvim-dap test
+Plug 'nvim-neotest/nvim-nio'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'mfussenegger/nvim-dap-python'
+Plug 'mfussenegger/nvim-dap'
+
 Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'main' }                  " AI assistant
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'                           " For vue commentstrings
 Plug 'L3MON4D3/LuaSnip'                                                      " Autocompletion
@@ -1429,6 +1435,7 @@ if has('nvim')
   lua require("lua_snip")
   lua require("mappings")
   lua require("my_funcs")
+  lua require("main")
   lua require("null_ls")
   lua require("nvim_cmp")
   lua require("nvim_tree")
