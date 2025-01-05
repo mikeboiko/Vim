@@ -100,7 +100,11 @@ lspconfig.lua_ls.setup({
 		})
 	end,
 	settings = {
-		Lua = {},
+		Lua = {
+			diagnostics = {
+				globals = { "init_debug", "vim" },
+			},
+		},
 	},
 })
 

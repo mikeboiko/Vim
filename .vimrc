@@ -694,6 +694,7 @@ call plug#begin(vimPlugDir)
 " Plug 'file:///home/mike/.vim/plugged/test'
 
 " nvim-dap test
+Plug 'jbyuki/one-small-step-for-vimkind'
 Plug 'nvim-neotest/nvim-nio'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'mfussenegger/nvim-dap-python'
@@ -1429,13 +1430,13 @@ nnoremap <BS> <C-^>
 " NeoVim {{{2
 
 if has('nvim')
+  lua require("main")
   lua require("copilot_init")
   lua require("lsp_zero")
   lua require("lua_init")
   lua require("lua_snip")
   lua require("mappings")
   lua require("my_funcs")
-  lua require("main")
   lua require("null_ls")
   lua require("nvim_cmp")
   lua require("nvim_tree")
